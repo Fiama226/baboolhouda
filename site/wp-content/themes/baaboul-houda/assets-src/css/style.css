@@ -1,0 +1,359 @@
+/* ==========================================================================
+   TV Baaboul Houda — design system
+   Light, content-first (Eman-style) with deep-green + gold identity.
+   French (LTR) & Arabic (RTL, html[dir=rtl] + .bh-rtl).
+   Fonts: Cairo (UI), Amiri / Amiri Quran (Arabic + mushaf).
+   ========================================================================== */
+
+:root {
+    --bh-green: #0e7a4e;
+    --bh-green-dark: #0a5c3a;
+    --bh-green-deep: #073c26;
+    --bh-gold: #c9a227;
+    --bh-gold-soft: #f4e8c4;
+    --bh-ink: #17251d;
+    --bh-ink-soft: #4a5a52;
+    --bh-paper: #faf8f2;
+    --bh-card: #ffffff;
+    --bh-line: #e4e0d4;
+    --bh-red: #d64545;
+    --bh-radius: 14px;
+    --bh-shadow: 0 1px 2px rgba(23, 37, 29, .05), 0 8px 24px rgba(23, 37, 29, .07);
+    --bh-font-ui: 'Cairo', 'Segoe UI', system-ui, sans-serif;
+    --bh-font-ar: 'Amiri', 'Cairo', serif;
+    --bh-font-quran: 'Amiri Quran', 'Amiri', serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: var(--bh-font-ui);
+    background: var(--bh-paper);
+    color: var(--bh-ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+body.bh-rtl { font-family: var(--bh-font-ar), var(--bh-font-ui); }
+body.bh-rtl p, body.bh-rtl li, body.bh-rtl .bh-card__body small { font-family: var(--bh-font-ar); }
+
+img { max-width: 100%; height: auto; }
+a { color: var(--bh-green); text-decoration: none; }
+a:hover { color: var(--bh-green-dark); }
+
+.bh-container { max-width: 1180px; margin-inline: auto; padding-inline: 20px; }
+.bh-container--narrow { max-width: 820px; }
+.bh-container--wide { max-width: 1320px; }
+
+.bh-font-quran { font-family: var(--bh-font-quran); }
+.bh-hide-mobile { display: inline; }
+.bh-time-range { font-variant-numeric: tabular-nums; color: var(--bh-green-dark); font-weight: 700; }
+.bh-empty { color: var(--bh-ink-soft); background: var(--bh-card); border: 1px dashed var(--bh-line); border-radius: var(--bh-radius); padding: 28px; text-align: center; }
+.bh-link { font-weight: 700; }
+[hidden] { display: none !important; }
+[x-cloak] { display: none !important; }
+
+/* ---------------- Topbar ---------------- */
+.bh-topbar { background: var(--bh-green-deep); color: #e8f3ee; font-size: 13px; }
+.bh-topbar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 34px; flex-wrap: wrap; }
+.bh-topbar__date { opacity: .92; }
+.bh-topbar__hijri { color: var(--bh-gold); font-weight: 600; margin-inline-start: 8px; }
+.bh-topbar__links { display: inline-flex; align-items: center; gap: 12px; }
+.bh-topbar__phone, .bh-topbar__wa, .bh-topbar__social { color: #e8f3ee; display: inline-flex; align-items: center; gap: 5px; }
+.bh-topbar__phone:hover, .bh-topbar__wa:hover, .bh-topbar__social:hover { color: var(--bh-gold); }
+.bh-lang-switch { background: rgba(255,255,255,.12); padding: 3px 12px; border-radius: 999px; font-weight: 700; color: #fff !important; }
+.bh-lang-switch:hover { background: var(--bh-gold); color: #1a1408 !important; }
+
+/* ---------------- Header ---------------- */
+.bh-header { background: var(--bh-card); border-bottom: 1px solid var(--bh-line); position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 0 rgba(0,0,0,.02); }
+.bh-header__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 76px; }
+.bh-header__brand { display: inline-flex; align-items: center; gap: 12px; }
+.bh-logo, .bh-logo-img { display: block; }
+.bh-header__names { display: flex; flex-direction: column; line-height: 1.25; }
+.bh-header__names strong { font-size: 19px; color: var(--bh-green-deep); }
+.bh-header__names em { font-style: normal; font-size: 12px; color: var(--bh-ink-soft); }
+
+.bh-nav__list { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.bh-nav__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; border-radius: 10px; font-weight: 600; font-size: 15px; color: var(--bh-ink); }
+.bh-nav__link:hover { background: var(--bh-gold-soft); color: var(--bh-green-deep); }
+.bh-nav__link--live { color: var(--bh-red); }
+.bh-live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--bh-red); animation: bh-pulse 1.4s infinite; }
+@keyframes bh-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+li.is-active > .bh-nav__link { background: var(--bh-green-deep); color: #fff; }
+
+.bh-burger { display: none; background: none; border: 0; width: 44px; height: 44px; cursor: pointer; padding: 10px; }
+.bh-burger span { display: block; height: 2.5px; background: var(--bh-green-deep); margin: 5px 0; border-radius: 2px; transition: transform .2s; }
+
+/* ---------------- Hero (home / live) ---------------- */
+.bh-hero { padding: 28px 0 8px; }
+.bh-hero__grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 24px; align-items: start; }
+.bh-hero__live-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.bh-hero__title { margin: 0; font-size: clamp(22px, 3vw, 30px); color: var(--bh-green-deep); }
+.bh-live-pill { background: #fdecec; color: var(--bh-red); font-weight: 800; font-size: 13px; padding: 5px 14px; border-radius: 999px; letter-spacing: .4px; }
+.bh-live-pill.is-on { background: var(--bh-red); color: #fff; }
+.bh-hero__player, .bh-hero__off { background: #000; border-radius: var(--bh-radius); overflow: hidden; box-shadow: var(--bh-shadow); }
+.bh-hero__off { padding: 42px 30px; text-align: center; color: #e8f3ee; background: linear-gradient(160deg, var(--bh-green-deep), #05281a); }
+.bh-hero__off-icon { font-size: 44px; }
+.bh-hero__off-next { color: var(--bh-gold); font-weight: 700; }
+.bh-hero__now { margin-top: 12px; font-size: 15px; }
+.bh-hero__side { display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------------- Cards ---------------- */
+.bh-card { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); box-shadow: var(--bh-shadow); padding: 18px; display: block; color: inherit; transition: transform .15s, box-shadow .15s; }
+a.bh-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(23,37,29,.08), 0 14px 34px rgba(23,37,29,.12); color: inherit; }
+.bh-card__title { margin: 0 0 10px; font-size: 16px; color: var(--bh-green-deep); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bh-card__img { display: block; border-radius: 10px; overflow: hidden; aspect-ratio: 16/10; background: var(--bh-green-deep); margin-bottom: 12px; position: relative; }
+.bh-card__img img { width: 100%; height: 100%; object-fit: cover; }
+.bh-card__img--placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--bh-gold); }
+.bh-card__play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; color: #fff; background: rgba(7,60,38,.35); }
+.bh-card__body { display: flex; flex-direction: column; gap: 4px; }
+.bh-card__body strong { font-size: 16px; color: var(--bh-ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bh-card__body small, .bh-card__body time { color: var(--bh-ink-soft); font-size: 13px; }
+.bh-card--news { padding: 0; overflow: hidden; }
+.bh-card--news .bh-card__body { padding: 14px 16px 16px; }
+.bh-card--news .bh-card__img { border-radius: 0; margin: 0; }
+.bh-card--presenter { text-align: center; }
+.bh-card--presenter-img, .bh-presenter-placeholder { display: block; width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin: 0 auto 10px; font-size: 44px; line-height: 120px; text-align: center; background: var(--bh-gold-soft); }
+
+/* Ayah card */
+.bh-ayah-ar { font-family: var(--bh-font-quran); font-size: 22px; line-height: 2.1; text-align: right; direction: rtl; margin: 8px 0; color: var(--bh-green-deep); }
+.bh-ayah-ref { color: var(--bh-ink-soft); font-size: 13px; margin: 0 0 8px; }
+
+/* Prayer mini */
+.bh-prayer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.bh-prayer { background: var(--bh-paper); border: 1px solid var(--bh-line); border-radius: 10px; padding: 8px; text-align: center; }
+.bh-prayer.is-next { border-color: var(--bh-gold); background: var(--bh-gold-soft); }
+.bh-prayer__name { display: block; font-size: 12px; color: var(--bh-ink-soft); }
+.bh-prayer strong { font-size: 16px; color: var(--bh-green-deep); font-variant-numeric: tabular-nums; }
+.bh-prayer__src { font-size: 11px; color: var(--bh-gold); margin: 8px 0 0; }
+.bh-select { border: 1px solid var(--bh-line); border-radius: 8px; padding: 6px 10px; font-family: inherit; font-size: 14px; background: #fff; color: var(--bh-ink); }
+.bh-select--small { width: auto; font-size: 13px; }
+
+/* ---------------- Sections ---------------- */
+.bh-section { padding: 40px 0; }
+.bh-section--alt { background: linear-gradient(180deg, #f2efe4, var(--bh-paper)); border-block: 1px solid var(--bh-line); }
+.bh-section__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.bh-section__head h2 { margin: 0; font-size: clamp(20px, 2.4vw, 26px); color: var(--bh-green-deep); }
+
+.bh-grid { display: grid; gap: 18px; }
+.bh-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.bh-grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ---------------- Schedule ---------------- */
+.bh-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(180px, 1fr); gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
+.bh-strip__item { background: var(--bh-card); border: 1px solid var(--bh-line); border-inline-start: 4px solid var(--bh-green); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.bh-strip__item a { font-weight: 700; color: var(--bh-ink); display: block; }
+.bh-strip__label { margin-top: 8px; font-weight: 800; color: var(--bh-gold); }
+
+.bh-week__days { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.bh-week__day { border: 1px solid var(--bh-line); background: var(--bh-card); border-radius: 999px; padding: 8px 18px; font-family: inherit; font-weight: 700; cursor: pointer; color: var(--bh-ink-soft); }
+.bh-week__day.is-active { background: var(--bh-green-deep); border-color: var(--bh-green-deep); color: #fff; }
+.bh-week__col { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 20px; }
+.bh-week__col h3 { margin-top: 0; color: var(--bh-green-deep); }
+.bh-badge-today { background: var(--bh-gold); color: #1a1408; font-size: 12px; border-radius: 999px; padding: 2px 10px; margin-inline-start: 8px; vertical-align: middle; }
+.bh-week__slots { list-style: none; margin: 0; padding: 0; }
+.bh-week__slot { display: flex; gap: 14px; padding: 12px 4px; border-bottom: 1px dashed var(--bh-line); align-items: baseline; }
+.bh-week__slot:last-child { border-bottom: 0; }
+.bh-week__slot a, .bh-week__slot span:last-child { font-weight: 600; color: var(--bh-ink); }
+
+/* ---------------- Page hero ---------------- */
+.bh-page-hero { background: linear-gradient(160deg, var(--bh-green-deep) 0%, #05281a 70%); color: #fff; padding: 44px 0 38px; }
+.bh-page-hero h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 38px); }
+.bh-page-hero__sub { color: #cfe4d8; margin: 4px 0; }
+.bh-page-hero--quran h1 { font-family: var(--bh-font-ar); }
+.bh-breadcrumb { display: inline-block; margin-bottom: 10px; color: var(--bh-gold); font-weight: 700; font-size: 14px; }
+.bh-programme-hero { display: flex; align-items: center; gap: 20px; }
+.bh-programme-hero__logo { width: 96px; height: 96px; object-fit: cover; border-radius: 20px; border: 3px solid var(--bh-gold); }
+
+/* ---------------- Quran ---------------- */
+.bh-quran-tools { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+.bh-input { font-family: inherit; font-size: 16px; padding: 12px 16px; border: 1px solid var(--bh-line); border-radius: 12px; background: var(--bh-card); color: var(--bh-ink); width: 100%; max-width: 480px; }
+.bh-quran-count { color: var(--bh-ink-soft); font-size: 14px; }
+.bh-quran-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.bh-quran-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: 12px; padding: 12px 8px; transition: border-color .15s, background .15s; }
+.bh-quran-card:hover { border-color: var(--bh-gold); background: var(--bh-gold-soft); }
+.bh-quran-card__num { background: var(--bh-green-deep); color: var(--bh-gold); font-weight: 800; font-size: 13px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.bh-quran-card__names strong { font-size: 20px; display: block; }
+.bh-quran-card__names em { font-style: normal; font-size: 12px; color: var(--bh-ink-soft); }
+.bh-quran-card__meta { font-size: 11px; color: var(--bh-ink-soft); }
+
+.bh-quran-reader-section { padding-top: 24px; }
+.bh-quran-reader__nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+.bh-quran-reader__head { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 20px; margin-bottom: 18px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.bh-quran-reader__title h1 { font-size: 34px; margin: 0; color: var(--bh-green-deep); }
+.bh-quran-reader__tools { display: flex; gap: 14px; align-items: end; flex-wrap: wrap; }
+.bh-reader-reciter span, .bh-reader-toggle span { display: block; font-size: 12px; color: var(--bh-ink-soft); margin-bottom: 4px; }
+.bh-reader-toggle { display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600; }
+.bh-bismillah { text-align: center; font-size: 28px; margin: 6px 0 18px; color: var(--bh-green-deep); }
+.bh-quran-reader__body { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 28px; }
+.bh-ayah { font-size: 26px; line-height: 2.3; margin: 0 0 4px; text-align: right; }
+.bh-ayah__num { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border: 1.5px solid var(--bh-gold); color: var(--bh-green-dark); font-family: var(--bh-font-ui); font-size: 12px; font-weight: 800; border-radius: 50%; margin: 0 8px 0 4px; vertical-align: middle; }
+.bh-ayah__fr { display: block; direction: ltr; text-align: left; font-family: var(--bh-font-ui); font-size: 15px; line-height: 1.7; color: var(--bh-ink-soft); font-family: var(--bh-font-ui); padding: 6px 14px 14px; border-bottom: 1px dashed var(--bh-line); margin-bottom: 10px; }
+.bh-ayah__fr:empty { display: none; }
+
+/* ---------------- Radio page ---------------- */
+.bh-radio-page { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, 1fr); gap: 24px; align-items: start; }
+.bh-card--radio { display: flex; gap: 18px; align-items: center; }
+.bh-radio-page__cover { width: 120px; }
+.bh-radio-page__cover img, .bh-radio-page__disc { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; display: block; font-size: 54px; line-height: 120px; text-align: center; background: var(--bh-gold-soft); }
+.bh-radio-page__controls { display: flex; gap: 16px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.bh-radio-page__vol { display: flex; gap: 8px; align-items: center; }
+.bh-radio-page__hint { color: var(--bh-gold); font-size: 13px; }
+
+/* ---------------- Buttons / forms ---------------- */
+.bh-btn { display: inline-flex; align-items: center; gap: 8px; font-family: inherit; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 11px 22px; border: 1px solid transparent; cursor: pointer; transition: background .15s, color .15s; }
+.bh-btn-primary { background: var(--bh-green); color: #fff; }
+.bh-btn-primary:hover { background: var(--bh-green-dark); color: #fff; }
+.bh-btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.bh-btn-ghost { background: transparent; border-color: var(--bh-line); color: var(--bh-ink); }
+.bh-btn-ghost:hover { border-color: var(--bh-green); color: var(--bh-green-dark); }
+.bh-btn--lg { font-size: 17px; padding: 14px 28px; }
+
+.bh-contact-form label { display: block; font-weight: 700; margin-bottom: 6px; }
+.bh-contact-form input[type=text], .bh-contact-form input[type=email], .bh-contact-form textarea { width: 100%; font-family: inherit; font-size: 15px; padding: 11px 14px; border: 1px solid var(--bh-line); border-radius: 10px; margin-bottom: 14px; background: #fff; color: var(--bh-ink); }
+.bh-contact-form .bh-hp { position: absolute; left: -9999px; }
+.bh-req { color: var(--bh-red); }
+.bh-alert { padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-weight: 600; }
+.bh-alert-ok { background: #e7f5ec; color: #14532d; }
+.bh-alert-err { background: #fdecec; color: #7f1d1d; }
+
+/* ---------------- Contact ---------------- */
+.bh-contact-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); gap: 28px; }
+.bh-contact-card { display: flex; gap: 14px; align-items: center; background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 16px; margin-bottom: 12px; color: var(--bh-ink); }
+.bh-contact-card:hover { border-color: var(--bh-green); color: var(--bh-ink); }
+.bh-contact-card span:first-child { font-size: 26px; }
+.bh-contact-card strong { display: block; }
+.bh-contact-card small { color: var(--bh-ink-soft); }
+.bh-contact-card--wa { border-color: #25d366; background: #f0fbf4; }
+
+/* ---------------- Events ---------------- */
+.bh-events-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+.bh-event-card { display: flex; gap: 18px; align-items: center; background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 16px 18px; color: var(--bh-ink); }
+.bh-event-card:hover { border-color: var(--bh-gold); color: var(--bh-ink); }
+.bh-event-card__date { display: flex; flex-direction: column; align-items: center; min-width: 64px; background: var(--bh-green-deep); color: var(--bh-gold); border-radius: 12px; padding: 10px 6px; }
+.bh-event-card__date strong { font-size: 24px; line-height: 1.1; }
+.bh-event-card__date em { font-style: normal; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+.bh-event-card__date--lg strong { font-size: 34px; }
+.bh-event-card__body strong { font-size: 17px; display: block; }
+.bh-event-card__body small { color: var(--bh-ink-soft); }
+.bh-event-card--past { opacity: .65; }
+.bh-card--event__head { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; }
+.bh-card--event__meta { color: var(--bh-ink-soft); margin: 2px 0 0; }
+
+/* ---------------- Share ---------------- */
+.bh-share { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--bh-line); }
+.bh-share__btn { border: 1px solid var(--bh-line); background: #fff; border-radius: 999px; padding: 7px 16px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--bh-ink); cursor: pointer; }
+.bh-share__btn:hover { border-color: var(--bh-green); color: var(--bh-green-dark); }
+
+/* ---------------- Prose / article ---------------- */
+.bh-prose { font-size: 16.5px; }
+.bh-prose h2 { color: var(--bh-green-deep); margin-top: 34px; }
+.bh-prose blockquote { border-inline-start: 4px solid var(--bh-gold); margin: 20px 0; padding: 8px 20px; background: var(--bh-gold-soft); border-radius: 8px; }
+.bh-article__meta { color: var(--bh-ink-soft); font-size: 14px; }
+.bh-article__hero { border-radius: var(--bh-radius); margin: 18px 0; width: 100%; }
+.bh-slot-list li { margin-bottom: 4px; }
+
+/* ---------------- Radio bar (persistent) ---------------- */
+.bh-radio-bar { position: fixed; bottom: 0; inset-inline: 0; z-index: 100; background: var(--bh-green-deep); color: #fff; box-shadow: 0 -4px 20px rgba(0,0,0,.18); }
+body:has(.bh-radio-bar) { padding-bottom: 64px; }
+.bh-radio-bar__inner { display: flex; align-items: center; gap: 14px; max-width: 1180px; margin-inline: auto; padding: 10px 20px; }
+.bh-radio-bar__cover { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.bh-radio-bar__disc { font-size: 26px; }
+.bh-radio-bar__meta { flex: 1; min-width: 0; }
+.bh-radio-bar__meta strong { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bh-radio-bar__status { font-size: 12px; color: var(--bh-gold); }
+.bh-radio-bar__btn { background: var(--bh-gold); color: #1a1408; border: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.bh-radio-bar__btn:hover { background: #dbb53a; }
+.bh-eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 18px; }
+.bh-eq i { width: 3px; background: var(--bh-gold); height: 4px; border-radius: 2px; }
+.bh-eq.is-playing i { animation: bh-eq 1s infinite ease-in-out; }
+.bh-eq i:nth-child(2) { animation-delay: .2s; }
+.bh-eq i:nth-child(3) { animation-delay: .4s; }
+.bh-eq i:nth-child(4) { animation-delay: .6s; }
+@keyframes bh-eq { 0%,100% { height: 4px; } 50% { height: 16px; } }
+
+/* ---------------- Footer ---------------- */
+.bh-footer { background: #05281a; color: #cfe4d8; margin-top: 40px; }
+.bh-footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 30px; padding: 46px 20px 30px; }
+.bh-footer__col h3 { color: #fff; font-size: 15px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: .6px; }
+.bh-footer__col ul { list-style: none; margin: 0; padding: 0; }
+.bh-footer__col li { margin-bottom: 8px; }
+.bh-footer a { color: #cfe4d8; }
+.bh-footer a:hover { color: var(--bh-gold); }
+.bh-footer__socials a { font-weight: 700; }
+.bh-footer__schedule .bh-time-range { color: var(--bh-gold); display: inline-block; min-width: 74px; }
+.bh-footer__bottom { border-top: 1px solid rgba(255,255,255,.08); padding: 16px 0; font-size: 13px; }
+.bh-footer__bottom .bh-container { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+/* ---------------- Filters / chips ---------------- */
+.bh-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+.bh-chip { border: 1px solid var(--bh-line); background: var(--bh-card); border-radius: 999px; padding: 7px 16px; font-size: 14px; font-weight: 600; color: var(--bh-ink-soft); }
+.bh-chip:hover, .bh-chip[aria-current] { background: var(--bh-green-deep); border-color: var(--bh-green-deep); color: #fff; }
+.bh-chips { margin: 6px 0 0; }
+.bh-chips .bh-chip { font-size: 12px; padding: 4px 12px; }
+
+/* ---------------- Embeds ---------------- */
+.bh-embed { position: relative; padding-top: 56.25%; background: #000; border-radius: var(--bh-radius); overflow: hidden; }
+.bh-embed iframe, .bh-embed video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.bh-audio-card { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); padding: 20px; }
+.bh-audio-card__icon { font-size: 40px; display: block; margin-bottom: 10px; }
+.bh-audio-card audio { width: 100%; }
+
+/* ---------------- Prayer page ---------------- */
+.bh-card--prayer-lg { padding: 24px; }
+.bh-prayer-lg__head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.bh-prayer-lg__city span, .bh-prayer-lg__date span { display: block; font-size: 12px; color: var(--bh-ink-soft); }
+.bh-prayer-lg__grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.bh-prayer-lg__cell { background: var(--bh-paper); border: 1px solid var(--bh-line); border-radius: 12px; padding: 14px 10px; text-align: center; position: relative; }
+.bh-prayer-lg__cell.is-next { border-color: var(--bh-gold); background: var(--bh-gold-soft); }
+.bh-prayer-lg__name { display: block; color: var(--bh-ink-soft); font-size: 14px; }
+.bh-prayer-lg__time { font-size: 22px; color: var(--bh-green-deep); font-variant-numeric: tabular-nums; }
+.bh-prayer-lg__src { color: var(--bh-gold); font-weight: 700; margin-top: 14px; }
+.bh-prayer-month { margin-top: 34px; }
+.bh-table-wrap { overflow-x: auto; border: 1px solid var(--bh-line); border-radius: var(--bh-radius); background: var(--bh-card); }
+.bh-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bh-table th { background: var(--bh-green-deep); color: #fff; padding: 10px 14px; text-align: start; }
+.bh-table td { padding: 8px 14px; border-bottom: 1px solid var(--bh-line); font-variant-numeric: tabular-nums; }
+.bh-table tr.is-today td { background: var(--bh-gold-soft); font-weight: 700; }
+
+/* ---------------- Presenters ---------------- */
+.bh-presenter-single { display: flex; justify-content: center; }
+.bh-card--presenter-lg { text-align: center; }
+.bh-presenter-single__photo { width: 220px; height: 220px; object-fit: cover; border-radius: 50%; border: 4px solid var(--bh-gold); margin-bottom: 14px; }
+
+/* ---------------- RTL adjustments ---------------- */
+[dir='rtl'] .bh-strip { direction: rtl; }
+[dir='rtl'] .bh-ayah__num { margin: 0 4px 0 8px; }
+[dir='rtl'] .bh-footer__schedule .bh-time-range { min-width: auto; }
+[dir='rtl'] .bh-topbar__hijri { margin-inline-start: 8px; }
+[dir='rtl'] .bh-share { flex-direction: row; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1080px) {
+    .bh-grid--4 { grid-template-columns: repeat(3, 1fr); }
+    .bh-quran-grid { grid-template-columns: repeat(5, 1fr); }
+    .bh-prayer-lg__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 880px) {
+    .bh-burger { display: block; }
+    .bh-nav { position: absolute; top: 100%; inset-inline: 0; background: var(--bh-card); border-bottom: 1px solid var(--bh-line); box-shadow: var(--bh-shadow); display: none; }
+    .bh-nav--open { display: block; }
+    .bh-nav__list { flex-direction: column; align-items: stretch; padding: 12px; }
+    .bh-hero__grid, .bh-radio-page, .bh-contact-layout, .bh-episode-layout { grid-template-columns: 1fr; }
+    .bh-grid--3 { grid-template-columns: repeat(2, 1fr); }
+    .bh-grid--4 { grid-template-columns: repeat(2, 1fr); }
+    .bh-footer__grid { grid-template-columns: 1fr 1fr; }
+    .bh-quran-grid { grid-template-columns: repeat(4, 1fr); }
+    .bh-hide-mobile { display: none; }
+    .bh-prayer-lg__grid { grid-template-columns: repeat(2, 1fr); }
+    .bh-programme-hero { flex-direction: column; text-align: center; }
+    .bh-card--radio { flex-direction: column; text-align: center; }
+}
+@media (max-width: 560px) {
+    .bh-grid--3, .bh-grid--4 { grid-template-columns: 1fr; }
+    .bh-quran-grid { grid-template-columns: repeat(3, 1fr); }
+    .bh-prayer-grid { grid-template-columns: repeat(2, 1fr); }
+    .bh-footer__grid { grid-template-columns: 1fr; }
+    .bh-ayah { font-size: 22px; }
+    .bh-bh-section, .bh-section { padding: 28px 0; }
+}

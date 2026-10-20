@@ -1,0 +1,24 @@
+node_modules/
+.git/
+.gitignore
+release/
+preview/
+docs/
+.github/
+build/tests/
+build/tmp/
+*.log
+.DS_Store
+# The build/ dir is small and referenced by scripts — keep it out of the image.
+build/
+# Docker metadata
+Dockerfile
+docker-compose.yml
+.env
+.env.example
+sources.json
+package.json
+package-lock.json
+vite.config.js
+README.md
+guide.txt

@@ -1,0 +1,27 @@
+{
+  "name": "tv-baaboul-houda",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TV Baaboul Houda / قناة باب الهدى — official website (WordPress custom theme + core plugin, Docker-first, cPanel deployable)",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "npm run build:quran && vite build && node build/postbuild.mjs && node build/icons/generate.mjs",
+    "build:quran": "node build/quran/build.mjs",
+    "watch": "vite build --watch",
+    "test": "npm run lint:php && vitest run && node build/quran/validate.mjs && node build/release/check.mjs",
+    "lint:php": "node build/php/lint.mjs",
+    "test:watch": "vitest",
+    "vendor:core": "bash scripts/vendor-core.sh",
+    "release": "npm run build && bash scripts/build-release.sh",
+    "preview": "node preview/server.mjs"
+  },
+  "devDependencies": {
+    "alpinejs": "^3.14.0",
+    "howler": "^2.2.4",
+    "hls.js": "^1.5.0",
+    "php-parser": "^3.1.10",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
+  }
+}
