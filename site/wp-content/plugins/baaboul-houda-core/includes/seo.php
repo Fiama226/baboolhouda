@@ -85,9 +85,7 @@ add_action('wp_head', function () {
     }
     echo '<meta name="twitter:card" content="summary' . ($img ? '_large_image' : '') . '">' . "\n";
 
-    // preconnects
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+    // preconnects (fonts are self-hosted; only video/live hosts are external)
     echo '<link rel="preconnect" href="https://www.youtube.com">' . "\n";
     echo '<link rel="preconnect" href="https://www.facebook.com">' . "\n";
 

@@ -9,6 +9,9 @@ const plugin = fileURLToPath(new URL('./site/wp-content/plugins/baaboul-houda-co
  * cPanel release zip never needs Node.js on the host.
  */
 export default defineConfig({
+  // Relative asset URLs: the theme is served from /wp-content/themes/…,
+  // so emitted font/asset references must be relative to the CSS/JS file.
+  base: './',
   build: {
     outDir: `${theme}/assets/dist`,
     emptyOutDir: true,
@@ -19,6 +22,7 @@ export default defineConfig({
         main: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/js/main.js', import.meta.url)),
         quran: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/js/quran.js', import.meta.url)),
         style: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/css/style.css', import.meta.url)),
+        fonts: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/css/fonts.css', import.meta.url)),
         admin: fileURLToPath(new URL('./site/wp-content/plugins/baaboul-houda-core/assets-src/js/admin.js', import.meta.url)),
       },
       output: {

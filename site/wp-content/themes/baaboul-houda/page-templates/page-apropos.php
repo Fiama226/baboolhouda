@@ -28,7 +28,7 @@ if ($fb || $yt) :
         <div class="bh-social-grid">
             <?php if ($fb) : ?>
                 <div class="bh-card">
-                    <h3 class="bh-card__title">📘 <?php echo esc_html(bh_l('Notre page Facebook', 'صفحتنا على فيسبوك')); ?></h3>
+                    <h3 class="bh-card__title"><?php echo esc_html(bh_l('Notre page Facebook', 'صفحتنا على فيسبوك')); ?></h3>
                     <div class="bh-fb-embed">
                         <div class="fb-page" data-href="<?php echo esc_attr($fb); ?>" data-tabs="timeline" data-width="340" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>
                     </div>
@@ -38,7 +38,7 @@ if ($fb || $yt) :
             <?php endif; ?>
             <?php if ($yt) : ?>
                 <div class="bh-card">
-                    <h3 class="bh-card__title">▶️ <?php echo esc_html(bh_l('Notre chaîne YouTube', 'قناتنا على يوتيوب')); ?></h3>
+                    <h3 class="bh-card__title"><?php echo esc_html(bh_l('Notre chaîne YouTube', 'قناتنا على يوتيوب')); ?></h3>
                     <p><?php echo esc_html(bh_l('Replays complets, émissions et directs enregistrements sur notre chaîne YouTube.', 'المعادلات الكاملة والبرامج والتسجيلات المباشرة على قناتنا في يوتيوب.')); ?></p>
                     <a class="bh-btn bh-btn-primary" href="<?php echo esc_url($yt); ?>" target="_blank" rel="noopener"><?php echo esc_html(bh_l('Voir la chaîne ↗', 'شاهد القناة ↗')); ?></a>
                 </div>

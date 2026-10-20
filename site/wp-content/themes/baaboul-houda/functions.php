@@ -45,7 +45,8 @@ add_filter('query_vars', function (array $vars): array {
 });
 
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('bh-fonts', 'https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap', [], null);
+    // Fonts are self-hosted (assets/fonts/*.woff2) — no external requests.
+    wp_enqueue_style('bh-fonts', BH_THEME_ASSETS . '/css/fonts.css', [], BH_THEME_VERSION);
     wp_enqueue_style('bh-style', BH_THEME_ASSETS . '/css/style.css', [], BH_THEME_VERSION);
     wp_enqueue_script('bh-main', BH_THEME_ASSETS . '/js/main.js', [], BH_THEME_VERSION, true);
     wp_localize_script('bh-main', 'bhCfg', bh_client_config());

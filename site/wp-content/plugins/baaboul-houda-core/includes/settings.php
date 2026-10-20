@@ -21,7 +21,7 @@ function bh_default_settings(): array {
         // En direct
         'live_enabled'    => '1',
         'live_platform'   => 'youtube', // youtube | facebook | hls | off
-        'live_url'        => '',
+        'live_url'        => 'https://www.youtube.com/watch?v=TseWV8tk2kc', // défaut : chaîne 24/7 YouTube
         'live_title_fr'   => 'Diffusion en direct',
         'live_title_ar'   => 'بث مباشر',
         // Radio
@@ -265,7 +265,7 @@ function bh_render_settings_page(): void {
                 'label'     => 'Plateforme',
                 'options'   => ['youtube' => 'YouTube', 'facebook' => 'Facebook', 'hls' => 'Flux vidéo propre (HLS/.m3u8)', 'off' => 'Hors ligne'],
             ]);
-            bh_field($s, 'live_url', 'url', ['label' => 'URL de la diffusion', 'help' => 'YouTube : URL de la vidéo. Facebook : URL de la vidéo de la page. HLS : URL .m3u8.']);
+            bh_field($s, 'live_url', 'url', ['label' => 'URL de la diffusion', 'help' => 'YouTube : URL de la vidéo. Facebook : URL de la vidéo de la page. HLS : URL .m3u8. Laissez vide pour afficher la chaîne 24/7 par défaut.']);
             bh_field($s, 'live_title_fr', 'text', ['label' => 'Titre (français)']);
             bh_field($s, 'live_title_ar', 'text', ['label' => 'العنوان (العربية)']);
             ?>

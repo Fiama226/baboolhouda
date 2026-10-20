@@ -1,62 +1,102 @@
 <?php
 /**
- * Baaboul Houda — wp-config.php sample.
+ * The base configuration for WordPress
  *
- * cPanel : copier ce fichier en `wp-config.php`, remplir les 3 constantes DB
- * et remplacer les clés SALT par celles de
- * <https://api.wordpress.org/secret-key/1.1/salt/>
+ * The wp-config.php creation script uses this file during the installation.
+ * You don't have to use the website, you can copy this file to "wp-config.php"
+ * and fill in the values.
  *
- * @package baaboul-houda
+ * This file contains the following configurations:
+ *
+ * * Database settings
+ * * Secret keys
+ * * Database table prefix
+ * * ABSPATH
+ *
+ * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/
+ *
+ * @package WordPress
  */
 
-// Nom / utilisateur / mot de passe / hôte de la base (cPanel > MySQL).
-define( 'DB_NAME', 'CHANGE_ME_db' );
-define( 'DB_USER', 'CHANGE_ME_user' );
-define( 'DB_PASSWORD', 'CHANGE_ME_password' );
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'database_name_here' );
+
+/** Database username */
+define( 'DB_USER', 'username_here' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'password_here' );
+
+/** Database hostname */
 define( 'DB_HOST', 'localhost' );
+
+/** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
+
+/** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-// Clés de sécurité — GÉNÉRER sur https://api.wordpress.org/secret-key/1.1/salt/
-define( 'AUTH_KEY', 'CHANGE_ME' );
-define( 'SECURE_AUTH_KEY', 'CHANGE_ME' );
-define( 'LOGGED_IN_KEY', 'CHANGE_ME' );
-define( 'NONCE_KEY', 'CHANGE_ME' );
-define( 'AUTH_SALT', 'CHANGE_ME' );
-define( 'SECURE_AUTH_SALT', 'CHANGE_ME' );
-define( 'LOGGED_IN_SALT', 'CHANGE_ME' );
-define( 'NONCE_SALT', 'CHANGE_ME' );
+/**#@+
+ * Authentication unique keys and salts.
+ *
+ * Change these to different unique phrases! You can generate these using
+ * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
+ *
+ * You can change these at any point in time to invalidate all existing cookies.
+ * This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define( 'AUTH_KEY',         'put your unique phrase here' );
+define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
+define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
+define( 'NONCE_KEY',        'put your unique phrase here' );
+define( 'AUTH_SALT',        'put your unique phrase here' );
+define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
+define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
+define( 'NONCE_SALT',       'put your unique phrase here' );
 
+/**#@-*/
+
+/**
+ * WordPress database table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ *
+ * At the installation time, database tables are created with the specified prefix.
+ * Changing this value after WordPress is installed will make your site think
+ * it has not been installed.
+ *
+ * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/#table-prefix
+ */
 $table_prefix = 'wp_';
 
-// Sécurité : interdire la modification des fichiers depuis l'admin.
-define( 'DISALLOW_FILE_EDIT', true );
-define( 'DISALLOW_FILE_MODS', true );
-// Interdire l'inscription publique.
-define( 'WP_ALLOW_MULTISITE', false );
-// Journal d'erreurs : hors du web root par défaut ; désactiver en production
-// une fois le site stable (laisser true pendant le déploiement).
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the documentation.
+ *
+ * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
+ */
 define( 'WP_DEBUG', false );
-define( 'WP_DEBUG_LOG', false );
-define( 'WP_DEBUG_DISPLAY', false );
 
-// Mises à jour : autoriser mineures + traductions uniquement.
-define( 'AUTOMATIC_UPDATER_DISABLED', false );
-add_action( 'option_update_auto_update', function ( $value ) {
-	$plugins = is_array( $value ) ? $value : array();
-	// Ne jamais désactiver la mise à jour du cœur si tout est épinglé.
-	return $plugins;
-}, 20 );
+/* Add any custom values between this line and the "stop editing" line. */
 
-// Maintenance : créer un fichier `maintenance.php` à la racine pour forcer
-// la page de maintenance pendant les mises à jour manuelles.
-if ( file_exists( __DIR__ . '/maintenance.php' ) ) {
-	wp_die(
-		esc_html__( 'Le site est en maintenance. Revenez dans quelques instants.', 'baaboul-houda' ),
-		'Maintenance',
-		array( 'response' => 503 )
-	);
+
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', __DIR__ . '/' );
 }
 
-/* That's all, stop editing! */
+/** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';

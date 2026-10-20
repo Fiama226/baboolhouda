@@ -7,13 +7,19 @@ defined('ABSPATH') || exit;
 
 function bh_live(): array {
     $s = bh_settings();
-    return [
+    $live = [
         'enabled'  => !empty($s['live_enabled']) && 'off' !== $s['live_platform'],
         'platform' => in_array($s['live_platform'], ['youtube', 'facebook', 'hls'], true) ? $s['live_platform'] : 'off',
         'url'      => $s['live_url'],
         'title_fr' => $s['live_title_fr'],
         'title_ar' => $s['live_title_ar'],
     ];
+    // Default stream: when the channel is on but no URL has been pasted yet,
+    // show the station's permanent 24/7 YouTube stream.
+    if ($live['enabled'] && '' === trim((string) $live['url'])) {
+        $live['url'] = 'https://www.youtube.com/watch?v=TseWV8tk2kc';
+    }
+    return $live;
 }
 
 /** Second channel (e.g. "Coran 24/7") — same shape as bh_live(). */

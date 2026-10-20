@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Outils interactifs — aperçu</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/site/wp-content/themes/baaboul-houda/assets/dist/css/fonts.css">
 <link rel="stylesheet" href="/site/wp-content/themes/baaboul-houda/assets/dist/css/style.css">
 <style>
   .bh-preview-note { background:#fff8e6; border-bottom:2px solid var(--bh-gold); color:#5c4a0e; text-align:center; font-size:13px; padding:8px 16px; }
@@ -40,7 +40,7 @@
     <h1>Outils & services — aperçu interactif</h1>
 
     <section class="bh-card" x-data="bhZakat({ rate: 2.5, nisab: 0, currency: 'FCFA', nisabNote: '' })">
-      <h2 class="bh-card__title">🧮 Calculateur de Zakat</h2>
+      <h2 class="bh-card__title">Calculateur de Zakat</h2>
       <div style="display:grid;gap:10px;">
         <label>Argent liquide (FCFA) <input class="bh-select" type="number" min="0" x-model.number="cash"></label>
         <label>Or / bijoux (FCFA) <input class="bh-select" type="number" min="0" x-model.number="gold"></label>
@@ -53,7 +53,7 @@
     </section>
 
     <section class="bh-card" x-data="bhQibla({ city: 'Ouagadougou', bearing: 71.4, cities: Object.keys(window.bhCfg.qiblaBears) })" x-init="init()">
-      <h2 class="bh-card__title">🧭 Direction de la Qibla</h2>
+      <h2 class="bh-card__title">Direction de la Qibla</h2>
       <label>Ville
         <select class="bh-select" x-model="citySel" @change="applyCity()">
           <template x-for="c in cities" :key="c"><option :value="c" x-text="c"></option></template>
@@ -65,11 +65,11 @@
       </div>
       <p class="bh-dates__result" x-show="bearingDeg !== null" x-text="'La Kaaba se trouve à ' + bearingText() + ' de vous.'"></p>
       <p class="bh-muted" x-show="bearingDeg === null">Aucune donnée pour cette ville.</p>
-      <button class="bh-btn bh-btn--ghost" @click="startCompass()" x-show="!deviceReady">📱 Activer le capteur (mobile)</button>
+      <button class="bh-btn bh-btn--ghost" @click="startCompass()" x-show="!deviceReady">Activer le capteur (mobile)</button>
     </section>
 
     <section class="bh-card" x-data="bhDates({ city: 'Ouagadougou' })">
-      <h2 class="bh-card__title">📅 Conversions de dates & jours de jeûne</h2>
+      <h2 class="bh-card__title">Conversions de dates & jours de jeûne</h2>
       <p><strong>Aujourd’hui :</strong> <span class="bh-dates__today" x-text="todayGreg"></span> · <span class="bh-dates__hijri" x-text="todayHijri"></span></p>
       <p class="bh-dates__result" x-show="result" x-text="result"></p>
       <div class="bh-dates-convert" style="margin-top:12px;">
@@ -92,7 +92,7 @@
     </section>
 
     <section class="bh-card" x-data="bhTasbih()" x-init="init()">
-      <h2 class="bh-card__title">📿 Tasbih numérique</h2>
+      <h2 class="bh-card__title">Tasbih numérique</h2>
       <label>Formule
         <select class="bh-select" x-model="phrase" @change="onPhraseChange()">
           <template x-for="p in Object.keys(window.bhCfg.tasbihPhrases)" :key="p"><option :value="p" x-text="window.bhCfg.tasbihPhrases[p]"></option></template>
@@ -107,7 +107,7 @@
     </section>
 
     <section class="bh-card" x-data="bhPrayer()">
-      <h2 class="bh-card__title" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">🕌 Horaires de prière
+      <h2 class="bh-card__title" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">Horaires de prière
         <select x-model="city" @change="load()" class="bh-select" aria-label="Ville" style="width:auto;">
           <template x-for="c in cities" :key="c"><option :value="c" x-text="c"></option></template>
         </select>
@@ -125,7 +125,7 @@
     </section>
 
     <section class="bh-card bh-card--ayah" x-data="bhAyah()">
-      <h2 class="bh-card__title">✨ Verset du jour</h2>
+      <h2 class="bh-card__title">Verset du jour</h2>
       <p class="bh-ayah__ar" x-text="text"></p>
       <p class="bh-ayah__ref" style="color:var(--bh-ink-soft);" x-text="ref"></p>
       <a class="bh-link" :href="coranUrl">Lire le Coran →</a>
