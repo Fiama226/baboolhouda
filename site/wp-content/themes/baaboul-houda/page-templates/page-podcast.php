@@ -10,10 +10,12 @@ $q = new \WP_Query([
     'post_type'      => 'episode',
     'posts_per_page' => 30,
     'no_found_rows'  => true,
-    'meta_query'     => [[
-        'key'   => '_bh_source_type',
-        'value' => 'audio',
-    ]],
+    // Audio replays: audio-type episodes, or any episode that has an audio URL.
+    'meta_query'     => [
+        'relation' => 'OR',
+        ['key' => '_bh_source_type', 'value' => 'audio'],
+        ['key' => '_bh_audio_url', 'value' => '', 'compare' => '!='],
+    ],
 ]);
 ?>
 <div class="bh-container bh-page">
@@ -35,22 +37,12 @@ $q = new \WP_Query([
         <?php if (!$q->have_posts()) : ?>
             <p class="bh-empty"><?php echo esc_html(bh_l('Aucun épisode audio pour le moment.', 'لا حلقات صوتية بعد.')); ?></p>
         <?php else : ?>
-            <?php
-            while ($q->have_posts()) :
-                $q->the_post();
-                $src = bh_episode_source(get_the_ID());
-                $audio = $src['audio'] ?: $src['url'];
-                ?>
-                <div class="bh-card bh-card--podcast" data-bh-audio-player data-url="<?php echo esc_attr($audio); ?>">
-                    <span class="bh-card__body">
-                        <strong><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></strong>
-                        <small><?php echo esc_html(get_the_date()); ?> — <?php echo esc_html(bh_post_excerpt(get_the_ID(), 40)); ?></small>
-                    </span>
-                    <span class="bh-audio-controls">
-                        <button type="button" class="bh-audio-play" aria-label="<?php echo esc_attr(bh_l('Écouter', 'استمع')); ?>">▶</button>
-                    </span>
-                </div>
-            <?php endwhile; ?>
+            <div class="bh-card bh-audio-list">
+                <?php foreach ($q->posts as $bh_ep) : ?>
+                    <?php get_template_part('template-parts/audio-row', null, ['post' => $bh_ep]); ?>
+                <?php endforeach; ?>
+            </div>
+            <?php wp_reset_postdata(); ?>
         <?php endif; ?>
     </div>
 </div>

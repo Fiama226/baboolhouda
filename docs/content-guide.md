@@ -15,6 +15,11 @@ Menu **TV Baaboul Houda > Réglages du site > En direct** :
    - **Hors ligne** → le player est masqué.
 3. Écrire le titre (FR et AR) et **Enregistrer**.
 
+**Diffuser une vidéo ou un direct Facebook** : ouvrir la vidéo (ou le direct) sur la page
+Facebook de la chaîne, copier son adresse (ex. `https://www.facebook.com/100083362387605/videos/…/`),
+la coller dans **URL de la diffusion**, choisir la plateforme **Facebook**, puis **Enregistrer**.
+Seules les vidéos publiques de la page s'intègrent. Si aucun lien n'est renseigné, la vidéo par défaut de la chaîne est affichée sur l'accueil.
+
 Le badge rouge **● EN DIRECT** apparaît immédiatement dans le menu et
 l'accueil affiche le player. Pour finir : décocher la case → Enregistrer.
 
@@ -71,6 +76,23 @@ Menu **Épisodes (replays) > Ajouter** :
 - **Date de diffusion**.
 L'image miniature s'affiche sur la carte de l'épisode (utilisez la vignette
 YouTube si possible).
+
+### Replays radio (audio)
+
+Pour qu'un replay apparaisse dans **Replays radio** (page Radio) et sur la
+page **Podcasts**, sous forme de lecteur audio (bouton lecture, barre de
+progression, téléchargement) :
+
+1. Choisissez le type de source **« Audio seul — replay radio »**.
+2. Collez le **lien du fichier audio** (`.mp3`, `.m4a`…) dans le champ URL,
+   **ou** cliquez sur **« Téléverser / choisir un fichier audio »** pour
+   l'envoyer depuis votre ordinateur (ou reprendre un fichier déjà présent
+   dans la médiathèque).
+3. Renseignez le programme et la date de diffusion, puis **Publier**.
+
+Un épisode YouTube/Facebook peut aussi avoir une version audio : remplissez
+« URL audio (optionnel) » et il sera listé en plus dans les replays radio.
+Un seul son joue à la fois : lancer un replay met la radio en direct en pause.
 
 ## 6. 🗞️ Actualités
 

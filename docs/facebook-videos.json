@@ -1,0 +1,87 @@
+{
+  "source": "https://www.facebook.com/profile.php?id=100083362387605 (public view, no login)",
+  "note": "No live stream found. Captions are sparse; dates as written in captions. Facebook shows a login popup over the page but video links are in the public DOM.",
+  "videos": [
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/1947141319592803/",
+      "title": "Le 17 octobre 2025 عنوان: (الحياة الزوجية السعيدة)",
+      "date": "2025-10-17",
+      "kind": "replay",
+      "duration": "33:17",
+      "verified_embed": true,
+      "notes": "Visually verified embed plays. Used as default live/featured video."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/3145113465688323/",
+      "title": "Le 17 octobre 2025 عنوان: (الحياة الزوجية السعيدة)",
+      "date": "2025-10-17",
+      "kind": "replay",
+      "duration": "30:10",
+      "verified_embed": true,
+      "notes": "Embed page loads (HTTP 200, same size as working ones); not visually checked."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/2214498672781177/",
+      "title": "Lé 14 octobre 2026 (caption otherwise generic)",
+      "date": "2026-10-14",
+      "kind": "replay",
+      "duration": "7:45",
+      "verified_embed": true,
+      "notes": "Embed page loads; not visually checked."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/1271804365142697/",
+      "title": "Lé 17 octobre 2026 (caption otherwise generic)",
+      "date": "2026-10-17",
+      "kind": "replay",
+      "duration": "3:07",
+      "verified_embed": true,
+      "notes": "Embed page loads; not visually checked."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/4461724257427994/",
+      "title": "Lé 16 octobre 2026 (caption otherwise generic)",
+      "date": "2026-10-16",
+      "kind": "replay",
+      "duration": "27:24",
+      "verified_embed": true,
+      "notes": "Embed page loads; not visually checked."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/1853203785692931/",
+      "title": "Lé 16 octobre 2026 (caption otherwise generic)",
+      "date": "2026-10-16",
+      "kind": "replay",
+      "duration": "2:28",
+      "verified_embed": true,
+      "notes": "Embed page loads; not visually checked."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/2054935155189733/",
+      "title": "Lé 16 octobre 2026 (caption otherwise generic)",
+      "date": "2026-10-16",
+      "kind": "replay",
+      "duration": "27:24",
+      "verified_embed": true,
+      "notes": "Same duration as 4461724257427994, probably duplicate upload; not used."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/2528814114293825/",
+      "title": "(caption: channel presentation text, no title)",
+      "date": null,
+      "kind": "replay",
+      "duration": "1:04",
+      "verified_embed": true,
+      "notes": "Embed page loads; not used."
+    },
+    {
+      "url": "https://www.facebook.com/100083362387605/videos/4005458073083147/",
+      "title": "(caption: channel presentation text, no title)",
+      "date": null,
+      "kind": "replay",
+      "duration": null,
+      "verified_embed": true,
+      "notes": "Visually verified embed plays (portrait still image video). Not used."
+    }
+  ]
+}

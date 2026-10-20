@@ -12,6 +12,12 @@ add_action('admin_enqueue_scripts', function (string $hook) {
     }
     wp_enqueue_style('bh-admin', BH_CORE_URL . 'assets/dist/css/admin.css', [], BH_VERSION);
     wp_enqueue_script('bh-admin', BH_CORE_URL . 'assets/dist/js/admin.js', [], BH_VERSION, true);
+
+    // Media library modal (upload/choose an audio or video file) on the episode editor.
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if ($screen && 'episode' === $screen->post_type) {
+        wp_enqueue_media();
+    }
 });
 
 /* ---------------------------------------------------------------------
@@ -55,14 +61,20 @@ function bh_render_episode_metabox(\WP_Post $post): void {
         . wp_kses_post(implode('', array_map(static fn ($id, $label) => '<option value="' . (int) $id . '"' . selected($pid, $id, false) . '>' . esc_html($label) . '</option>', array_keys($options), $options)))
         . '</select></p>';
     echo '<p><label>Date de diffusion</label><br><input type="date" name="bh_date" value="' . esc_attr($date) . '"></p>';
-    echo '<p><label>Type de source</label><br><select name="bh_source_type">'
+    echo '<div class="bh-episode-source">';
+    echo '<p><label for="bh-source-type">Type de source</label><br><select id="bh-source-type" name="bh_source_type">'
         . '<option value="youtube"' . selected($type, 'youtube', false) . '>YouTube (URL)</option>'
         . '<option value="facebook"' . selected($type, 'facebook', false) . '>Facebook (URL)</option>'
         . '<option value="file"' . selected($type, 'file', false) . '>Vidéo auto-hébergée (.mp4 / URL)</option>'
-        . '<option value="audio"' . selected($type, 'audio', false) . '>Audio seul (.mp3 / URL)</option>'
+        . '<option value="audio"' . selected($type, 'audio', false) . '>Audio seul — replay radio (.mp3 / URL)</option>'
         . '</select></p>';
-    echo '<p><label>URL</label><br><input type="url" name="bh_source_url" class="widefat" value="' . esc_attr($url) . '" placeholder="https://…"></p>';
-    echo '<p><label>URL audio (optionnel)</label><br><input type="url" name="bh_audio_url" class="widefat" value="' . esc_attr($audio) . '"></p>';
+    echo '<p><label for="bh-source-url">URL</label><br><input type="url" id="bh-source-url" name="bh_source_url" class="widefat" value="' . esc_attr($url) . '" placeholder="https://…">'
+        . '<button type="button" class="button bh-media-pick" data-target="bh-source-url" data-library="audio" style="margin-top:6px">Téléverser / choisir un fichier</button></p>';
+    echo '<p class="description" data-bh-hint="audio">Replay radio : collez le lien du fichier audio, ou cliquez sur « Téléverser / choisir un fichier » pour l’envoyer depuis votre ordinateur. Il apparaîtra sur la page Radio sous forme de lecteur audio.</p>';
+    echo '<p><label for="bh-audio-url">URL audio (optionnel)</label><br><input type="url" id="bh-audio-url" name="bh_audio_url" class="widefat" value="' . esc_attr($audio) . '" placeholder="https://…/emission.mp3">'
+        . '<button type="button" class="button bh-media-pick" data-target="bh-audio-url" data-library="audio" style="margin-top:6px">Téléverser / choisir un audio</button></p>';
+    echo '<p class="description">Pour une vidéo YouTube/Facebook, vous pouvez en plus fournir ici la version audio : l’épisode sera aussi listé comme replay radio.</p>';
+    echo '</div>';
 }
 
 add_action('save_post', function (int $post_id) {

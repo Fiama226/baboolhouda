@@ -43,10 +43,10 @@ $hasCh2  = !empty($live2['enabled']);
             </div>
 
             <template x-if="ch1.enabled && (!hasCh2 || ch === 1)">
-                <div class="bh-hero__player"><?php echo bh_live_embed_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+                <div class="bh-hero__player"><?php echo bh_live_embed_html(['autoplay' => true, 'mute' => true]); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
             </template>
             <template x-if="hasCh2 && ch === 2 && ch2.enabled">
-                <div class="bh-hero__player"><?php echo function_exists('bh_live_embed_html_for') ? bh_live_embed_html_for(function_exists('bh_live_channel2') ? bh_live_channel2() : []) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+                <div class="bh-hero__player"><?php echo function_exists('bh_live_embed_html_for') ? bh_live_embed_html_for(function_exists('bh_live_channel2') ? bh_live_channel2() : [], ['autoplay' => true]) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
             </template>
             <template x-if="!ch1.enabled && (!hasCh2 || ch === 1)">
                 <div class="bh-hero__off">
@@ -60,6 +60,12 @@ $hasCh2  = !empty($live2['enabled']);
                     </p>
                 </div>
             </template>
+
+            <!-- Autoplay starts muted (browser rule): tell visitors how to get the sound. -->
+            <p class="bh-hero__sound-hint" x-data="{ show: true }" x-show="show && ch1.enabled && (!hasCh2 || ch === 1)" x-init="setTimeout(() => show = false, 12000)" x-cloak>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="m16 9.5 4 5m0-5-4 5"/></svg>
+                <?php echo esc_html(bh_l('La vidéo démarre sans le son (règle des navigateurs) : touchez le haut-parleur du lecteur pour l’activer.', 'يبدأ الفيديو بدون صوت (قاعدة المتصفحات): اضغط على أيقونة مكبّر الصوت في المشغّل لتفعيله.')); ?>
+            </p>
 
             <?php if ($nowNext['current']) : ?>
                 <p class="bh-hero__now">
@@ -215,7 +221,7 @@ $hasCh2  = !empty($live2['enabled']);
             <h2><?php echo esc_html(bh_l('Actualités', 'الأخبار')); ?></h2>
             <a class="bh-link" href="<?php echo esc_url(bh_nav_url('actualites')); ?>"><?php echo esc_html(bh_l('Toutes les actualités →', 'جميع الأخبار →')); ?></a>
         </div>
-        <?php get_template_part('template-parts/news', 'list', ['limit' => 3]); ?>
+        <?php get_template_part('template-parts/news', 'list', ['limit' => 3, 'variant' => 'featured']); ?>
     </div>
 </section>
 

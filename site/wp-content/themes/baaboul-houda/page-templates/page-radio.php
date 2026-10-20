@@ -91,21 +91,26 @@ $radioEnabled = !empty($s['radio_enabled']) && '' !== trim((string) $s['radio_ur
     <div class="bh-container">
         <div class="bh-section__head">
             <h2><?php echo esc_html(bh_l('Replays radio', 'أرشيف الإذاعة')); ?></h2>
-            <a class="bh-link" href="<?php echo esc_url(bh_nav_url('emissions')); ?>"><?php echo esc_html(bh_l('Tous les replays →', 'كل الأرشيف →')); ?></a>
+            <a class="bh-link" href="<?php echo esc_url(bh_nav_url('podcast')); ?>"><?php echo esc_html(bh_l('Tous les replays audio →', 'كل الحلقات الصوتية →')); ?></a>
         </div>
         <?php
+        // Audio only: episodes whose source is an audio file, or that have an audio URL.
         $audioEp = new WP_Query([
-            'post_type' => 'episode', 'posts_per_page' => 6, 'no_found_rows' => true,
-            'meta_query' => [['key' => '_bh_source_type', 'value' => ['audio', 'youtube', 'facebook', 'file'], 'compare' => 'IN']],
+            'post_type' => 'episode', 'posts_per_page' => 8, 'no_found_rows' => true,
+            'meta_query' => [
+                'relation' => 'OR',
+                ['key' => '_bh_source_type', 'value' => 'audio'],
+                ['key' => '_bh_audio_url', 'value' => '', 'compare' => '!='],
+            ],
         ]);
         if ($audioEp->have_posts()) {
-            echo '<div class="bh-grid bh-grid--3">';
+            echo '<div class="bh-card bh-audio-list">';
             foreach ($audioEp->posts as $e) {
-                get_template_part('template-parts/episode', 'card', ['post' => $e]);
+                get_template_part('template-parts/audio-row', null, ['post' => $e]);
             }
             echo '</div>';
         } else {
-            echo '<p class="bh-empty">' . esc_html(bh_l('Les replays apparaîtront ici.', 'ستظهر الحلقات المسجلة هنا.')) . '</p>';
+            echo '<p class="bh-empty">' . esc_html(bh_l('Les replays audio apparaîtront ici.', 'ستظهر الحلقات الصوتية هنا.')) . '</p>';
         }
         wp_reset_postdata();
         ?>

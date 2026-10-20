@@ -128,18 +128,18 @@ foreach ($presenters as $slug => $p) {
 }
 
 /* ---- Episodes ------------------------------------------------------ */
-$yt = fn ($id) => 'https://www.youtube.com/watch?v=' . $id;
+$fb = fn ($id) => 'https://www.facebook.com/100083362387605/videos/' . $id . '/';
 $mp3 = fn ($n) => 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-' . $n . '.mp3';
 $episodes = [
     // slug, fr title, ar title, fr text, ar text, programme, presenter idx, days ago, type, url
-    ['demo-ep-coran-vie-1', 'Coran et Vie : bien commencer la journée', 'قرآن وحياة: بداية يوم مبارك', 'Récitation et courte méditation pour démarrer la journée.', 'تلاوة وتأمل قصير لبداية اليوم.', 'quran-et-vie', 0, 2, 'youtube', $yt('9bZkp7q19f0')],
+    ['demo-ep-coran-vie-1', 'Conférence du 17 octobre 2025 : la vie conjugale heureuse', 'الحياة الزوجية السعيدة', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'quran-et-vie', 0, 2, 'facebook', $fb('1947141319592803')],
     ['demo-ep-coran-vie-2', 'Coran et Vie : la patience au quotidien', 'قرآن وحياة: الصبر في الحياة اليومية', 'Réflexion sur la patience dans le travail et la famille.', 'تأمل في الصبر في العمل والأسرة.', 'quran-et-vie', 0, 9, 'audio', $mp3(1)],
-    ['demo-ep-questions-foi-1', 'Questions de Foi : la prière en voyage', 'أسئلة الإيمان: الصلاة في السفر', 'Les auditeurs posent leurs questions sur la prière lors des déplacements.', 'المستمعون يطرحون أسئلتهم حول الصلاة أثناء التنقل.', 'questions-de-foi', 0, 4, 'youtube', $yt('jNQXAC9IVRw')],
-    ['demo-ep-questions-foi-2', 'Questions de Foi : le jeûne et la santé', 'أسئلة الإيمان: الصيام والصحة', 'Un échange sur le jeûne et les situations particulières.', 'حوار حول الصيام والحالات الخاصة.', 'questions-de-foi', 0, 16, 'facebook', 'https://www.facebook.com/facebook/videos/10153231379946729/'],
-    ['demo-ep-jeunesse-1', 'Jeunesse et Valeurs : réussir ses études', 'الشباب والقيم: النجاح في الدراسة', 'Conseils d’organisation et de motivation pour les étudiants.', 'نصائح في التنظيم والتحفيز للطلاب.', 'jeunesse-et-valeurs', 1, 6, 'youtube', $yt('aqz-KE-bpKQ')],
+    ['demo-ep-questions-foi-1', 'Conférence du 17 octobre 2025 (partie 2)', 'الحياة الزوجية السعيدة (الجزء الثاني)', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'questions-de-foi', 0, 4, 'facebook', $fb('3145113465688323')],
+    ['demo-ep-questions-foi-2', 'Émission du 14 octobre 2026', 'أسئلة الإيمان: الصيام والصحة', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'questions-de-foi', 0, 16, 'facebook', $fb('2214498672781177')],
+    ['demo-ep-jeunesse-1', 'Émission du 17 octobre 2026', 'الشباب والقيم: النجاح في الدراسة', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'jeunesse-et-valeurs', 1, 6, 'facebook', $fb('1271804365142697')],
     ['demo-ep-jeunesse-2', 'Jeunesse et Valeurs : métier et honnêteté', 'الشباب والقيم: العمل والأمانة', 'Comment concilier ambition professionnelle et valeurs.', 'كيف نوفّق بين الطموح المهني والقيم.', 'jeunesse-et-valeurs', 1, 21, 'audio', $mp3(2)],
-    ['demo-ep-communaute-1', 'Regards sur la Communauté : la solidarité de quartier', 'نظرات على المجتمع: تضامن الحي', 'Reportage sur les initiatives d’entraide dans un quartier de Ouagadougou.', 'تقرير عن مبادرات التعاون في أحد أحياء واغادوغو.', 'regards-sur-la-communaute', 2, 11, 'youtube', $yt('M7lc1UVf-VE')],
-    ['demo-ep-communaute-2', 'Regards sur la Communauté : rencontre avec une association', 'نظرات على المجتمع: لقاء مع جمعية', 'Rencontre avec une association locale et ses bénévoles.', 'لقاء مع جمعية محلية ومتطوعيها.', 'regards-sur-la-communaute', 2, 28, 'facebook', 'https://www.facebook.com/facebook/videos/10153231379946729/'],
+    ['demo-ep-communaute-1', 'Émission du 16 octobre 2026', 'نظرات على المجتمع: تضامن الحي', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'regards-sur-la-communaute', 2, 11, 'facebook', $fb('4461724257427994')],
+    ['demo-ep-communaute-2', 'Extrait du 16 octobre 2026', 'نظرات على المجتمع: لقاء مع جمعية', 'Rediffusion de la chaîne TV Baaboul Houda (vidéo officielle de la page Facebook).', 'إعادة بث من قناة باب الهدى (فيديو رسمي من صفحة فيسبوك).', 'regards-sur-la-communaute', 2, 28, 'facebook', $fb('1853203785692931')],
 ];
 foreach ($episodes as $e) {
     $meta = [

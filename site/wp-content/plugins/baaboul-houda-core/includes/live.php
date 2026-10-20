@@ -5,6 +5,16 @@
 
 defined('ABSPATH') || exit;
 
+/** Default home video, shown when the admin has not provided any live-stream URL. */
+function bh_default_live(): array {
+    return [
+        'platform' => 'youtube',
+        'url'      => 'https://www.youtube.com/watch?v=SkQlj6t3ido',
+        'title_fr' => 'Diffusion TV Baaboul Houda',
+        'title_ar' => 'بث قناة باب الهدى',
+    ];
+}
+
 function bh_live(): array {
     $s = bh_settings();
     $live = [
@@ -14,10 +24,18 @@ function bh_live(): array {
         'title_fr' => $s['live_title_fr'],
         'title_ar' => $s['live_title_ar'],
     ];
-    // Default stream: when the channel is on but no URL has been pasted yet,
-    // show the station's permanent 24/7 YouTube stream.
+    // No URL given by the admin: fall back to the channel's default video.
+    // An explicit "off" (enabled = false) is left untouched.
     if ($live['enabled'] && '' === trim((string) $live['url'])) {
-        $live['url'] = 'https://www.youtube.com/watch?v=TseWV8tk2kc';
+        $def = bh_default_live();
+        $live['platform'] = $def['platform'];
+        $live['url']      = $def['url'];
+        if ('' === trim((string) $live['title_fr'])) {
+            $live['title_fr'] = $def['title_fr'];
+        }
+        if ('' === trim((string) $live['title_ar'])) {
+            $live['title_ar'] = $def['title_ar'];
+        }
     }
     return $live;
 }
@@ -67,30 +85,39 @@ function bh_youtube_id(string $url): string {
     return '';
 }
 
-/** Embed HTML for the live platform. Returns '' when unconfigured. */
-function bh_live_embed_html(): string {
-    return bh_live_embed_html_for(bh_live());
+/**
+ * Embed HTML for the live platform. Returns '' when unconfigured.
+ * $opts: autoplay (bool), mute (bool). Browsers only allow autoplay when the
+ * video starts muted (or after a click on the page), so the home page asks for both.
+ */
+function bh_live_embed_html(array $opts = []): string {
+    return bh_live_embed_html_for(bh_live(), $opts);
 }
 
 /** Embed HTML for ANY channel config (used for the TV2 "Coran 24/7" channel). */
-function bh_live_embed_html_for(array $live): string {
+function bh_live_embed_html_for(array $live, array $opts = []): string {
     if (empty($live['enabled']) || '' === trim((string) ($live['url'] ?? ''))) {
         return '';
     }
+    $autoplay = !empty($opts['autoplay']);
+    $mute     = !empty($opts['mute']);
+    $loading  = $autoplay ? 'eager' : 'lazy';
     switch ($live['platform']) {
         case 'youtube':
             $id = bh_youtube_id($live['url']);
             if (!$id) {
                 return '';
             }
-            return '<div class="bh-embed bh-embed-youtube"><iframe src="https://www.youtube.com/embed/' . rawurlencode($id) . '?rel=0&modestbranding=1" title="' . esc_attr($live['title_fr']) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>';
+            $q = 'rel=0&modestbranding=1&playsinline=1' . ($autoplay ? '&autoplay=1' : '') . ($mute ? '&mute=1' : '');
+            return '<div class="bh-embed bh-embed-youtube"><iframe src="https://www.youtube.com/embed/' . rawurlencode($id) . '?' . $q . '" title="' . esc_attr($live['title_fr']) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="' . $loading . '"></iframe></div>';
         case 'facebook':
             // Facebook video embed (works with a public page video URL).
             $href = rawurlencode($live['url']);
-            return '<div class="bh-embed bh-embed-facebook"><iframe src="https://www.facebook.com/plugins/video.php?href=' . $href . '&show_text=true&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen loading="lazy" title="' . esc_attr($live['title_fr']) . '"></iframe></div>';
+            $q    = 'show_text=true&width=560' . ($autoplay ? '&autoplay=true' : '');
+            return '<div class="bh-embed bh-embed-facebook"><iframe src="https://www.facebook.com/plugins/video.php?href=' . $href . '&' . $q . '" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="' . $loading . '" title="' . esc_attr($live['title_fr']) . '"></iframe></div>';
         case 'hls':
             $url = esc_url_raw($live['url']);
-            return '<div class="bh-embed bh-embed-hls"><video id="bh-live-video" controls playsinline preload="metadata" data-src="' . esc_attr($url) . '" style="width:100%;background:#000"></video></div>';
+            return '<div class="bh-embed bh-embed-hls"><video id="bh-live-video" controls playsinline preload="metadata"' . ($autoplay ? ' autoplay' : '') . ($mute ? ' muted' : '') . ' data-src="' . esc_attr($url) . '" style="width:100%;background:#000"></video></div>';
     }
     return '';
 }

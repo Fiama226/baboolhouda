@@ -96,6 +96,18 @@ function bh_episode_source(int $episode_id): array {
     ];
 }
 
+/**
+ * Playable audio file URL of an episode ('' if it has none): the explicit
+ * "URL audio" field first, otherwise the main URL when the source type is audio.
+ */
+function bh_episode_audio_url(int $episode_id): string {
+    $src = bh_episode_source($episode_id);
+    if ('' !== $src['audio']) {
+        return $src['audio'];
+    }
+    return 'audio' === $src['type'] ? $src['url'] : '';
+}
+
 function bh_episode_programme(int $episode_id): ?\WP_Post {
     $id = (int) get_post_meta($episode_id, '_bh_programme_id', true);
     return $id ? get_post($id) : null;

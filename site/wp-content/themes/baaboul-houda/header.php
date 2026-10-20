@@ -64,7 +64,7 @@ $bh_chevron      = '<svg class="bh-ico bh-ico--chev" viewBox="0 0 24 24" width="
         @scroll.window.passive="scrolled = window.scrollY > 4" :class="{ 'is-scrolled': scrolled }"
         @keydown.escape.window="open = false">
     <div class="bh-container bh-header__inner">
-        <a class="bh-header__brand" href="<?php echo esc_url(function_exists('bh_alt_url') ? bh_alt_url(bh_lang()) : home_url('/')); ?>">
+        <a class="bh-header__brand" href="<?php echo esc_url(bh_nav_url('direct')); ?>" aria-label="<?php echo esc_attr(bh_l('TV Baaboul Houda — Accueil', 'قناة باب الهدى — الرئيسية')); ?>">
             <?php echo bh_logo_html(54); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span class="bh-header__names">
                 <strong><?php bloginfo('name'); ?></strong>

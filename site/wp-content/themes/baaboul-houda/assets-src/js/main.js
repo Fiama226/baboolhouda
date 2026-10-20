@@ -72,11 +72,22 @@ function bhRadioBar() {
                     el.querySelector('.icon-play').hidden = false;
                     el.querySelector('.icon-pause').hidden = true;
                 } else {
+                    window.dispatchEvent(new CustomEvent('bh:audio-start', { detail: 'radio' })); // pause replays
                     howl.play();
                     this.playing = true;
                     el.querySelector('.icon-play').hidden = true;
                     el.querySelector('.icon-pause').hidden = false;
                 }
+            });
+            // A replay started: stop the live radio (one sound at a time).
+            window.addEventListener('bh:audio-start', (e) => {
+                if (e.detail === 'radio' || !howl || !this.playing) return;
+                howl.stop();
+                this.playing = false;
+                eqEl.classList.remove('is-playing');
+                statusEl.textContent = '';
+                el.querySelector('.icon-play').hidden = false;
+                el.querySelector('.icon-pause').hidden = true;
             });
         },
     };
@@ -103,6 +114,8 @@ function bhRadioPage(url, titleFr, titleAr, cover) {
         setVol() { if (howl) howl.volume(this.vol); },
         async toggle() {
             if (!this.url) return;
+            // Howler calls its handlers with `this` = the Howl, so keep the component in `vm`.
+            const vm = this;
             if (!howl) {
                 const Howl = await howler();
                 howl = new Howl({
@@ -110,13 +123,76 @@ function bhRadioPage(url, titleFr, titleAr, cover) {
                     html5: true,
                     loop: true,
                     volume: this.vol,
-                    onplay() { this.playing = true; },
-                    onstop() { this.playing = false; },
-                    onpause() { this.playing = false; },
+                    onplay() { vm.playing = true; },
+                    onstop() { vm.playing = false; },
+                    onpause() { vm.playing = false; },
                 });
+                // A replay started: stop the live radio (one sound at a time).
+                window.addEventListener('bh:audio-start', (e) => { if (e.detail !== 'radio' && vm.playing) howl.stop(); });
             }
-            if (this.playing) howl.stop(); else howl.play();
+            if (this.playing) {
+                howl.stop();
+            } else {
+                window.dispatchEvent(new CustomEvent('bh:audio-start', { detail: 'radio' })); // pause replays
+                howl.play();
+            }
         },
+    };
+}
+
+/* ============================ audio replay rows (radio / podcast) ============================ */
+function bhAudioRow(o) {
+    let audio = null;
+    const fmt = (s) => {
+        if (!Number.isFinite(s) || s < 0) return '0:00';
+        const m = Math.floor(s / 60);
+        const r = Math.floor(s % 60);
+        return `${m}:${String(r).padStart(2, '0')}`;
+    };
+    return {
+        src: o.src,
+        playing: false, loading: false, error: false, cur: 0, dur: 0,
+        init() {
+            // Another replay (or the live radio) started: pause this one.
+            window.addEventListener('bh:audio-start', (e) => {
+                if (e.detail !== this.$el && this.playing) this.pause();
+            });
+        },
+        ensure() {
+            if (audio) return audio;
+            audio = new Audio();
+            audio.preload = 'none';
+            audio.src = this.src;
+            audio.addEventListener('loadedmetadata', () => { this.dur = audio.duration; });
+            audio.addEventListener('timeupdate', () => {
+                this.cur = audio.currentTime;
+                if (!this.dur && Number.isFinite(audio.duration)) this.dur = audio.duration;
+            });
+            audio.addEventListener('playing', () => { this.playing = true; this.loading = false; });
+            audio.addEventListener('waiting', () => { this.loading = true; });
+            audio.addEventListener('pause', () => { this.playing = false; });
+            audio.addEventListener('ended', () => { this.playing = false; this.cur = 0; });
+            audio.addEventListener('error', () => { this.error = true; this.playing = false; this.loading = false; });
+            return audio;
+        },
+        async toggle() {
+            const a = this.ensure();
+            if (this.playing) { a.pause(); return; }
+            this.error = false;
+            this.loading = true;
+            this.playing = true; // react at once (pause icon) while the file buffers
+            window.dispatchEvent(new CustomEvent('bh:audio-start', { detail: this.$el }));
+            try { await a.play(); } catch { this.playing = false; this.loading = false; this.error = true; }
+        },
+        pause() { if (audio) audio.pause(); },
+        seek(e) {
+            if (!this.dur) return;
+            const a = this.ensure();
+            a.currentTime = (Number(e.target.value) / 1000) * this.dur;
+            this.cur = a.currentTime;
+        },
+        pct() { return this.dur ? Math.min(1000, Math.round((this.cur / this.dur) * 1000)) : 0; },
+        timeText() { return `${fmt(this.cur)} / ${this.dur ? fmt(this.dur) : '--:--'}`; },
     };
 }
 
@@ -633,6 +709,11 @@ async function initLiveHls() {
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = src;
     }
+    // Home page autoplay: the video is muted (the only kind browsers let start on their own).
+    if (video.autoplay) {
+        video.muted = true;
+        video.play().catch(() => { /* blocked: the visitor presses play */ });
+    }
 }
 
 /* ============================ topbar date ============================ */
@@ -804,34 +885,6 @@ function initShare() {
     });
 }
 
-/* ============================ podcast audio players ============================ */
-function initPodcastPlayers() {
-    document.querySelectorAll('[data-bh-audio-player]').forEach((card) => {
-        const btn = card.querySelector('.bh-audio-play');
-        if (!btn) return;
-        let audio = null;
-        let playing = false;
-        btn.addEventListener('click', () => {
-            if (!audio) {
-                audio = new Audio(card.dataset.url);
-                audio.addEventListener('ended', () => { playing = false; btn.textContent = '▶'; card.classList.remove('is-playing'); });
-            }
-            if (playing) {
-                audio.pause();
-                playing = false;
-                btn.textContent = '▶';
-                card.classList.remove('is-playing');
-            } else {
-                audio.play().then(() => {
-                    playing = true;
-                    btn.textContent = '⏸';
-                    card.classList.add('is-playing');
-                }).catch(() => {});
-            }
-        });
-    });
-}
-
 /* ============================ boot ============================ */
 /** Header live search (suggest from REST /bh/v1/search). */
 function bhSearch() {
@@ -883,6 +936,7 @@ function bhSearch() {
 }
 Alpine.data('bhSearch', bhSearch);
 Alpine.data('bhRadioPage', (u, f, a, c) => bhRadioPage(u, f, a, c));
+Alpine.data('bhAudioRow', (o) => bhAudioRow(o));
 Alpine.data('bhPrayer', (full) => bhPrayer(full));
 Alpine.data('bhAyah', bhAyah);
 Alpine.data('bhQuranIndex', bhQuranIndex);
@@ -902,7 +956,6 @@ document.addEventListener('alpine:init', () => {
     initLiveToast();
     initAdhan();
     initShare();
-    initPodcastPlayers();
     if (cfg.accent) {
         document.documentElement.style.setProperty('--bh-green', cfg.accent);
     }

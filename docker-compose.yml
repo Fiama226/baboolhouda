@@ -89,6 +89,12 @@ services:
         wp plugin activate baaboul-houda-core --skip-themes
         wp theme activate baaboul-houda
         wp rewrite structure '/%postname%/'
+        # Remove WordPress' sample post/page ("Hello world!") so they never show on the site
+        # (after the plugin+theme are active: the theme needs the plugin to load).
+        ids=$$(wp post list --post_type=post --name=hello-world --format=ids)
+        [ -n "$$ids" ] && wp post delete $$ids --force
+        ids=$$(wp post list --post_type=page --name=sample-page --format=ids)
+        [ -n "$$ids" ] && wp post delete $$ids --force
         # DEV-ONLY demo content (idempotent). Disable with SEED_DEMO=0 in .env.
         if [ "$${SEED_DEMO:-1}" != "0" ]; then sh /seed-demo.sh; fi
         echo ">> Ready: theme + core plugin active"
