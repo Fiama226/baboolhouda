@@ -33,3 +33,4 @@ build/tmp/
 
 # Local environment (secrets/ports)
 .env
+.playwright-mcp/
