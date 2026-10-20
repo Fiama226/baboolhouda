@@ -22,6 +22,13 @@ bash scripts/test-local.sh
 ```
 Le **vrai** `php -l` et le **build Docker** tournent en CI (GitHub Actions) à chaque push.
 
+> ⚠️ Le fichier de CI [`.github/workflows/ci.yml`](.github/workflows/ci.yml) est
+> inclus dans le dépôt local mais **n'a pas pu être poussé** par l'agent
+> (l'intégration GitHub de cet espace de travail n'a pas la permission
+> `workflows`). Le propriétaire du dépôt doit soit l'activer
+> (*Settings > General > Workflow > Allow GitHub App*), soit commit manuellement
+> ce fichier : `git add .github/workflows/ci.yml && git commit -m "ci" && git push`.
+
 ### Déploiement cPanel
 ```bash
 npm install && npm run release
