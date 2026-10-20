@@ -1,0 +1,32 @@
+# Vendored WordPress core (fetched by scripts/vendor-core.sh, see sources.json)
+site/wp-*.php
+site/wp-includes/
+site/wp-admin/
+site/index.php
+site/license.txt
+site/readme.html
+site/xmlrpc.php
+site/wp-content/index.php
+site/wp-content/plugins/hello.php
+site/wp-content/plugins/index.php
+site/wp-content/themes/index.php
+site/wp-content/themes/twenty*/
+
+# WordPress runtime state
+site/wp-content/uploads/*
+!site/wp-content/uploads/.gitkeep
+site/wp-content/cache/
+site/wp-content/object-cache.php
+site/wp-content/debug.log
+site/wp-config.php
+
+# Build artifacts (committed: theme ships pre-built) — keep dist in git for cPanel zip
+# (we intentionally commit dist/ so the release zip needs no Node on the host)
+node_modules/
+build/tmp/
+/release/
+.tmp/
+*.log
+.DS_Store
+# wp-config-sample.php IS part of the release (the wp-*.php rule above hides it)
+!site/wp-config-sample.php

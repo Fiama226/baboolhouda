@@ -1,0 +1,52 @@
+# =============================================================================
+# TV Baaboul Houda — local development / preview (Docker-first workflow)
+#
+#   docker compose up -d        →  http://localhost:8080  (site)
+#                                  http://localhost:8080/wp-admin (admin)
+#   docker compose logs -f
+#
+# First run performs the WordPress installer once (pick admin user/password),
+# then the core plugin creates the section pages automatically on activation.
+# =============================================================================
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MARIADB_DATABASE: ${DB_NAME:-baboul_wp}
+      MARIADB_USER: ${DB_USER:-baboul}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-baboulpass}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # DB is internal only.
+    expose:
+      - "3306"
+
+  site:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME:-baboul_wp}
+      WORDPRESS_DB_USER: ${DB_USER:-baboul}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-baboulpass}
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DEBUG: "0"
+    volumes:
+      # Optional live dev: mount the site tree for hot edits (PHP).
+      - ./site:/var/www/html/site-dev
+
+volumes:
+  db-data:

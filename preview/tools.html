@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outils interactifs — aperçu</title>
+<link rel="stylesheet" href="/site/wp-content/themes/baaboul-houda/assets/dist/css/fonts.css">
+<link rel="stylesheet" href="/site/wp-content/themes/baaboul-houda/assets/dist/css/style.css">
+<style>
+  .bh-preview-note { background:#fff8e6; border-bottom:2px solid var(--bh-gold); color:#5c4a0e; text-align:center; font-size:13px; padding:8px 16px; }
+  .bh-preview-note a { font-weight:700; }
+  .bh-select { padding:9px 12px; border:1px solid var(--bh-line); border-radius:10px; background:var(--bh-card); color:var(--bh-ink); font-family:var(--bh-font-ui); font-size:14.5px; }
+  .bh-tools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:22px; align-items:start; }
+  @media (max-width:900px){ .bh-tools-grid { grid-template-columns:1fr; } }
+  .bh-tools-grid h1 { grid-column:1/-1; font-size:28px; margin:0; }
+  .bh-ayah__ar { font-family:var(--bh-font-quran); font-size:27px; line-height:2.1; direction:rtl; }
+  label fieldset { border:0; padding:0; margin:0; }
+  .bh-tools-grid label { display:grid; gap:5px; font-size:13.5px; font-weight:700; color:var(--bh-ink-soft); }
+  .bh-qibla-dial { width:240px; height:240px; margin:18px auto; border-radius:50%; border:10px solid var(--bh-line); position:relative; background:radial-gradient(circle, var(--bh-paper) 55%, var(--bh-card)); }
+  .bh-qibla-dial__needle { position:absolute; inset:0; display:grid; place-items:start center; transition:transform .4s ease; transform-origin:50% 50%; }
+  .bh-qibla-dial__needle::before { content:'🕋'; font-size:30px; margin-top:6px; }
+  .bh-qibla-dial span.n { position:absolute; top:-2px; left:50%; transform:translateX(-50%); font-size:11px; font-weight:800; color:var(--bh-ink-soft); }
+  .bh-tasbih__count { font-size:56px; text-align:center; font-weight:800; color:var(--bh-green); font-variant-numeric:tabular-nums; margin:8px 0 2px; }
+  .bh-prayer-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .bh-prayer { background:var(--bh-paper); border:1px solid var(--bh-line); border-radius:10px; padding:10px; text-align:center; }
+  .bh-prayer.is-next { background:var(--bh-gold-soft); border-color:var(--bh-gold); }
+  .bh-prayer__name { display:block; font-size:12.5px; color:var(--bh-ink-soft); }
+</style>
+</head>
+<body>
+<div class="bh-preview-note">
+  ⚠️ <strong>Aperçu interactif — outils</strong> (mêmes composants que le site) ·
+  <a href="/">Aperçu design FR</a> · <a href="/ar.html">العربية</a> · <a href="/quran.html">Lecteur Coran</a>
+</div>
+
+<main class="bh-main">
+<div class="bh-container" style="padding:28px 20px;">
+  <div class="bh-tools-grid">
+
+    <h1>Outils & services — aperçu interactif</h1>
+
+    <section class="bh-card" x-data="bhZakat({ rate: 2.5, nisab: 0, currency: 'FCFA', nisabNote: '' })">
+      <h2 class="bh-card__title">Calculateur de Zakat</h2>
+      <div style="display:grid;gap:10px;">
+        <label>Argent liquide (FCFA) <input class="bh-select" type="number" min="0" x-model.number="cash"></label>
+        <label>Or / bijoux (FCFA) <input class="bh-select" type="number" min="0" x-model.number="gold"></label>
+        <label>Bien professionnel (FCFA) <input class="bh-select" type="number" min="0" x-model.number="business"></label>
+        <label>Dettes (FCFA) <input class="bh-select" type="number" min="0" x-model.number="debts"></label>
+      </div>
+      <p class="bh-dates__result" x-show="total() > 0" x-text="'Total assujetti : ' + total().toLocaleString('fr-FR') + ' FCFA — Zakat due : ' + zakatDue()"></p>
+      <p class="bh-muted" x-show="total() <= 0 && (cash > 0 || gold > 0 || business > 0)">Le total est sous le seuil (nisab) — pas de zakat due.</p>
+      <p class="bh-muted" x-show="total() === 0 && !cash && !gold && !business && !debts">Saisissez vos avoirs pour calculer la zakat (réf. : <span x-text="nisabText()"></span>).</p>
+    </section>
+
+    <section class="bh-card" x-data="bhQibla({ city: 'Ouagadougou', bearing: 71.4, cities: Object.keys(window.bhCfg.qiblaBears) })" x-init="init()">
+      <h2 class="bh-card__title">Direction de la Qibla</h2>
+      <label>Ville
+        <select class="bh-select" x-model="citySel" @change="applyCity()">
+          <template x-for="c in cities" :key="c"><option :value="c" x-text="c"></option></template>
+        </select>
+      </label>
+      <div class="bh-qibla-dial" aria-hidden="true">
+        <span class="n">N</span>
+        <div class="bh-qibla-dial__needle" :style="'transform:rotate(' + needleDeg() + 'deg)'"></div>
+      </div>
+      <p class="bh-dates__result" x-show="bearingDeg !== null" x-text="'La Kaaba se trouve à ' + bearingText() + ' de vous.'"></p>
+      <p class="bh-muted" x-show="bearingDeg === null">Aucune donnée pour cette ville.</p>
+      <button class="bh-btn bh-btn--ghost" @click="startCompass()" x-show="!deviceReady">Activer le capteur (mobile)</button>
+    </section>
+
+    <section class="bh-card" x-data="bhDates({ city: 'Ouagadougou' })">
+      <h2 class="bh-card__title">Conversions de dates & jours de jeûne</h2>
+      <p><strong>Aujourd’hui :</strong> <span class="bh-dates__today" x-text="todayGreg"></span> · <span class="bh-dates__hijri" x-text="todayHijri"></span></p>
+      <p class="bh-dates__result" x-show="result" x-text="result"></p>
+      <div class="bh-dates-convert" style="margin-top:12px;">
+        <label>Grégorien → Hégirien
+          <input type="date" x-model="gregDate" class="bh-select" @change="convertGregToHijri()">
+        </label>
+      </div>
+      <div class="bh-dates-convert" style="margin-top:12px;">
+        <label>H. année <input type="number" min="1000" max="2000" x-model.number="hijriYear" class="bh-select"></label>
+        <label>H. mois <input type="number" min="1" max="12" x-model.number="hijriMonth" class="bh-select"></label>
+        <label>H. jour <input type="number" min="1" max="30" x-model.number="hijriDay" class="bh-select"></label>
+        <button class="bh-btn bh-btn-primary" @click="convertHijriToGreg()">→ Grégorien</button>
+      </div>
+      <h3 style="margin-top:22px;">Prochains jours de jeûne & fêtes</h3>
+      <ul>
+        <template x-for="f in upcomingFasts()" :key="f.id">
+          <li><span x-text="f.name"></span><span class="bh-fasts__date" x-text="f.date + ' · ' + f.daysLeft"></span></li>
+        </template>
+      </ul>
+    </section>
+
+    <section class="bh-card" x-data="bhTasbih()" x-init="init()">
+      <h2 class="bh-card__title">Tasbih numérique</h2>
+      <label>Formule
+        <select class="bh-select" x-model="phrase" @change="onPhraseChange()">
+          <template x-for="p in Object.keys(window.bhCfg.tasbihPhrases)" :key="p"><option :value="p" x-text="window.bhCfg.tasbihPhrases[p]"></option></template>
+        </select>
+      </label>
+      <p class="bh-tasbih__count" x-text="count"></p>
+      <p style="text-align:center" class="bh-muted" x-text="roundsText()"></p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="bh-btn bh-btn-primary" @click="tick()" style="min-width:120px;">+1</button>
+        <button class="bh-btn bh-btn--ghost" @click="reset()">Réinitialiser</button>
+      </div>
+    </section>
+
+    <section class="bh-card" x-data="bhPrayer()">
+      <h2 class="bh-card__title" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">Horaires de prière
+        <select x-model="city" @change="load()" class="bh-select" aria-label="Ville" style="width:auto;">
+          <template x-for="c in cities" :key="c"><option :value="c" x-text="c"></option></template>
+        </select>
+      </h2>
+      <div class="bh-prayer-grid">
+        <template x-for="p in order" :key="p.key">
+          <div class="bh-prayer" :class="{ 'is-next': p.key === nextKey }">
+            <span class="bh-prayer__name" x-text="names[p.key]"></span>
+            <strong x-text="times[p.key] || '—:—'"></strong>
+          </div>
+        </template>
+      </div>
+      <p class="bh-muted" x-show="nextIn">Prochaine prière dans <strong x-text="nextIn"></strong></p>
+      <p class="bh-muted" x-show="source === 'fallback'">Horaires indicatifs (hors-ligne)</p>
+    </section>
+
+    <section class="bh-card bh-card--ayah" x-data="bhAyah()">
+      <h2 class="bh-card__title">Verset du jour</h2>
+      <p class="bh-ayah__ar" x-text="text"></p>
+      <p class="bh-ayah__ref" style="color:var(--bh-ink-soft);" x-text="ref"></p>
+      <a class="bh-link" :href="coranUrl">Lire le Coran →</a>
+    </section>
+
+  </div>
+</div>
+</main>
+
+<script>
+    window.bhCfg = {
+        isAr: false,
+        coranUrl: '/coran.html',
+        home: '/',
+        prayer: { city: 'Ouagadougou', method: 3, cities: ['Ouagadougou','Koudougou','Bobo-Dioulasso','Ouagadougou','Dakar','Bamako','Paris'], times: {}, source: 'fallback' },
+        quran: { index: [], audioBases: { 'ar.alafasy': 'https://cdn.islamic.network/quran/audio/128/ar.alafasy' } },
+        tasbihPhrases: { subhanallah: 'SubḥānAllāh', alhamdulillah: 'Al-ḥamdu li-Llāh', allahuakbar: 'Allāhu akbar', laillahaillallah: 'Lā ilāha illa-Llāh', istighfar: 'Astaghfiru-Llāh' },
+        dailyAyah: { surah: 1, ayah: 1, text: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', name_ar: 'الفاتحة', name_fr: 'Al-Fātiḥa', ref: '1:1' },
+        rest: { status: '', search: '', newsletter: '' },
+        qiblaBears: {
+            Ouagadougou: 71.4, Koudougou: 71.2, 'Bobo-Dioulasso': 71.8, Ouahigouya: 71.2,
+            Gao: 75.9, Bamako: 72.3, Dakar: 73.9, Abidjan: 65.0, Accra: 63.8,
+            Nairobi: 7.2, 'Le Caire': 136.1, Djibouti: 342.5, Paris: 119.2,
+            Londres: 119.0, Tunis: 112.7, Alger: 105.4, Tripoli: 109.2,
+            Doha: 252.6, 'Dubaï': 258.2,
+        },
+    };
+    window.bhCfg.prayer.cities = ['Ouagadougou', 'Koudougou', 'Bobo-Dioulasso', 'Dakar', 'Bamako', 'Paris'];
+</script>
+<script type="module" src="/site/wp-content/themes/baaboul-houda/assets/dist/js/main.js"></script>
+</body>
+</html>

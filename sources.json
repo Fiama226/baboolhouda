@@ -1,0 +1,21 @@
+{
+  "$comment": "Pinned upstream sources. scripts/vendor-core.sh and the Dockerfile resolve these exact revisions so the release is reproducible.",
+  "wordpress_core": {
+    "repo": "https://github.com/WordPress/WordPress",
+    "ref": "7.1.3",
+    "notes": "Official core mirror (SVN -> git, auto-updated). PHP 8.1+ required."
+  },
+  "quran_text": {
+    "repo": "https://github.com/AlaaJabre/quran-hafs-uthmani",
+    "ref": "7d9b7e5793e4e28a797be4d00f4799eb5f252e5d",
+    "file": "quran-hafs-uthmani.json",
+    "riwaya": "Hafs an Asim",
+    "mushaf": "Madinah",
+    "notes": "Uthmani text, 6236 verses with page/juz numbers. Transformed at build time into site/wp-content/plugins/baaboul-houda-core/data/quran.json by build/quran/build.mjs. Text is public domain (Tanzil/QCF); FR translations are fetched at runtime from alquran.cloud (CC-BY 4.0) and cached client-side."
+  },
+  "js_dependencies": {
+    "registry": "https://registry.npmjs.org",
+    "bundled_at_build_time": ["alpinejs", "hls.js", "howler"],
+    "notes": "All JS is bundled into site/wp-content/themes/baaboul-houda/assets/dist at build time. No CDNs required at runtime except Google Fonts and the live-stream providers (YouTube/Facebook)."
+  }
+}
