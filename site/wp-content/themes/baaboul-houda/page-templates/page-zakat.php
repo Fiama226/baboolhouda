@@ -24,7 +24,6 @@ $zakat = function_exists('bh_zakat_reference') ? bh_zakat_reference() : ['rate' 
     <header class="bh-page__head">
         <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page__lead">
-            <?php echo esc_html(bh_l('Le nisab : ', 'النصاب: ')); ?>
             <span x-text="nisabText()"></span>
             <?php echo esc_html(bh_l(" — au-dessus de ce seuil, la zakat est de " . (string) $zakat['rate'] . " %.", ' — فوق هذا الحد تكون الزكاة ' . (string) $zakat['rate'] . '%.')); ?>
         </p>

@@ -39,8 +39,8 @@ get_header();
                 <div class="bh-quran-reader__title">
                     <h1 dir="rtl" class="bh-font-quran"><?php echo esc_html($surah['name_ar']); ?></h1>
                     <p>
-                        <strong><?php echo esc_html($surah['name_fr']); ?></strong> — <?php echo esc_html($surah['meaning_fr']); ?>
-                        · <?php echo (int) $surah['ayah_count']; ?> <?php echo esc_html(bh_l('versets', 'آيات')); ?>
+                        <?php if (!bh_is_ar()) : ?><strong><?php echo esc_html($surah['name_fr']); ?></strong> — <?php echo esc_html($surah['meaning_fr']); ?> ·<?php endif; ?>
+                        <?php echo (int) $surah['ayah_count']; ?> <?php echo esc_html(bh_l('versets', 'آيات')); ?>
                         · <?php echo esc_html(bh_l($surah['type'], $surah['type'] === 'mecquoise' ? 'مكية' : 'مدنية')); ?>
                     </p>
                 </div>
