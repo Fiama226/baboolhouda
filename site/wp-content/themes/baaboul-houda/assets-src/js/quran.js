@@ -10,6 +10,67 @@ import { mulberry32, quizQuestions, planSchedule, planProgress, planDayOf, clip,
 
 const cfg = window.bhCfg || {};
 const lang = (fr, ar) => (cfg.isAr ? ar : fr);
+
+/* Draw the 1200x630 verse card and resolve to a PNG Blob (or null). Never rejects. */
+async function buildAyahCard(arText, title, url, accent) {
+    try {
+        const W = 1200, H = 630;
+        const quranFont = '"Amiri Quran", Amiri, "Traditional Arabic", serif';
+        try {
+            if (document.fonts) {
+                await Promise.all([
+                    document.fonts.load(`400 64px "Amiri Quran"`, arText || 'ا'),
+                    document.fonts.load('600 34px Cairo', title),
+                ]);
+                await document.fonts.ready;
+            }
+        } catch { /* fonts are best-effort */ }
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return null;
+        const grad = ctx.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, '#08130d'); grad.addColorStop(1, '#0d2a1b');
+        ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = accent || '#0e7a4e'; ctx.fillRect(0, 0, W, 14);
+
+        // Arabic text: wrap by measured width, shrink until it fits the box.
+        const boxW = W - 160, boxTop = 60, boxBottom = 430;
+        const words = String(arText).replace(/\s+/g, ' ').trim().slice(0, 600).split(' ');
+        let size = 72, lines = [];
+        for (; size >= 28; size -= 4) {
+            ctx.font = `400 ${size}px ${quranFont}`;
+            lines = [];
+            let cur = '';
+            for (const w of words) {
+                const test = cur ? `${cur} ${w}` : w;
+                if (cur && ctx.measureText(test).width > boxW) { lines.push(cur); cur = w; } else { cur = test; }
+            }
+            if (cur) lines.push(cur);
+            if (lines.length * size * 1.75 <= boxBottom - boxTop) break;
+        }
+        const lh = size * 1.75;
+        const startY = boxTop + ((boxBottom - boxTop) - lines.length * lh) / 2 + lh * 0.7;
+        ctx.fillStyle = '#ffffff';
+        ctx.direction = 'rtl'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+        ctx.font = `400 ${size}px ${quranFont}`;
+        lines.forEach((ln, i) => ctx.fillText(ln, W - 80, startY + i * lh));
+
+        ctx.direction = 'ltr'; ctx.textAlign = 'left';
+        ctx.fillStyle = '#9fe3c3';
+        ctx.font = '600 34px Cairo, sans-serif';
+        ctx.fillText(title, 60, 510);
+        ctx.font = '400 26px Cairo, sans-serif';
+        ctx.fillStyle = '#7fb89d';
+        ctx.fillText(url.length > 70 ? `${url.slice(0, 67)}…` : url, 60, 570);
+
+        return await new Promise((resolve) => {
+            try { canvas.toBlob((b) => resolve(b || null), 'image/png'); } catch { resolve(null); }
+        });
+    } catch {
+        return null;
+    }
+}
 const store = (k, v) => { try { const x = JSON.parse(localStorage.getItem(k)); return x === null || x === undefined ? v : x; } catch { return v; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
 
@@ -310,35 +371,39 @@ function bhReader(surahN) {
             );
             const url = `${location.origin}${location.pathname}#a-${n}`;
             const text = shareText(`${title} — ${clip(t, 120)}`, url);
-            if (navigator.share) {
-                navigator.share({ title, text, url }).catch(() => {});
+            const fileName = `quran-${this.surahN}-${n}.png`;
+
+            // 1. Build the PNG card first (never throws; null on failure).
+            const blob = await buildAyahCard(t, title, url, cfg.accent);
+
+            // 2. Phones: share the image itself when the platform supports files.
+            if (blob && typeof navigator.share === 'function' && typeof navigator.canShare === 'function') {
+                try {
+                    const file = new File([blob], 'ayah.png', { type: 'image/png' });
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({ files: [file], title, text, url });
+                        return;
+                    }
+                } catch (e) {
+                    if (e && e.name === 'AbortError') return; // user dismissed the sheet
+                    /* fall through to text+link */
+                }
+            }
+            // 3. Text + link share.
+            if (typeof navigator.share === 'function') {
+                try { await navigator.share({ title, text, url }); } catch { /* dismissed */ }
                 return;
             }
-            // Canvas share card
+            // 4. Desktop: download the PNG.
+            if (!blob) return;
             try {
-                const canvas = document.createElement('canvas');
-                canvas.width = 1200; canvas.height = 630;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#08130d'; ctx.fillRect(0, 0, 1200, 630);
-                ctx.fillStyle = cfg.accent || '#0e7a4e'; ctx.fillRect(0, 0, 1200, 14);
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '400 72px "Amiri Quran", Amiri, serif';
-                ctx.direction = 'rtl'; ctx.textAlign = 'right';
-                ctx.fillText(clip(t, 60), 1140, 300);
-                ctx.direction = 'ltr'; ctx.textAlign = 'left';
-                ctx.font = '600 34px Cairo, sans-serif';
-                ctx.fillStyle = '#9fe3c3';
-                ctx.fillText(title, 60, 480);
-                ctx.font = '400 28px Cairo, sans-serif';
-                ctx.fillText(url, 60, 560);
-                canvas.toBlob((blob) => {
-                    if (!blob) return;
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = `quran-${this.surahN}-${n}.png`;
-                    a.click();
-                    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-                }, 'image/png');
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(() => URL.revokeObjectURL(a.href), 4000);
             } catch { /* */ }
         },
 

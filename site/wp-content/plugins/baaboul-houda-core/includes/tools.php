@@ -102,7 +102,17 @@ function bh_zakat_reference(): array {
  * Ramadan seerah — 30 entries (public-domain historical facts), FR + AR.
  * ------------------------------------------------------------------- */
 
+/**
+ * DISABLED until reviewed by a qualified person: QA found entries that look
+ * wrongly attributed or inaccurate. The page hides the card while this is
+ * empty. To re-enable, review bh_seerah_ramadan_unreviewed() entry by entry,
+ * then return it from here.
+ */
 function bh_seerah_ramadan(): array {
+    return [];
+}
+
+function bh_seerah_ramadan_unreviewed(): array {
     return [
         ['fr' => 'Le début de la révélation : la récitation du Coran commença à la Kaaba lors d’un mois de Ramadan, quand le Prophète ﷺ avait 40 ans.', 'ar' => 'بداية الوحي: بدأ نزول القرآن في رمضان حين كان النبي ﷺ في الأربعين من عمره.'],
         ['fr' => 'Le Prophète ﷺ dit : « Le Ramadan est arrivé pour vous, mois de baraka : Allah y impose le jeûne. »', 'ar' => 'قال النبي ﷺ: «قد جاءكم رمضان شهر مبارك فرض الله عليكم الصيام.»'],

@@ -21,8 +21,22 @@ function bh_names99(): array {
     return bh_json_data('names99.json');
 }
 
+/**
+ * Hisn al-Muslim sections.
+ * File shape: { meta: {...}, sections: [ {id, title_ar, title_fr, items: [ {text, count} ]} ] }
+ */
 function bh_adhkar(): array {
-    return bh_json_data('adhkar.json');
+    return bh_json_data('adhkar.json')['sections'] ?? [];
+}
+
+/** Source/licence metadata of the adhkar dataset (book, source, notes). */
+function bh_adhkar_meta(): array {
+    return bh_json_data('adhkar.json')['meta'] ?? [];
+}
+
+/** Metadata (source) of the 99-names dataset. */
+function bh_names99_meta(): array {
+    return bh_json_data('names99.json')['meta'] ?? [];
 }
 
 function bh_hadiths(): array {

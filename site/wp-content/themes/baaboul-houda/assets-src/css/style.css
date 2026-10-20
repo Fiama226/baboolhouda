@@ -387,7 +387,7 @@ body:has(.bh-radio-bar) { padding-bottom: 64px; }
 .bh-breadcrumb { font-size: 13px; color: var(--bh-ink-soft); margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
 .bh-breadcrumb a { color: var(--bh-green); text-decoration: none; }
 .bh-page-hero .bh-breadcrumb, .bh-page-hero .bh-breadcrumb a { color: var(--bh-gold); }
-.bh-page { padding: 34px 0 56px; }
+.bh-page { padding-block: 34px 56px; }
 .bh-page__head { margin-bottom: 26px; }
 .bh-page__head h1 { font-size: 30px; margin: 0 0 8px; }
 .bh-page__lead { color: var(--bh-ink-soft); margin: 0 0 10px; max-width: 70ch; }
@@ -883,3 +883,41 @@ a.bh-card--tool:hover { transform: translateY(-2px); box-shadow: var(--bh-shadow
 
 /* Keep the WhatsApp button above the persistent radio bar. */
 body:has(.bh-radio-bar) .bh-wa-float { bottom: 88px; }
+
+/* ================= Mobile pass: tap targets, form controls, floating UI ================= */
+main select:not(.bh-select), .bh-tasbih__top select {
+  font-family: inherit; font-size: 16px; padding: 10px 12px; min-height: 44px;
+  border: 1px solid var(--bh-line); border-radius: 10px; background: var(--bh-card); color: var(--bh-ink); max-width: 100%;
+}
+@media (max-width: 880px) {
+  .bh-topbar__phone, .bh-topbar__wa, .bh-topbar__social, .bh-theme-toggle { position: relative; }
+  .bh-topbar__phone::before, .bh-topbar__wa::before, .bh-topbar__social::before, .bh-theme-toggle::before { content: ''; position: absolute; inset: -14px -7px; }
+  .bh-search input { min-height: 36px; }
+  .bh-lang-switch { min-height: 36px; display: inline-flex; align-items: center; }
+  .bh-select, .bh-input, .bh-quran-reader__tools select { min-height: 44px; font-size: 16px; }
+  .bh-footer__col li a { display: inline-block; padding-block: 8px; }
+  .bh-footer__col li { margin-bottom: 0; }
+  .bh-breadcrumb a, .bh-link { display: inline-block; padding-block: 8px; }
+  .bh-reader-toggle { flex-direction: row; align-items: center; min-height: 44px; gap: 8px; }
+  .bh-reader-toggle span, .bh-reader-reciter span { display: inline; margin: 0; }
+  .bh-reader-toggle input[type=checkbox], .bh-quran-tools input[type=checkbox] { width: 22px; height: 22px; flex: none; }
+  .bh-quran-reader__tools { flex-direction: column; align-items: stretch; width: 100%; gap: 6px; }
+  .bh-quran-reader__tools .bh-btn { width: 100%; justify-content: center; text-align: center; min-height: 44px; }
+  .bh-reader-reciter { flex-wrap: wrap; }
+  .bh-reader-reciter select { flex: 1; min-width: 0; }
+  .bh-ayah__act { width: 36px; height: 36px; }
+  .bh-ayah__actions { gap: 3px; }
+  .bh-quran-reader__body .bh-ayah { content-visibility: auto; contain-intrinsic-size: auto 240px; }
+  .bh-ayah__actions { flex-wrap: wrap; }
+  .bh-ayah__num { min-width: 32px; height: 32px; }
+  .bh-ayah__ar { font-size: 24px; line-height: 2.2; }
+  .bh-newsletter-form { flex-wrap: wrap; align-items: stretch; }
+  .bh-newsletter-form > label { flex: 1 1 100%; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .bh-newsletter-form input[type=email] { width: 100%; min-width: 0; min-height: 44px; font-size: 16px; }
+  .bh-newsletter-form > .bh-btn { flex: 1 1 100%; min-height: 44px; }
+  input[type=range] { min-height: 32px; }
+  .bh-wa-float { width: 48px; height: 48px; right: 14px; bottom: 14px; opacity: .92; }
+  body:has(.bh-radio-bar) .bh-wa-float { bottom: 88px; }
+  .bh-footer__bottom { padding-bottom: 76px; }
+  [dir='rtl'] .bh-wa-float { right: auto; left: 14px; }
+}

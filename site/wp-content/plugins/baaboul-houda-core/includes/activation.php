@@ -29,6 +29,8 @@ function bh_section_pages(): array {
         'dates'       => ['Dates & calendrier', 'التواريخ والتقويم', 'page-dates.php'],
         'tasbih'      => ['Tasbih numérique', 'سبحة إلكترونية', 'page-tasbih.php'],
         'wudu'        => ['Guide du Wudu', 'دليل الوضوء', 'page-wudu.php'],
+        'adhkar'      => ['Invocations (Adhkar)', 'الأذكار', 'page-adhkar.php'],
+        'noms-allah'  => ['Les 99 noms d’Allah', 'أسماء الله الحسنى', 'page-noms.php'],
         'mosquees'    => ['Mosquées', 'الجمع', 'page-mosquees.php'],
         'dons'        => ['Dons & soutien', 'التبرع والدعم', 'page-dons.php'],
         'publicite'   => ['Publicité', 'الإعلان', 'page-publicite.php'],

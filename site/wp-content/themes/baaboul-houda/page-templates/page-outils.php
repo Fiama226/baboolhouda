@@ -2,7 +2,7 @@
 /**
  * Template Name: Outils & calculs
  *
- * Hub of the Islamic tools: zakat, qibla, dates, tasbih, wudu, mosques.
+ * Hub of the Islamic tools: zakat, qibla, dates, tasbih, wudu, adhkar, 99 names, mosques.
  */
 defined('ABSPATH') || exit;
 get_header();
@@ -12,6 +12,8 @@ $tools = [
     ['slug' => 'dates',   'icon' => '📅', 'fr' => 'Dates & calendrier', 'ar' => 'التواريخ والتقويم', 'desc_fr' => 'Convertisseur hégirien, jours de jeûne, prochaines fêtes.', 'desc_ar' => 'محول التقويم الهجري، أيام الصوم، الأعياد.'],
     ['slug' => 'tasbih',  'icon' => '📿', 'fr' => 'Tasbih numérique', 'ar' => 'سبحة إلكترونية', 'desc_fr' => 'Compteur de dhikr avec objectifs, sauvegardé sur votre appareil.', 'desc_ar' => 'عداد الذكر مع الأهداف، محفوظ على جهازك.'],
     ['slug' => 'wudu',    'icon' => '💧', 'fr' => 'Guide du Wudu', 'ar' => 'دليل الوضوء', 'desc_fr' => 'Les étapes de la petite ablution, pas à pas.', 'desc_ar' => 'خطوات الوضوء خطوة بخطوة.'],
+    ['slug' => 'adhkar',  'icon' => '🤲', 'fr' => 'Invocations (Adhkar)', 'ar' => 'الأذكار', 'desc_fr' => 'Hisn al-Muslim : invocations avec texte arabe et répétitions.', 'desc_ar' => 'حصن المسلم: أذكار بالنص العربي وعدد التكرار.'],
+    ['slug' => 'noms-allah', 'icon' => '✨', 'fr' => 'Les 99 noms d’Allah', 'ar' => 'أسماء الله الحسنى', 'desc_fr' => 'Les 99 noms : arabe, translittération et signification.', 'desc_ar' => 'أسماء الله الحسنى: بالعربية ومعانيها.'],
     ['slug' => 'mosquees','icon' => '🕌', 'fr' => 'Mosquées', 'ar' => 'الجمع', 'desc_fr' => 'Annuaire des mosquées (adresse, contact, carte).', 'desc_ar' => 'دليل الجمع (العنوان، الاتصال، الخريطة).'],
 ];
 ?>

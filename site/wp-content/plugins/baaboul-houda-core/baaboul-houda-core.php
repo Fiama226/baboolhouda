@@ -12,7 +12,7 @@
 
 defined('ABSPATH') || exit;
 
-define('BH_VERSION', '1.0.1');
+define('BH_VERSION', '1.0.2');
 define('BH_CORE_FILE', __FILE__);
 define('BH_CORE_DIR', plugin_dir_path(__FILE__));
 define('BH_CORE_URL', plugin_dir_url(__FILE__));

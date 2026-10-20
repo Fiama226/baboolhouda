@@ -31,13 +31,13 @@ $events  = new \WP_Query(['post_type' => 'evenement', 'posts_per_page' => 6, 'no
     </template>
 
     <div class="bh-grid bh-grid--2">
+        <?php if ($entry) : ?>
         <div class="bh-card bh-card--seerah">
             <h2 class="bh-card__title"><?php echo esc_html(bh_l('Seerah du jour', 'سيرة اليوم')); ?></h2>
-            <?php if ($entry) : ?>
-                <p><?php echo esc_html($entry['fr']); ?></p>
-                <p class="bh-seerah__ar" dir="rtl" style="text-align:right;font-family:var(--bh-font-quran)"><?php echo esc_html($entry['ar']); ?></p>
-            <?php endif; ?>
+            <p><?php echo esc_html($entry['fr']); ?></p>
+            <p class="bh-seerah__ar" dir="rtl" style="text-align:right;font-family:var(--bh-font-quran)"><?php echo esc_html($entry['ar']); ?></p>
         </div>
+        <?php endif; ?>
         <div class="bh-card">
             <h2 class="bh-card__title"><?php echo esc_html(bh_l('Événements Ramadan', 'فعاليات رمضان')); ?></h2>
             <?php if ($events->have_posts()) : ?>

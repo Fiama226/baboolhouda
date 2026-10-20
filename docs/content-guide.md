@@ -114,4 +114,5 @@ couleur d'accent, URL Facebook/YouTube, image de partage OG (1200×630).
 | Coran | `/coran/` · sourate : `/coran/36/` (Ya-Sin) |
 | Prières | `/prieres/` |
 | Actualités / Événements / Animateurs / Contact | `/actualites/` · `/evenements/` · `/animateurs/` · `/contact/` |
+| Invocations (Hisn al-Muslim) / 99 noms d’Allah | `/adhkar/` · `/noms-allah/` (AR : `/ar/adhkar/` · `/ar/noms-allah/`) |
 | Sitemap | `/sitemap.xml` |

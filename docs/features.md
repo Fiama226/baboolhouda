@@ -24,7 +24,7 @@ Last updated: 2026-10-20 (v2 delivery, statuts vérifiés contre le code)
 | # | Feature | Status |
 |---|---------|--------|
 | 14 | Multiple FR translations (2–4 selectable) | ✅ 3 editions (Cherrier, Berque, Al-Que) |
-| 15 | Verse share card (PNG, FB/WhatsApp) | ⚠️ canvas 1200×630 → PNG par verset (`shareAyah`, quran.js) ; sur mobile, `navigator.share` (texte+lien) est utilisé en priorité, la carte PNG n'est générée que sans Web Share |
+| 15 | Verse share card (PNG, FB/WhatsApp) | ✅ canvas 1200×630 → PNG par verset (`shareAyah`/`buildAyahCard`, quran.js) ; partagé comme fichier via Web Share sur mobile (`navigator.canShare({files})`), sinon texte+lien, et téléchargement du PNG sur ordinateur |
 | 16 | Word-by-word view (tap word) | ✅ w2w via api.quran.com, cached, graceful |
 | 17 | Tap a word to hear it | ⬜ needs per-word audio source (gloss on tap done) |
 | 18 | Tafsir per verse (alquran.cloud runtime) | ✅ per-ayah tafsir, cached |
@@ -49,7 +49,7 @@ Last updated: 2026-10-20 (v2 delivery, statuts vérifiés contre le code)
 | 33 | Digital tasbih counter | ✅ phrases, rounds, persistence, haptics |
 | 34 | Prayer PWA notifications | ✅ Web Notification at prayer time (+ adhan audio) |
 | 35 | Adhan audio at prayer time | ✅ `initAdhan` (20 s poll, slot-dedup) |
-| 36 | Ramadan dashboard (imsak/iftar/tarawih/seerah) | ✅ imsak/iftar countdown + 30-day seerah |
+| 36 | Ramadan dashboard (imsak/iftar/tarawih/seerah) | ⚠️ compte à rebours imsak/iftar OK ; seerah du jour désactivée en attente de relecture éditoriale |
 | 37 | Fasting calendar (white months, Ashura…) | ✅ `upcomingFasts` (Aïd, Ashura, Arafah, 13-14-15) |
 | 38 | Next Islamic holiday countdown | ✅ next-event card |
 | 39 | Mosque list with map | ✅ curated list + map links |
@@ -57,6 +57,8 @@ Last updated: 2026-10-20 (v2 delivery, statuts vérifiés contre le code)
 | 42 | Wudu step guide | ✅ 7 steps |
 | 43 | Name of Allah of the day | ✅ 99-names rotation |
 | 44 | Hadith of the day | ✅ hadiths rotation |
+| 44a | Page « Invocations (Adhkar) » (`/adhkar/`) | ✅ Hisn al-Muslim : 132 sections, texte arabe + répétitions, recherche, copie ; source MIT citée en pied de page |
+| 44b | Page « Les 99 noms d’Allah » (`/noms-allah/`) | ✅ 99 noms : arabe, translittération, sens FR + commentaire, recherche |
 
 ## D. Learning & content
 | # | Feature | Status |
@@ -67,7 +69,7 @@ Last updated: 2026-10-20 (v2 delivery, statuts vérifiés contre le code)
 | 51 | Scholar profiles (videos by presenter) | ✅ single-animateur with "ses émissions" |
 | 52 | Topic library (tag filters) | ✅ `sujet_episod` chip filter on replays |
 | 53 | Kids section | ✅ curated kids page |
-| 54 | Seasonal pages (Ramadan/Eid/Muharram) | ✅ ramadan dashboard + seerah |
+| 54 | Seasonal pages (Ramadan/Eid/Muharram) | ⚠️ dashboard Ramadan ; seerah du jour désactivée (relecture éditoriale) |
 | 55 | Photo galleries (CPT) | ✅ `galerie` CPT + single |
 | 56 | Transcripts (episode meta + display) | ✅ `_bh_transcript` + display + toggle |
 | 57 | Related articles + reading time + byline | ✅ byline, reading time, trending sidebar |

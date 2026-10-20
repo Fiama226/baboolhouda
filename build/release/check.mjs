@@ -48,7 +48,7 @@ const TEMPLATES = [
   'page-actualites', 'page-apropos',
   // v2 section pages (activation.php)
   'page-outils', 'page-zakat', 'page-qibla', 'page-dates', 'page-tasbih',
-  'page-wudu', 'page-mosquees', 'page-dons', 'page-publicite', 'page-temoignages',
+  'page-wudu', 'page-adhkar', 'page-noms', 'page-mosquees', 'page-dons', 'page-publicite', 'page-temoignages',
   'page-messages', 'page-question', 'page-fatwas', 'page-galeries', 'page-podcast',
   'page-ramadan', 'page-enfants', 'page-presse', 'page-newsletter',
 ];

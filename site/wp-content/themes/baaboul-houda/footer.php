@@ -48,6 +48,8 @@ $s = function_exists('bh_settings') ? bh_settings() : [];
             <h3><?php echo esc_html(bh_l('La chaîne', 'القناة')); ?></h3>
             <ul>
                 <li><a href="<?php echo esc_url(bh_nav_url('outils')); ?>"><?php echo esc_html(bh_l('Outils & calculs', 'الأدوات')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('adhkar')); ?>"><?php echo esc_html(bh_l('Invocations (Adhkar)', 'الأذكار')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('noms-allah')); ?>"><?php echo esc_html(bh_l('Les 99 noms d’Allah', 'أسماء الله الحسنى')); ?></a></li>
                 <li><a href="<?php echo esc_url(bh_nav_url('podcast')); ?>"><?php echo esc_html(bh_l('Podcasts', 'البودكاست')); ?></a></li>
                 <li><a href="<?php echo esc_url(bh_nav_url('fatwas')); ?>"><?php echo esc_html(bh_l('Questions & réponses', 'الأسئلة والأجوبة')); ?></a></li>
                 <li><a href="<?php echo esc_url(bh_nav_url('dons')); ?>"><?php echo esc_html(bh_l('Dons & soutien', 'التبرع')); ?></a></li>
