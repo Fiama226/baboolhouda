@@ -7,7 +7,7 @@
 
 defined('ABSPATH') || exit;
 
-define('BH_THEME_VERSION', '1.0.0');
+define('BH_THEME_VERSION', '1.0.0.' . (int) @filemtime(__DIR__ . '/assets/dist/js/main.js')); // mtime = cache-busting on each rebuild
 define('BH_THEME_ASSETS', get_template_directory_uri() . '/assets/dist');
 define('BH_THEME_SRC', get_template_directory() . '/assets-src');
 
@@ -32,7 +32,7 @@ add_action('after_setup_theme', function () {
 
 add_action('init', function () {
     add_rewrite_rule('^ar/?$', 'index.php?bh_lang=ar', 'top');
-    add_rewrite_rule('^ar/([a-z0-9\-]+)/?$', 'index.php?bh_lang=ar&name=$matches[1]', 'top');
+    add_rewrite_rule('^ar/([a-z0-9\-]+)/?$', 'index.php?bh_lang=ar&pagename=$matches[1]', 'top');
     add_rewrite_rule('^coran/([1-9][0-9]{0,2})/?$', 'index.php?bh_surah=$matches[1]', 'top');
 });
 add_filter('query_vars', function (array $vars): array {
@@ -50,10 +50,8 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('bh-style', BH_THEME_ASSETS . '/css/style.css', [], BH_THEME_VERSION);
     wp_enqueue_script('bh-main', BH_THEME_ASSETS . '/js/main.js', [], BH_THEME_VERSION, true);
     wp_localize_script('bh-main', 'bhCfg', bh_client_config());
-    // Quran reader features — only on /coran/{n}/ to keep other pages light.
-    if (get_query_var('bh_surah')) {
-        wp_enqueue_script('bh-quran', BH_THEME_ASSETS . '/js/quran.js', ['bh-main'], BH_THEME_VERSION, true);
-    }
+    // Quran reader features (quran.js) are dynamically imported by main.js on
+    // reader pages ([data-bh-reader]) so they register before Alpine starts.
 });
 
 // The Vite bundles are ES modules (shared ./lib.js chunk): they must be
@@ -124,6 +122,7 @@ function bh_client_config(): array {
             'city'    => (string) ($s['prayer_city'] ?? 'Ouagadougou'),
             'method'  => (int) ($s['prayer_method'] ?? 3),
             'cities'  => array_values(array_filter(array_map('trim', explode(',', (string) ($s['prayer_cities'] ?? ''))))),
+            'coords'  => function_exists('bh_known_cities') ? bh_known_cities() : new stdClass(),
             'times'   => $fallback,
             'source'  => $f['source'] ?? 'fallback',
         ],
@@ -166,7 +165,7 @@ function bh_logo_html(int $height = 52): string {
 /** Current nav URL (language-aware: /ar/{slug}/ in Arabic mode). */
 function bh_nav_url(string $slug): string {
     if (function_exists('bh_is_ar') && bh_is_ar()) {
-        return home_url('/ar/' . $slug . '/');
+        return 'direct' === $slug ? home_url('/ar/') : home_url('/ar/' . $slug . '/');
     }
     $id = function_exists('bh_page_id') ? bh_page_id($slug) : 0;
     if ($id) {

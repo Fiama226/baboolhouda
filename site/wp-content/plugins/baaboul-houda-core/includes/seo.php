@@ -47,10 +47,24 @@ add_action('wp_head', function () {
     $desc = html_entity_decode(bh_meta_description(), ENT_QUOTES, get_bloginfo('charset'));
 
     // Title
-    $title = get_the_title();
+    $qo    = get_queried_object();
+    $title = ($qo instanceof \WP_Post && function_exists('bh_post_title')) ? bh_post_title($qo) : get_the_title();
+    if (is_404() || is_search()) {
+        $title = is_404() ? (bh_is_ar() ? 'الصفحة غير موجودة' : 'Page introuvable') : (bh_is_ar() ? 'بحث' : 'Recherche');
+    }
+    if (!($qo instanceof \WP_Post) && is_home() && get_option('page_for_posts')) {
+        $title = bh_post_title((int) get_option('page_for_posts'));
+    }
     $sep   = ' | ';
     $site  = bh_site_name();
-    if (is_front_page()) {
+    $surahN = (int) get_query_var('bh_surah');
+    $surah  = ($surahN && function_exists('bh_quran_surah')) ? bh_quran_surah($surahN) : null;
+    if ($surah) {
+        $full = (bh_is_ar() ? 'سورة ' . $surah['name_ar'] : 'Sourate ' . $surah['name_fr']) . ' (' . $surahN . ')' . $sep . $site;
+        $desc = bh_is_ar()
+            ? 'سورة ' . $surah['name_ar'] . ' — ' . $surah['ayah_count'] . ' آية: قراءة واستماع وتفسير.'
+            : 'Sourate ' . $surah['name_fr'] . ' (' . $surah['meaning_fr'] . ') — ' . $surah['ayah_count'] . ' versets : lecture, écoute, traduction et tafsir.';
+    } elseif (is_front_page()) {
         $full = $site . $sep . (bh_is_ar() ? 'قناة إسلامية — تلفزيون وإذاعة' : 'TV et radio islamiques');
     } else {
         $full = $title ? $title . $sep . $site : $site;

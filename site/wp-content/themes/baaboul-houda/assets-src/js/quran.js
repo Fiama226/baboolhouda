@@ -10,7 +10,7 @@ import { mulberry32, quizQuestions, planSchedule, planProgress, planDayOf, clip,
 
 const cfg = window.bhCfg || {};
 const lang = (fr, ar) => (cfg.isAr ? ar : fr);
-const store = (k, v) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return v; } };
+const store = (k, v) => { try { const x = JSON.parse(localStorage.getItem(k)); return x === null || x === undefined ? v : x; } catch { return v; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
 
 let audio = null;
@@ -35,7 +35,7 @@ async function loadFr(surahN, edition) {
         if (Object.keys(out).length) { save(key, out); return out; }
     } catch { /* offline or unknown edition */ }
     // graceful fallback to Cherrier
-    if (edition !== 'fr-cherrier') return loadFr(surahN, 'fr-cherrier');
+    if (edition !== 'fr.hamidullah') return loadFr(surahN, 'fr.hamidullah');
     return {};
 }
 
@@ -48,6 +48,8 @@ async function loadSimple(surahN) {
         const ed = (body.data || [])[0];
         const out = {};
         (ed?.ayahs || []).forEach((a) => { out[a.numberInSurah] = a.text; });
+        // alquran.cloud prepends the basmala to verse 1 (except surahs 1 and 9)
+        if (surahN !== 1 && surahN !== 9 && out[1]) out[1] = out[1].split(/\s+/).slice(4).join(' ');
         if (Object.keys(out).length) { save(key, out); return out; }
     } catch { /* */ }
     return {};
@@ -58,7 +60,7 @@ async function loadTafsir(surahN) {
     const hit = store(key, null);
     if (hit) return hit;
     try {
-        const body = await fetchJson(`https://api.alquran.cloud/v1/surah/${surahN}/editions/ar.tafsir.muyassar`);
+        const body = await fetchJson(`https://api.alquran.cloud/v1/surah/${surahN}/editions/ar.muyassar`);
         const ed = (body.data || [])[0];
         const out = {};
         (ed?.ayahs || []).forEach((a) => { out[a.numberInSurah] = a.text; });
@@ -67,17 +69,19 @@ async function loadTafsir(surahN) {
     return {};
 }
 
-async function loadW2w(globalN) {
+async function loadW2w(globalN, verseKey) {
     const key = `bh-w2w-${globalN}`;
     const hit = store(key, null);
     if (hit) return hit;
-    const body = await fetchJson(`https://api.quran.com/api/v4/verses/${globalN}?words=true&language=en`);
-    const v = body.data?.[0];
-    if (!v || !v.words) throw new Error('no words');
-    const out = v.words.map((w) => ({
-        ar: w.text,
-        gloss: (w.dict || []).map((d) => (d.definition || []).map((x) => x.en || '').filter(Boolean).join(' ')).join(' ') || (w.char_type_name === 'punctuation' ? '' : String(w.type || '')),
-    }));
+    const body = await fetchJson(`https://api.quran.com/api/v4/verses/by_key/${verseKey}?words=true&language=en&word_fields=text_uthmani`);
+    const words = body.verse?.words;
+    if (!words) throw new Error('no words');
+    const out = words
+        .filter((w) => w.char_type_name === 'word')
+        .map((w) => ({
+            ar: w.text_uthmani || w.text,
+            gloss: [w.translation?.text, w.transliteration?.text ? `(${w.transliteration.text})` : ''].filter(Boolean).join(' '),
+        }));
     save(key, out);
     return out;
 }
@@ -85,36 +89,41 @@ async function loadW2w(globalN) {
 /* ---- reader ---- */
 function bhReader(surahN) {
     const reciters = cfg.quran?.audioBases || {};
-    let frCache = {};
-    let simpleCache = {};
-    let tafsirCache = {};
-    let w2wCache = {};
-    let w2wError = false;
-    let tafsirLoading = false;
     let repeatLeft = 0;
     let forceSeq = false;
 
-    const bookmarks = store(`bh-bm-${surahN}`, {});
     const notes = store(`bh-note-${surahN}`, {});
 
     const arTexts = {};
     document.querySelectorAll('.bh-ayah').forEach((el) => {
         const n = Number(el.dataset.ayah);
         const span = el.querySelector('.bh-ayah__ar');
-        if (span) arTexts[n] = span.textContent.trim();
+        if (span) {
+            const c = span.cloneNode(true);
+            c.querySelectorAll('.bh-ayah__num').forEach((x) => x.remove());
+            arTexts[n] = c.textContent.trim();
+        }
     });
     const totalAyah = Object.keys(arTexts).length;
 
     return {
         surahN,
         reciter: store('bh-reciter', 'ar.alafasy'),
-        frEdition: store('bh-fr-edition', 'fr-cherrier'),
+        frEdition: 'fr.hamidullah',
         showFr: store('bh-show-fr', true),
         simpleScript: store('bh-simple', false),
         tafsirOpen: false,
         speed: '1',
         repeatN: '0',
         sequential: store('bh-sequential', false),
+        // reactive data (must live on the component for Alpine to re-render)
+        frData: {},
+        simpleData: {},
+        tafsirData: {},
+        w2wData: {},
+        w2wErr: false,
+        tafLoading: false,
+        bm: store(`bh-bm-${surahN}`, {}),
         allPlaying: false,
         playingAyah: null,
         noteOpen: null,
@@ -126,11 +135,16 @@ function bhReader(surahN) {
 
         init() {
             window.__bhArTexts = arTexts;
+            // cache Arabic text so the index full-text search works offline
+            save(`bh-ar-${this.surahN}`, Object.keys(arTexts).map(Number).sort((a, b) => a - b).map((k) => arTexts[k]));
             this.$watch('reciter', (v) => save('bh-reciter', v));
-            this.$watch('frEdition', (v) => { save('bh-fr-edition', v); this._frPromise = null; });
-            this.$watch('simpleScript', (v) => { save('bh-simple', v); this._simplePromise = null; });
+            this.$watch('frEdition', (v) => { save('bh-fr-edition', v); this._frPromise = null; this.ensureFr(); });
+            this.$watch('simpleScript', (v) => { save('bh-simple', v); if (v) this.ensureSimple(); });
+            this.$watch('showFr', (v) => save('bh-show-fr', v));
             this.$watch('sequential', (v) => save('bh-sequential', v));
+            this.$watch('speed', (v) => { if (audio) audio.playbackRate = Number(v) || 1; });
             this.ensureFr();
+            if (this.simpleScript) this.ensureSimple();
             // resume scroll target (#a-N anchor is handled by the browser)
             const mark = () => this.markRead();
             window.addEventListener('beforeunload', mark);
@@ -141,7 +155,7 @@ function bhReader(surahN) {
 
         arText(n) {
             const t = arTexts[n] || '';
-            const simple = this.simpleScript ? (simpleCache[n] || '') : '';
+            const simple = this.simpleScript ? (this.simpleData[n] || '') : '';
             const inner = simple || t;
             return `${inner}<a class="bh-ayah__num" href="#a-${n}" id="a-${n}">${n}</a>`;
         },
@@ -149,44 +163,24 @@ function bhReader(surahN) {
         async ensureFr() {
             if (this._frPromise) return this._frPromise;
             this._frPromise = loadFr(this.surahN, this.frEdition)
-                .then((data) => { frCache = data; })
-                .catch(() => {})
-                .finally(() => {
-                    this.$nextTick(() => {
-                        document.querySelectorAll('.bh-ayah__fr').forEach((el) => {
-                            const a = Number(el.closest('.bh-ayah')?.dataset.ayah);
-                            el.textContent = frCache[a] || '';
-                        });
-                    });
-                });
+                .then((data) => { this.frData = data || {}; })
+                .catch(() => {});
             return this._frPromise;
         },
 
         frText(n) {
             if (!this.showFr) return '';
-            const hit = frCache[n];
-            if (hit) return hit;
-            this.ensureFr();
-            return '';
+            return this.frData[n] || '';
         },
 
         async ensureSimple() {
             if (!this._simplePromise) {
-                this._simplePromise = loadSimple(this.surahN).then((d) => {
-                    simpleCache = d;
-                    this.$nextTick(() => {
-                        document.querySelectorAll('.bh-ayah').forEach((el) => {
-                            const n = Number(el.dataset.ayah);
-                            const span = el.querySelector('.bh-ayah__ar');
-                            if (span && simpleCache[n]) span.innerHTML = `${simpleCache[n]}<a class="bh-ayah__num" href="#a-${n}" id="a-${n}">${n}</a>`;
-                        });
-                    });
-                });
+                this._simplePromise = loadSimple(this.surahN).then((d) => { this.simpleData = d || {}; }).catch(() => {});
             }
             return this._simplePromise;
         },
 
-        async playAyah(n) {
+        async playAyah(n, isRepeat = false) {
             const base = reciters[this.reciter];
             const el = document.querySelector(`.bh-ayah[data-ayah="${n}"]`);
             if (!base || !el) return;
@@ -201,7 +195,7 @@ function bhReader(surahN) {
                 el.classList.remove('is-playing');
                 if (repeatLeft > 0) {
                     repeatLeft -= 1;
-                    this.playAyah(n);
+                    this.playAyah(n, true);
                     return;
                 }
                 const wantSeq = forceSeq || this.sequential;
@@ -213,8 +207,14 @@ function bhReader(surahN) {
                     forceSeq = false;
                 }
             };
-            repeatLeft = Number(this.repeatN) > 1 ? Number(this.repeatN) - 1 : 0;
-            a.play().catch(() => { this.allPlaying = false; });
+            if (!isRepeat) repeatLeft = Number(this.repeatN) > 1 ? Number(this.repeatN) - 1 : 0;
+            a.play().catch(() => {
+                // offline / blocked: reset UI state
+                el.classList.remove('is-playing');
+                this.allPlaying = false;
+                this.playingAyah = null;
+                forceSeq = false;
+            });
             this.markRead(n);
         },
 
@@ -235,15 +235,16 @@ function bhReader(surahN) {
         },
 
         /* ---- bookmarks & notes ---- */
-        isBookmarked(n) { return Boolean(bookmarks[n]); },
+        isBookmarked(n) { return Boolean(this.bm[n]); },
         toggleBookmark(n) {
-            if (bookmarks[n]) delete bookmarks[n]; else bookmarks[n] = Date.now();
-            save(`bh-bm-${surahN}`, bookmarks);
-            this.$nextTick(() => {});
+            const next = { ...this.bm };
+            if (next[n]) delete next[n]; else next[n] = Date.now();
+            this.bm = next;
+            save(`bh-bm-${surahN}`, next);
         },
         bookmarksFor(surah) {
             if (surah !== this.surahN) return [];
-            return Object.keys(store(`bh-bm-${this.surahN}`, {})).map(Number).sort((a, b) => a - b);
+            return Object.keys(this.bm).map(Number).sort((a, b) => a - b);
         },
         toggleNote(n) {
             this.noteOpen = this.noteOpen === n ? null : n;
@@ -257,42 +258,45 @@ function bhReader(surahN) {
 
         /* ---- tafsir & word-by-word (sync getters for x-html) ---- */
         tafsirHtml(n) {
-            if (tafsirCache[n]) return `<p dir="rtl" style="text-align:right">${tafsirCache[n].replace(/</g, '&lt;')}</p>`;
-            return tafsirLoading ? '…' : '';
+            if (this.tafsirData[n]) return `<p dir="rtl" style="text-align:right">${String(this.tafsirData[n]).replace(/</g, '&lt;')}</p>`;
+            if (this.tafLoading) return '…';
+            return this.tafsirAyah === n && this.tafsirOpen
+                ? `<p class="bh-muted">${lang('Tafsir indisponible hors ligne.', 'التفسير غير متاح دون اتصال.')}</p>`
+                : '';
         },
-        tafsirLoading() { return tafsirLoading; },
+        tafsirLoading() { return this.tafLoading; },
         async toggleTafsir(n) {
             this.tafsirAyah = this.tafsirAyah === n ? null : n;
-            if (this.tafsirAyah && !tafsirCache[n]) {
-                tafsirLoading = true;
-                tafsirCache = { ...(await loadTafsir(this.surahN)) };
-                tafsirLoading = false;
-                this.$nextTick(() => {});
+            if (this.tafsirAyah) this.tafsirOpen = true;
+            if (this.tafsirAyah && !this.tafsirData[n]) {
+                this.tafLoading = true;
+                this.tafsirData = { ...(await loadTafsir(this.surahN)) };
+                this.tafLoading = false;
             }
         },
         w2wHtml(n) {
             const el = document.querySelector(`.bh-ayah[data-ayah="${n}"]`);
             const global = el ? Number(el.dataset.global) : null;
-            if (!global || !w2wCache[global]) return '';
-            return (w2wCache[global] || [])
+            if (!global || !this.w2wData[global]) return '';
+            const esc = (x) => String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+            return (this.w2wData[global] || [])
                 .filter((w) => w.ar)
-                .map((w) => `<span class="bh-w2w__w" title="${(w.gloss || '').replace(/"/g, '&quot;')}">${w.ar}</span>`)
+                .map((w) => `<span class="bh-w2w__w" title="${esc(w.gloss)}"><b>${esc(w.ar)}</b><small>${esc(w.gloss)}</small></span>`)
                 .join(' ');
         },
-        w2wError() { return w2wError; },
+        w2wError() { return this.w2wErr; },
         async toggleW2W(n) {
             this.w2wAyah = this.w2wAyah === n ? null : n;
             if (this.w2wAyah) {
                 const el = document.querySelector(`.bh-ayah[data-ayah="${n}"]`);
                 const global = el ? Number(el.dataset.global) : null;
-                if (global && !w2wCache[global]) {
+                if (global && !this.w2wData[global]) {
                     try {
-                        w2wCache[global] = await loadW2w(global);
-                        w2wError = false;
+                        this.w2wData = { ...this.w2wData, [global]: await loadW2w(global, `${this.surahN}:${n}`) };
+                        this.w2wErr = false;
                     } catch {
-                        w2wError = true;
+                        this.w2wErr = true;
                     }
-                    this.$nextTick(() => {});
                 }
             }
         },
@@ -373,13 +377,18 @@ function bhPlan() {
     const plan = store('bh-plan', null) || { days: 30, start: new Date().toISOString() };
     const reader = document.querySelector('[data-bh-reader]');
     const arTexts = reader
-        ? [...reader.querySelectorAll('.bh-ayah')].map((el) => el.querySelector('.bh-ayah__ar')?.textContent.trim() || '')
+        ? [...reader.querySelectorAll('.bh-ayah')].map((el) => {
+            const c = el.querySelector('.bh-ayah__ar')?.cloneNode(true);
+            if (!c) return '';
+            c.querySelectorAll('.bh-ayah__num').forEach((x) => x.remove());
+            return c.textContent.trim();
+        })
         : [];
     const surahN = Number(reader?.dataset.surah || 1);
     const questions = quizQuestions(arTexts, 5, surahN);
     return {
         planDays: String(plan.days),
-        _plan,
+        _plan: null,
         quizActive: false,
         quizI: 0,
         quizAnswered: false,
@@ -416,7 +425,9 @@ function bhPlan() {
         quizIndex() { return Math.min(this.quizI + 1, this.questions.length); },
         quizQuestion() {
             const q = this.questions[this.quizI];
-            return q ? q.question : lang('Cette sourate est trop courte pour un quiz.', 'هذه السورة قصيرة جدًا للاختبار.');
+            return q
+                ? lang(`Quel verset suit la ${q.pos}e ?`, `ما الآية التي تلي الآية ${q.pos}؟`) + ' ' + clip(arTexts[q.pos - 1], 90)
+                : lang('Cette sourate est trop courte pour un quiz.', 'هذه السورة قصيرة جدًا للاختبار.');
         },
         quizOptions() {
             const q = this.questions[this.quizI];

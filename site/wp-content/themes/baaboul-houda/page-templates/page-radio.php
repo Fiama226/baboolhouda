@@ -8,7 +8,7 @@ $radioEnabled = !empty($s['radio_enabled']) && '' !== trim((string) $s['radio_ur
 
 <section class="bh-page-hero">
     <div class="bh-container">
-        <h1><?php echo esc_html(bh_post_title(get_the_ID())); ?></h1>
+        <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page-hero__sub"><?php echo esc_html(bh_l('Votre radio islamique 24h/24 — où que vous soyez.', 'إذاعتكم الإسلامية على مدار الساعة — أينما كنتم.')); ?></p>
     </div>
 </section>
@@ -91,7 +91,7 @@ $radioEnabled = !empty($s['radio_enabled']) && '' !== trim((string) $s['radio_ur
     <div class="bh-container">
         <div class="bh-section__head">
             <h2><?php echo esc_html(bh_l('Replays radio', 'أرشيف الإذاعة')); ?></h2>
-            <a class="bh-link" href="<?php echo esc_url(bh_nav_url('emissions')); ?>"><?php echo esc_html(bh_l('Tout le replay →', 'كل الأرشيف →')); ?></a>
+            <a class="bh-link" href="<?php echo esc_url(bh_nav_url('emissions')); ?>"><?php echo esc_html(bh_l('Tous les replays →', 'كل الأرشيف →')); ?></a>
         </div>
         <?php
         $audioEp = new WP_Query([

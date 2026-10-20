@@ -9,9 +9,9 @@ defined('ABSPATH') || exit;
 get_header();
 $s = function_exists('bh_settings') ? bh_settings() : [];
 ?>
-<div class="bh-container bh-page" x-data="bhDates(<?php echo wp_json_encode([
+<div class="bh-container bh-page" x-data="bhDates(<?php echo esc_attr(wp_json_encode([
     'city'   => (string) ($s['prayer_city'] ?? 'Ouagadougou'),
-]); ?>)">
+])); ?>)">
     <nav class="bh-breadcrumb" aria-label="Fil d’Ariane">
         <a href="<?php echo esc_url(bh_nav_url('direct')); ?>"><?php echo esc_html(bh_l('Accueil', 'الرئيسية')); ?></a>
         <span aria-hidden="true">/</span>

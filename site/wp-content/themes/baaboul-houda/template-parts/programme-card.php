@@ -1,7 +1,7 @@
 <?php
 /** Programme card. Expects $post (WP_Post). */
 defined('ABSPATH') || exit;
-$p = $post;
+$p = $args["post"] ?? get_post();
 $logo = has_post_thumbnail($p) ? get_the_post_thumbnail_url($p, 'bh-card') : '';
 ?>
 <a class="bh-card bh-card--programme" href="<?php echo esc_url(get_permalink($p)); ?>">

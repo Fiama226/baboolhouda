@@ -1,8 +1,8 @@
 # Expansion checklist (80-item competitive audit)
 
-Status: ✅ done · ⬜ pending · ❌ excluded by client
+Status: ✅ done · ⚠️ partial (voir note) · ⬜ pending · ❌ excluded by client
 Client exclusions: 4, 40, 45, 46, 48, 69, 78, 79, 80
-Last updated: 2026-10-20 (v2 delivery)
+Last updated: 2026-10-20 (v2 delivery, statuts vérifiés contre le code)
 
 ## A. Live TV & radio
 | # | Feature | Status |
@@ -15,7 +15,7 @@ Last updated: 2026-10-20 (v2 delivery)
 | 7 | Radio podcast archive + RSS feed | ✅ podcast section; core WP `/feed/` |
 | 8 | "Just ended" banner after live slot | ✅ `justTitle/justUrl` in player |
 | 9 | YouTube channel → Replays auto-import (script) | ✅ `scripts/yt-import.mjs` (API key + app password) |
-| 10 | Live viewer counter (server-side, graceful) | ✅ `_bh_views` cookie-guarded counter + trending |
+| 10 | Live viewer counter (server-side, graceful) | ⚠️ compteur de **vues de pages** (`_bh_views`) + tendances ; pas de compteur de spectateurs simultanés |
 | 11 | "Watch on phone" QR code on live page | ✅ lazy qrcode, modal on live page |
 | 12 | Second channel "Coran 24/7" (TV1/TV2) | ✅ `bh_live_channel2`, TV1/TV2 tabs |
 | 13 | 24h catch-up → "This week's replay" aggregate | ✅ "Cette semaine" filter on replays |
@@ -24,11 +24,11 @@ Last updated: 2026-10-20 (v2 delivery)
 | # | Feature | Status |
 |---|---------|--------|
 | 14 | Multiple FR translations (2–4 selectable) | ✅ 3 editions (Cherrier, Berque, Al-Que) |
-| 15 | Verse share card (PNG, FB/WhatsApp) | ✅ canvas share card per ayah |
+| 15 | Verse share card (PNG, FB/WhatsApp) | ⚠️ canvas 1200×630 → PNG par verset (`shareAyah`, quran.js) ; sur mobile, `navigator.share` (texte+lien) est utilisé en priorité, la carte PNG n'est générée que sans Web Share |
 | 16 | Word-by-word view (tap word) | ✅ w2w via api.quran.com, cached, graceful |
 | 17 | Tap a word to hear it | ⬜ needs per-word audio source (gloss on tap done) |
 | 18 | Tafsir per verse (alquran.cloud runtime) | ✅ per-ayah tafsir, cached |
-| 19 | Mushaf mode (604 pages) | ✅ 30-juz navigation mode (start-verse deep links) |
+| 19 | Mushaf mode (604 pages) | ⚠️ navigation par 30 juz uniquement ; pas de pagination 604 pages du mushaf |
 | 20 | Audio sync (per-ayah auto-advance + highlight) | ✅ sequential play + `is-playing` highlight |
 | 21 | Reading plan tracker (30/15/7-day + progress) | ✅ `bhPlan`, localStorage |
 | 22 | Resume reading (last verse) | ✅ `bh-last-read` + "Reprendre ma lecture" |
@@ -37,7 +37,7 @@ Last updated: 2026-10-20 (v2 delivery)
 | 25 | Full-text search (AR offline + FR) | ✅ offline index (quran.json) + FR API |
 | 26 | Recitation speed control | ✅ 0.75–1.5× |
 | 27 | Memorization quiz | ✅ deterministic MCQ over surah |
-| 28 | Hijri calendar page (month + events) | ✅ dates page: converter + fasting events |
+| 28 | Hijri calendar page (month + events) | ⚠️ page dates : convertisseur + événements/jeûnes à venir ; pas de grille mensuelle |
 | 29 | Script modes (Uthmani / simplified) | ✅ Uthmani + simplified toggle |
 
 ## C. Prayer & tools
@@ -94,9 +94,9 @@ Last updated: 2026-10-20 (v2 delivery)
 | # | Feature | Status |
 |---|---------|--------|
 | 73 | Bundle split (lazy hls.js/howler/quran) | ✅ main.js 19 kB; hls/howler/qrcode lazy chunks |
-| 74 | PWA offline Quran | ✅ SW caches pages+assets (server-rendered verses) |
+| 74 | PWA offline Quran | ⚠️ SW : pages visitées (réseau d'abord) + assets en cache ; pas de pré-cache des 114 sourates (`APP_SHELL` vide) → hors-ligne seulement pour les sourates déjà ouvertes |
 | 75 | Live alert ("we're live" toast via status poll) | ✅ `initLiveToast` polls REST status |
-| 76 | Auto-post "EN DIRECT" to Facebook | ✅ page-token post on live start |
+| 76 | Auto-post "EN DIRECT" to Facebook | ✅ `includes/community.php` : passage `live_enabled` 0→1 + Page ID + jeton (Réglages > Publication automatique Facebook) → POST Graph API `/{page}/feed` (non bloquant, jamais fatal) |
 | 77 | Analytics (GA4/Plausible snippet) | ✅ settings snippet + light page-view counter |
 
 ## Excluded by client

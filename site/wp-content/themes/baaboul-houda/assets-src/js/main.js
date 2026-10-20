@@ -20,7 +20,7 @@ const cfg = window.bhCfg || {};
 const lang = (fr, ar) => (cfg.isAr ? ar : fr);
 
 const store = (key, val) => {
-    try { return JSON.parse(localStorage.getItem(key)); } catch { return val; }
+    try { const v = JSON.parse(localStorage.getItem(key)); return v === null || v === undefined ? val : v; } catch { return val; }
 };
 const save = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* private mode */ } };
 
@@ -220,24 +220,29 @@ function bhPrayer(full = false) {
         nextKey: '',
         nextIn: '',
         hijriText: '',
-        init() { this.load(); },
+        init() { this.load(); setInterval(() => this.tick(), 30000); },
         get names() {
-            return {
-                fajr: 'Fajr', sunrise: 'Lever', dhuhr: 'Dhuhr', asr: 'Asr', maghrib: 'Maghrib', isha: 'Isha',
-            };
+            return cfg.isAr
+                ? { fajr: 'الفجر', sunrise: 'الشروق', dhuhr: 'الظهر', asr: 'العصر', maghrib: 'المغرب', isha: 'العشاء' }
+                : { fajr: 'Fajr', sunrise: 'Lever', dhuhr: 'Dhuhr', asr: 'Asr', maghrib: 'Maghrib', isha: 'Isha' };
         },
         get order() { return keys.map((k) => ({ key: k })); },
         hijri() { return this.hijriText; },
         async load() {
             const cacheKey = `bh-pt-${this.city}-${new Date().toISOString().slice(0, 10)}`;
             const cached = store(cacheKey, null);
-            if (cached) { this.apply(cached.times, cached.hijri, 'aladhan'); return; }
+            if (cached) { this.apply(cached.times, cached.hijri, 'aladhan'); this.tick(); return; }
             try {
                 const d = new Date();
-                const res = await fetch(`https://api.aladhan.com/v1/timingsByCity/${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}?city=${encodeURIComponent(this.city)}&method=${cfg.prayer?.method || 3}`);
+                const dd = `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
+                const c = cfg.prayer?.coords?.[this.city];
+                const url = c
+                    ? `https://api.aladhan.com/v1/timings/${dd}?latitude=${c.lat}&longitude=${c.lon}&method=${cfg.prayer?.method || 3}`
+                    : `https://api.aladhan.com/v1/timingsByCity/${dd}?city=${encodeURIComponent(this.city)}&country=Burkina%20Faso&method=${cfg.prayer?.method || 3}`;
+                const res = await fetch(url);
                 if (!res.ok) throw new Error('http');
                 const body = await res.json();
-                const clean = (v) => String(v).replace(/\s*(AM|PM)$/, '').trim();
+                const clean = (v) => String(v).replace(/\s*(\(.*\)|AM|PM)\s*$/i, '').trim();
                 const t = body.data.timings;
                 const times = {
                     fajr: clean(t.Fajr), sunrise: clean(t.Sunrise), dhuhr: clean(t.Dhuhr),
@@ -357,8 +362,9 @@ function bhDates(o) {
     const now = new Date();
     const h = gregToHijri(now);
     return {
-        todayGreg: now.toLocaleDateString(cfg.isAr ? 'ar-EG-u-nu-latn' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
-        todayHijri: formatHijri(h, cfg.isAr ? 'ar' : 'fr'),
+        todayGreg() { return now.toLocaleDateString(cfg.isAr ? 'ar-EG-u-nu-latn' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); },
+        todayHijri() { return formatHijri(h, cfg.isAr ? 'ar' : 'fr'); },
+        resultText() { return this.result; },
         fasts: upcomingFasts(now, 400),
         gregDate: now.toISOString().slice(0, 10),
         hijriYear: h.y,
@@ -378,6 +384,7 @@ function bhDates(o) {
                     ? e.date.toLocaleDateString(cfg.isAr ? 'ar-EG-u-nu-latn' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
                     : String(e.date || ''),
                 daysLeft: e.daysLeft,
+                days: e.daysLeft,
             };
         },
         upcomingFasts() {
@@ -407,6 +414,34 @@ function bhDates(o) {
     };
 }
 
+/* ============================ ramadan ============================ */
+function bhRamadan() {
+    const maghribToday = () => {
+        const c = store(`bh-pt-${cfg.prayer?.city || 'Ouagadougou'}-${new Date().toISOString().slice(0, 10)}`, null);
+        return (c && c.times && c.times.maghrib) || cfg.prayer?.times?.maghrib || '18:30';
+    };
+    return {
+        left: '',
+        init() {
+            this.refresh();
+            setInterval(() => this.refresh(), 1000);
+        },
+        inRamadan() { return gregToHijri(new Date()).m === 9; },
+        refresh() {
+            const m = /^(\d{1,2}):(\d{2})/.exec(maghribToday());
+            if (!m) { this.left = ''; return; }
+            const t = new Date();
+            t.setHours(Number(m[1]), Number(m[2]), 0, 0);
+            let diff = Math.floor((t.getTime() - Date.now()) / 1000);
+            if (diff < 0) diff = 0;
+            const p = (n) => String(n).padStart(2, '0');
+            this.left = `${p(Math.floor(diff / 3600))}:${p(Math.floor((diff % 3600) / 60))}:${p(diff % 60)}`;
+        },
+        iftarCountdown() { return this.left; },
+    };
+}
+Alpine.data('bhRamadan', bhRamadan);
+
 /* ============================ tasbih ============================ */
 function bhTasbih() {
     const key = 'bh-tasbih';
@@ -421,8 +456,8 @@ function bhTasbih() {
         roundsText() {
             const r = tasbihRoundInfo(this.count, this.goal);
             return cfg.isAr
-                ? `${r.rounds} دورة · باقي ${r.left} على ${this.goal}`
-                : `${r.rounds} rond(s) · ${r.left} restant(s) pour ${this.goal}`;
+                ? `${r.rounds} دورة · ${r.left} / ${this.goal}`
+                : `${r.rounds} tour(s) · ${r.left} / ${this.goal}`;
         },
         tick() {
             this.count += 1;
@@ -494,9 +529,18 @@ function bhQuranIndex() {
         q: '',
         view: 'surahs',
         fullText: false,
-        results: [],
+        hits: [],
         resume: store('bh-last-read', null),
-        initAll() {},
+        initAll() {
+            let t = null;
+            const run = () => { clearTimeout(t); t = setTimeout(() => this.runSearch(), 300); };
+            this.$watch('q', run);
+            this.$watch('fullText', run);
+        },
+        async runSearch() {
+            if (!this.fullText) { this.hits = []; return; }
+            this.hits = await this.searchVerses();
+        },
         count() { return `${index.length} ${lang('sourates', 'سورة')}`; },
         matchCard(name) { return quranCardMatch(name, this.q); },
         resumeUrl() {
@@ -508,23 +552,23 @@ function bhQuranIndex() {
             const su = index.find((s) => s.n === this.resume.surah);
             return su ? `${su.fr} ${su.n} · ${lang('verset', 'آية')} ${this.resume.ayah}` : '';
         },
-        async results() {
-            if (!this.fullText) return [];
-            if (this._pendingQ === this.q && this._cache) return this._cache;
-            this._pendingQ = this.q;
+        async searchVerses() {
             try {
                 const norm = arNormalize(this.q.trim().toLowerCase());
                 if (norm.length < 2) { this._cache = []; return []; }
                 // 1) API search (FR + AR) when online.
-                const params = new URLSearchParams({ keyword: this.q.trim(), size: '12' });
-                const res = await fetch(`https://api.quran.com/api/v4/quran/search?${params}`);
+                const params = new URLSearchParams({ q: this.q.trim(), size: '12', language: cfg.isAr ? 'ar' : 'fr' });
+                const res = await fetch(`https://api.quran.com/api/v4/search?${params}`);
                 if (res.ok) {
                     const body = await res.json();
-                    const list = (body.verses || []).map((v) => ({
-                        ref: `${v.verses_key || ''}`.replace(':', ':'),
-                        url: `${cfg.coranUrl || '/coran/'}${String(v.verses_key || '1:1').split(':')[0]}/#a-${String(v.verses_key || '1:1').split(':')[1]}`,
-                        text: clip(String(v.text || ''), 120),
-                    }));
+                    const list = (body.search?.results || []).map((v) => {
+                        const [sn, an] = String(v.verse_key || '1:1').split(':');
+                        return {
+                            ref: `${sn}:${an}`,
+                            url: `${cfg.coranUrl || '/coran/'}${sn}/#a-${an}`,
+                            text: clip(String(v.text || ''), 120),
+                        };
+                    });
                     this._cache = list;
                     return list;
                 }
@@ -806,7 +850,7 @@ function bhSearch() {
             }
             this.busy = true;
             try {
-                const res = await fetch(`${cfg.rest?.search || '/wp-json/bh/v1/search'}&q=${encodeURIComponent(q)}`.replace('?&', '?'));
+                const res = await fetch(`${cfg.rest?.search || '/wp-json/bh/v1/search'}${(cfg.rest?.search || '').includes('?') ? '&' : '?'}q=${encodeURIComponent(q)}`);
                 if (res.ok) {
                     const body = await res.json();
                     this.results = Array.isArray(body.results) ? body.results.slice(0, 8) : [];
@@ -866,4 +910,10 @@ if (cfg.qiblaBears && Object.keys(cfg.qiblaBears).length) {
     bhRadioBar().init();
 })();
 
-Alpine.start();
+// Reader pages: register the lazy quran.js components (bhReader, bhPlan)
+// BEFORE Alpine walks the DOM, otherwise x-data="bhReader(…)" is undefined.
+if (document.querySelector('[data-bh-reader]')) {
+    import('./quran.js').then(() => Alpine.start(), () => Alpine.start());
+} else {
+    Alpine.start();
+}

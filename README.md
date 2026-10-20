@@ -11,8 +11,26 @@ Bilingue **français / arabe** (RTL complet), pensé pour une mise à jour sans 
 ```bash
 docker compose up -d
 # → http://localhost:8080  (site) · http://localhost:8080/wp-admin (admin)
-# Premier run : passer l'installateur WP (identifiants admin), c'est tout.
 ```
+Le site **s'installe tout seul** au premier `docker compose up` (service one-shot
+`wpcli`) : WordPress est installé, le plugin `baaboul-houda-core` puis le thème
+`baaboul-houda` sont activés, les permaliens sont réglés en `/%postname%/` et les
+pages de section sont créées. Il n'y a **pas d'installateur WordPress à parcourir**.
+
+- **Identifiants admin** : `admin` / `admin` par défaut (variables `WP_ADMIN_USER`,
+  `WP_ADMIN_PASSWORD`, `WP_ADMIN_EMAIL`). À changer pour tout usage non local.
+- **Contenu de démo** : programmes, replays, actualités, grille… sont injectés par
+  `scripts/seed-demo.sh` (idempotent, **dev uniquement**). Désactiver avec
+  `SEED_DEMO=0`, forcer un re-seed avec `FORCE=1`.
+- **Port** : `HTTP_PORT` (8080 par défaut). Si 8080 est occupé, mettre par exemple
+  `HTTP_PORT=8081` dans un fichier `.env` (voir `.env.example`) ; l'URL du site
+  suit ce port.
+- **Édition en direct** : le thème et le plugin sont montés depuis le dépôt
+  (`./site/wp-content/themes/baaboul-houda` et `./site/wp-content/plugins/baaboul-houda-core`
+  → `/var/www/html/wp-content/...`). Une modification PHP/CSS/JS est visible
+  immédiatement (recharger la page) ; après un changement dans `assets-src/`,
+  relancer `npm run build` (les assets buildés `assets/dist/` sont committés).
+- **Repartir de zéro** : `docker compose down -v` (supprime la base et le volume WordPress).
 
 ### Tests (sans Docker)
 ```bash
@@ -20,14 +38,9 @@ npm install
 npm test          # lint PHP (JS), tests unitaires, validation des données, intégrité release
 bash scripts/test-local.sh
 ```
-Le **vrai** `php -l` et le **build Docker** tournent en CI (GitHub Actions) à chaque push.
-
-> ⚠️ Le fichier de CI [`.github/workflows/ci.yml`](.github/workflows/ci.yml) est
-> inclus dans le dépôt local mais **n'a pas pu être poussé** par l'agent
-> (l'intégration GitHub de cet espace de travail n'a pas la permission
-> `workflows`). Le propriétaire du dépôt doit soit l'activer
-> (*Settings > General > Workflow > Allow GitHub App*), soit commit manuellement
-> ce fichier : `git add .github/workflows/ci.yml && git commit -m "ci" && git push`.
+La CI GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) exécute à
+chaque push : `php -l` réel (image `php:8.3-cli`) sur `site/wp-content`, `npm ci && npm test`,
+la vérification que `npm run build` ne modifie pas `assets/dist` (committé), et `docker build .`.
 
 ### Déploiement cPanel
 ```bash

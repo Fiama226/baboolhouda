@@ -6,9 +6,9 @@ defined('ABSPATH') || exit;
 get_header();
 $s = function_exists('bh_settings') ? bh_settings() : [];
 ?>
-<div class="bh-container bh-page" x-data="bhNewsletter(<?php echo wp_json_encode([
+<div class="bh-container bh-page" x-data="bhNewsletter(<?php echo esc_attr(wp_json_encode([
     'rest' => esc_url_raw(rest_url('bh/v1/newsletter')),
-]); ?>)">
+])); ?>)">
     <nav class="bh-breadcrumb" aria-label="Fil d’Ariane">
         <a href="<?php echo esc_url(bh_nav_url('direct')); ?>"><?php echo esc_html(bh_l('Accueil', 'الرئيسية')); ?></a>
         <span aria-hidden="true">/</span> <span><?php echo esc_html(bh_l('Newsletter', 'النشرة')); ?></span>

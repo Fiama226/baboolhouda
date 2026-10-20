@@ -9,11 +9,11 @@ $city   = (string) ($s['prayer_city'] ?? 'Ouagadougou');
 $bearing = function_exists('bh_qibla_for_city') ? bh_qibla_for_city($city) : null;
 $cities = function_exists('bh_known_cities') ? array_keys(bh_known_cities()) : [$city];
 ?>
-<div class="bh-container bh-page" x-data="bhQibla(<?php echo wp_json_encode([
+<div class="bh-container bh-page" x-data="bhQibla(<?php echo esc_attr(wp_json_encode([
     'city'    => $city,
     'bearing' => $bearing !== null ? round((float) $bearing, 1) : null,
     'cities'  => array_map('strval', $cities),
-]); ?>)">
+])); ?>)">
     <nav class="bh-breadcrumb" aria-label="Fil d’Ariane">
         <a href="<?php echo esc_url(bh_nav_url('direct')); ?>"><?php echo esc_html(bh_l('Accueil', 'الرئيسية')); ?></a>
         <span aria-hidden="true">/</span>

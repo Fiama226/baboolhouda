@@ -14,6 +14,7 @@ if (!$surah) {
     wp_safe_redirect(home_url('/coran/'));
     exit;
 }
+$bhCoranBase = bh_is_ar() ? home_url('/ar/coran/') : home_url('/coran/');
 $prevSurah = $surahNum > 1 ? $surahNum - 1 : 114;
 $nextSurah = $surahNum < 114 ? $surahNum + 1 : 1;
 
@@ -23,9 +24,9 @@ get_header();
 <section class="bh-section bh-quran-reader-section">
     <div class="bh-container bh-container--narrow">
         <nav class="bh-quran-reader__nav" aria-label="<?php echo esc_attr(bh_l('Navigation entre les sourates', 'التنقل بين السور')); ?>">
-            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/' . $prevSurah . '/')); ?>">← <?php echo esc_html(bh_l('Sourate précédente', 'السورة السابقة')); ?></a>
-            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/')); ?>"><?php echo esc_html(bh_l('Toutes les sourates', 'كل السور')); ?></a>
-            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/' . $nextSurah . '/')); ?>"><?php echo esc_html(bh_l('Sourate suivante', 'السورة التالية')); ?> →</a>
+            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url($bhCoranBase . $prevSurah . '/'); ?>">← <?php echo esc_html(bh_l('Sourate précédente', 'السورة السابقة')); ?></a>
+            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(bh_nav_url('coran')); ?>"><?php echo esc_html(bh_l('Toutes les sourates', 'كل السور')); ?></a>
+            <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url($bhCoranBase . $nextSurah . '/'); ?>"><?php echo esc_html(bh_l('Sourate suivante', 'السورة التالية')); ?> →</a>
         </nav>
 
         <div class="bh-quran-reader"
@@ -50,14 +51,6 @@ get_header();
                             <option value="ar.alafasy">Mishary Alafasy</option>
                             <option value="ar.minshawi">Minshawi</option>
                             <option value="ar.abdulbasitmurattal">Abdul Basit (Murattal)</option>
-                        </select>
-                    </label>
-                    <label class="bh-reader-reciter">
-                        <span><?php echo esc_html(bh_l('Traduction', 'الترجمة')); ?></span>
-                        <select x-model="frEdition" class="bh-select" aria-label="<?php echo esc_attr(bh_l('Traduction', 'الترجمة')); ?>">
-                            <option value="fr-cherrier">Cherrier (1897)</option>
-                            <option value="fr-fati">Fāti (Berque)</option>
-                            <option value="fr-que">Que (Al-Que)</option>
                         </select>
                     </label>
                     <label class="bh-reader-toggle" x-show="frEdition !== ''">
@@ -107,7 +100,7 @@ get_header();
                 <p class="bh-bismillah bh-font-quran" x-show="surahN !== 1 && surahN !== 9">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
                 <?php foreach ($su = $surah['ayahs'] as $i => $text) : ?>
                     <?php $n = (int) $i + 1; ?>
-                    <p class="bh-ayah" data-ayah="<?php echo $n; ?>" data-global="<?php echo (int) $surah['start_global'] + $i; ?>"
+                    <div class="bh-ayah" data-ayah="<?php echo $n; ?>" data-global="<?php echo (int) $surah['start_global'] + $i; ?>"
                        :class="{ 'is-playing': playingAyah === <?php echo $n; ?> }">
                         <span class="bh-ayah__ar bh-font-quran" x-html="arText(<?php echo $n; ?>)">
                             <?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- verified Uthmani text ?>
@@ -137,7 +130,7 @@ get_header();
                             <div class="bh-w2w" x-html="w2wHtml(<?php echo $n; ?>)"></div>
                             <p class="bh-muted" x-show="w2wError()"><?php echo esc_html(bh_l('Analyse mot-à-mot indisponible hors ligne.', 'التحليل كلمة-بكلمة غير متاح دون اتصال.')); ?></p>
                         </div>
-                    </p>
+                    </div>
                 <?php endforeach; ?>
             </div>
 
@@ -149,9 +142,9 @@ get_header();
                     </template>
                 </div>
                 <nav class="bh-quran-reader__foot-nav">
-                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/' . $prevSurah . '/')); ?>">← <?php echo esc_html(bh_l('Précédente', 'السابق')); ?></a>
-                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/')); ?>"><?php echo esc_html(bh_l('Sourates', 'السور')); ?></a>
-                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(home_url('/coran/' . $nextSurah . '/')); ?>"><?php echo esc_html(bh_l('Suivante', 'التالي')); ?> →</a>
+                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url($bhCoranBase . $prevSurah . '/'); ?>">← <?php echo esc_html(bh_l('Précédente', 'السابق')); ?></a>
+                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url(bh_nav_url('coran')); ?>"><?php echo esc_html(bh_l('Sourates', 'السور')); ?></a>
+                    <a class="bh-btn bh-btn-ghost" href="<?php echo esc_url($bhCoranBase . $nextSurah . '/'); ?>"><?php echo esc_html(bh_l('Suivante', 'التالي')); ?> →</a>
                 </nav>
             </footer>
 

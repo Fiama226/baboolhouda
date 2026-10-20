@@ -1,7 +1,7 @@
 <?php
 /**
  * Feeds & public endpoints:
- *  - /feed/podcast.xml        RSS 2.0 (audio episodes, MP3 enclosure)
+ *  - /feed/bh-podcast/        RSS 2.0 (audio episodes, MP3 enclosure)
  *  - /wp-json/bh/v1/status    live state (drives the "we're live" alert)
  *  - /wp-json/bh/v1/search    q → top-8 results (search suggest)
  *  - /wp-json/bh/v1/prayer-widget.js  embeddable prayer-time widget
@@ -14,7 +14,8 @@ defined('ABSPATH') || exit;
  * ------------------------------------------------------------------- */
 
 add_action('init', function () {
-    add_feed('podcast', 'bh_podcast_feed');
+    // Not "podcast": WP would claim /podcast/ for the feed and shadow the page.
+    add_feed('bh-podcast', 'bh_podcast_feed');
 });
 
 function bh_podcast_feed(): void {

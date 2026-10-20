@@ -380,19 +380,24 @@ add_action('updated_option', function (string $option, $old, $new) {
     if (empty($new['fb_autopost']) || empty($new['fb_page_id']) || empty($new['fb_token'])) {
         return;
     }
-    $lastUrl = (string) get_option('bh_last_live_post_url', '');
-    if ($lastUrl === (string) ($new['live_url'] ?? '')) {
+    // Anti-doublon : ne repost pas la même URL de diffusion (si une URL est définie).
+    $liveUrl = (string) ($new['live_url'] ?? '');
+    if ('' !== $liveUrl && $liveUrl === (string) get_option('bh_last_live_post_url', '')) {
         return;
     }
-    $url  = home_url('/direct/');
-    $body = wp_remote_post('https://graph.facebook.com/v19.0/' . rawurlencode((string) $new['fb_page_id']) . '/feed', [
-        'timeout' => 15,
-        'body'    => [
-            'message' => ($new['live_title_fr'] ?: 'En direct') . ' — ' . $url,
-            'access_token' => $new['fb_token'],
+    $url   = home_url('/direct/');
+    $title = (string) ($new['live_title_fr'] ?? '');
+    // Non bloquant, jamais fatal : un échec Facebook ne doit pas gêner l'enregistrement des réglages.
+    $res = wp_remote_post('https://graph.facebook.com/v19.0/' . rawurlencode((string) $new['fb_page_id']) . '/feed', [
+        'timeout'  => 5,
+        'blocking' => false,
+        'body'     => [
+            'message'      => '🔴 EN DIRECT — ' . ('' !== $title ? $title : 'TV Baaboul Houda') . ' — ' . $url,
+            'link'         => $url,
+            'access_token' => (string) $new['fb_token'],
         ],
     ]);
-    if (!is_wp_error($body)) {
-        update_option('bh_last_live_post_url', (string) ($new['live_url'] ?? ''), false);
+    if (!is_wp_error($res)) {
+        update_option('bh_last_live_post_url', $liveUrl, false);
     }
 }, 10, 3);

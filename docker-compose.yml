@@ -63,11 +63,14 @@ services:
       - wp-html:/var/www/html
       - ./site/wp-content/themes/baaboul-houda:/var/www/html/wp-content/themes/baaboul-houda
       - ./site/wp-content/plugins/baaboul-houda-core:/var/www/html/wp-content/plugins/baaboul-houda-core
+      - ./scripts/seed-demo.sh:/seed-demo.sh:ro
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: ${DB_NAME:-baboul_wp}
       WORDPRESS_DB_USER: ${DB_USER:-baboul}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-baboulpass}
+      SEED_DEMO: ${SEED_DEMO:-1}
+      FORCE: ${FORCE:-0}
       HTTP_PORT: ${HTTP_PORT:-8080}
     entrypoint: ["sh", "-c"]
     command:
@@ -86,6 +89,8 @@ services:
         wp plugin activate baaboul-houda-core --skip-themes
         wp theme activate baaboul-houda
         wp rewrite structure '/%postname%/'
+        # DEV-ONLY demo content (idempotent). Disable with SEED_DEMO=0 in .env.
+        if [ "$${SEED_DEMO:-1}" != "0" ]; then sh /seed-demo.sh; fi
         echo ">> Ready: theme + core plugin active"
 
 volumes:

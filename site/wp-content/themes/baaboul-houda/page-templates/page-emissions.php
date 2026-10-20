@@ -3,7 +3,7 @@
 defined('ABSPATH') || exit;
 get_header();
 
-$programmeFilter = isset($_GET['programme']) ? (int) $_GET['programme'] : 0;
+$programmeFilter = isset($_GET['prog']) ? (int) $_GET['prog'] : 0;
 $sujetFilter     = isset($_GET['sujet']) ? sanitize_title(wp_unslash($_GET['sujet'])) : '';
 $thisWeek       = !empty($_GET['semaine']);
 
@@ -38,7 +38,7 @@ $episodes   = new WP_Query($args);
 
 <section class="bh-page-hero">
     <div class="bh-container">
-        <h1><?php echo esc_html(bh_post_title(get_the_ID())); ?></h1>
+        <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page-hero__sub"><?php echo esc_html(bh_l('Re regardez et ré écoutez vos émissions préférées.', 'إعادة مشاهدة وإعادة استماع لبرامجك المفضلة.')); ?></p>
     </div>
 </section>
@@ -49,7 +49,7 @@ $episodes   = new WP_Query($args);
             <div class="bh-filter" role="group" aria-label="<?php echo esc_attr(bh_l('Filtrer par programme', 'تصفية حسب البرنامج')); ?>">
                 <a class="bh-chip" href="<?php echo esc_url(bh_nav_url('emissions')); ?>" <?php echo $programmeFilter || $sujetFilter || $thisWeek ? '' : 'aria-current="true"'; ?>><?php echo esc_html(bh_l('Tous', 'الكل')); ?></a>
                 <?php foreach ($programmes->posts as $p) : ?>
-                    <a class="bh-chip" href="<?php echo esc_url(add_query_arg('programme', $p->ID, bh_nav_url('emissions'))); ?>" <?php echo ($programmeFilter === $p->ID && !$sujetFilter && !$thisWeek) ? 'aria-current="true"' : ''; ?>>
+                    <a class="bh-chip" href="<?php echo esc_url(add_query_arg('prog', $p->ID, bh_nav_url('emissions'))); ?>" <?php echo ($programmeFilter === $p->ID && !$sujetFilter && !$thisWeek) ? 'aria-current="true"' : ''; ?>>
                         <?php echo esc_html(bh_post_title($p->ID)); ?>
                     </a>
                 <?php endforeach; ?>

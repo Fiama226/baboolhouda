@@ -7,7 +7,7 @@ $s = bh_settings();
 
 <section class="bh-page-hero">
     <div class="bh-container">
-        <h1><?php echo esc_html(bh_post_title(get_the_ID())); ?></h1>
+        <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page-hero__sub"><?php echo esc_html(bh_l('Une question, une demande de programme, une publicité ? Écrivez-nous.', 'سؤال، طلب برنامج، إعلان؟ راسلونا.')); ?></p>
     </div>
 </section>

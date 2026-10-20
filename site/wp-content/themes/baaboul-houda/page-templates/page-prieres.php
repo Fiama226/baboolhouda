@@ -7,7 +7,7 @@ $s = bh_settings();
 
 <section class="bh-page-hero">
     <div class="bh-container">
-        <h1><?php echo esc_html(bh_post_title(get_the_ID())); ?></h1>
+        <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page-hero__sub"><?php echo esc_html(bh_l('Horaires de prière et date hégirienne.', 'مواقيت الصلاة والتاريخ الهجري.')); ?></p>
     </div>
 </section>
@@ -33,7 +33,7 @@ $s = bh_settings();
                     <div class="bh-prayer-lg__cell" :class="{ 'is-next': p.key === nextKey }">
                         <span class="bh-prayer-lg__name" x-text="names[p.key]"></span>
                         <strong class="bh-prayer-lg__time" x-text="times[p.key] || '—:—'"></strong>
-                        <small x-show="p.key === nextKey && nextIn" x-text="'dans ' + nextIn" data-x-cloak></small>
+                        <small x-show="p.key === nextKey && nextIn" x-text="'<?php echo esc_js(bh_l('dans', 'بعد')); ?> ' + nextIn" data-x-cloak></small>
                     </div>
                 </template>
             </div>
@@ -65,9 +65,9 @@ $s = bh_settings();
         </div>
 
         <div class="bh-prayer-month">
-            <h2><?php echo esc_html(bh_l('Calendrier du mois', 'تقويم الشهر')); ?></h2>
+            <h2><?php echo esc_html(bh_l('Calendrier du mois', 'تقويم الشهر')); ?> — <?php echo esc_html($s['prayer_city']); ?></h2>
             <div class="bh-table-wrap">
-                <table class="bh-table" x-data="bhPrayer(true)">
+                <table class="bh-table">
                     <thead>
                         <tr>
                             <th><?php echo esc_html(bh_l('Jour', 'اليوم')); ?></th>
@@ -81,7 +81,7 @@ $s = bh_settings();
                             $isToday = $day === (int) date('j');
                             ?>
                             <tr <?php echo $isToday ? 'class="is-today"' : ''; ?>>
-                                <td><?php echo esc_html(date_i18n('D j', mktime($day, 0, 0, (int) date('n'), 1, (int) date('Y')))); ?></td>
+                                <td><?php echo esc_html(date_i18n('D j', mktime(12, 0, 0, (int) date('n'), (int) $day, (int) date('Y')))); ?></td>
                                 <td><?php echo esc_html($times['times']['fajr']); ?></td>
                                 <td><?php echo esc_html($times['times']['sunrise']); ?></td>
                                 <td><?php echo esc_html($times['times']['dhuhr']); ?></td>

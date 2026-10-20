@@ -25,7 +25,7 @@ $q = new \WP_Query([
         <h1><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></h1>
         <p class="bh-page__lead">
             <?php echo esc_html(bh_l('Écoutez nos émissions audio à la demande.', 'استمعوا إلى برامجنا الصوتية عند الطلب.')); ?>
-            <a class="bh-link" href="<?php echo esc_url(home_url('/feed/podcast.xml')); ?>" target="_blank" rel="noopener"
+            <a class="bh-link" href="<?php echo esc_url(home_url('/feed/bh-podcast/')); ?>" target="_blank" rel="noopener"
                title="<?php echo esc_attr(bh_l('Ajouter à votre application podcast', 'أضِف إلى تطبيق البودكاست')); ?>">
                 ⬇ <?php echo esc_html(bh_l('Flux RSS (votre app podcast)', 'قناة RSS (تطبيق البودكاست)')); ?>
             </a>
@@ -43,7 +43,7 @@ $q = new \WP_Query([
                 ?>
                 <div class="bh-card bh-card--podcast" data-bh-audio-player data-url="<?php echo esc_attr($audio); ?>">
                     <span class="bh-card__body">
-                        <strong><?php echo esc_html(bh_post_title(get_the_ID())); ?></strong>
+                        <strong><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></strong>
                         <small><?php echo esc_html(get_the_date()); ?> — <?php echo esc_html(bh_post_excerpt(get_the_ID(), 40)); ?></small>
                     </span>
                     <span class="bh-audio-controls">

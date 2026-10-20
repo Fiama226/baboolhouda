@@ -46,9 +46,10 @@ export const formatWait = (inMinutes) => {
 
 /** Does a Quran surah card (data-name) match the query? */
 export const quranCardMatch = (name, q) => {
-    const query = arNormalize(String(q || '').trim().toLowerCase());
+    const flat = (x) => arNormalize(String(x || '').trim().toLowerCase()).replace(/[\s\-'’`]/g, '');
+    const query = flat(q);
     if (!query) return true;
-    return arNormalize(String(name || '')).includes(query);
+    return flat(name).includes(query);
 };
 
 /* ============================ Zakat ============================ */
@@ -189,6 +190,8 @@ const FAST_LABELS = {
     shawwal: { fr: '6 jours de Cha\'wal', ar: 'ست شوال' },
 };
 
+const fastLabel = (k) => ({ name_fr: FAST_LABELS[k].fr, name_ar: FAST_LABELS[k].ar, ...FAST_LABELS[k] });
+
 /**
  * Upcoming fasts/dates within `horizonDays` of `now` (Date).
  * Uses gregToHijri (Intl Umm al-Qura with tabular fallback).
@@ -208,9 +211,9 @@ export const upcomingFasts = (now, horizonDays = 400) => {
         if (inRamadan) {
             out.push({ id: 'ramadan', name_fr: FAST_LABELS.ramadan.fr, name_ar: FAST_LABELS.ramadan.ar, date: day, daysLeft: i });
         }
-        if (h.m === 1 && h.d === 10) out.push({ id: 'asha', ...FAST_LABELS.asha, date: day, daysLeft: i });
-        if (h.m === 12 && h.d === 9) out.push({ id: 'arafa', ...FAST_LABELS.arafa, date: day, daysLeft: i });
-        if (h.d >= 13 && h.d <= 15) out.push({ id: 'bid', ...FAST_LABELS.bid, date: day, daysLeft: i });
+        if (h.m === 1 && h.d === 10) out.push({ id: 'asha', ...fastLabel('asha'), date: day, daysLeft: i });
+        if (h.m === 12 && h.d === 9) out.push({ id: 'arafa', ...fastLabel('arafa'), date: day, daysLeft: i });
+        if (h.d >= 13 && h.d <= 15) out.push({ id: 'bid', ...fastLabel('bid'), date: day, daysLeft: i });
         if (h.m === 10 && h.d >= 1 && h.d <= 6) {
             shawwalLeft = 6 - h.d + 1;
         }

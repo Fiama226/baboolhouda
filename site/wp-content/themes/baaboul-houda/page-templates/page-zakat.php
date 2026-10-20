@@ -6,7 +6,7 @@ defined('ABSPATH') || exit;
 get_header();
 $zakat = function_exists('bh_zakat_reference') ? bh_zakat_reference() : ['rate' => 2.5, 'nisab_amount' => 0, 'currency' => 'FCFA'];
 ?>
-<div class="bh-container bh-page" x-data="bhZakat(<?php echo wp_json_encode([
+<div class="bh-container bh-page" x-data="bhZakat(<?php echo esc_attr(wp_json_encode([
     'rate'       => (float) $zakat['rate'],
     'nisab'      => (float) $zakat['nisab_amount'],
     'currency'   => (string) $zakat['currency'],
@@ -14,7 +14,7 @@ $zakat = function_exists('bh_zakat_reference') ? bh_zakat_reference() : ['rate' 
         '' !== (string) $zakat['nisab_fr'] ? $zakat['nisab_fr'] : $zakat['nisab_note'],
         '' !== (string) $zakat['nisab_ar'] ? $zakat['nisab_ar'] : 'nisab = قيمة 85 غ من الذهب.'
     ) : '',
-]); ?>)">
+])); ?>)">
     <nav class="bh-breadcrumb" aria-label="Fil d’Ariane">
         <a href="<?php echo esc_url(bh_nav_url('direct')); ?>"><?php echo esc_html(bh_l('Accueil', 'الرئيسية')); ?></a>
         <span aria-hidden="true">/</span>

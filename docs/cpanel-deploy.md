@@ -30,8 +30,9 @@ Prérequis : un compte cPanel avec **PHP 8.1+** (cPanel > "Select PHP Version"),
 6. **Permalinks** : *Réglages > Permalinks* > choisir **« %postname% »** (les
    réécritures du thème — `/ar/`, `/coran/{n}/`, `/manifest.json`, `sitemap.xml`
    — en dépendent).
-7. **Activer** le plugin *Baaboul Houda Core* (il se-active aussi tout seul à la
-   première visite de l'admin). Il **crée automatiquement toutes les pages
+7. **Activer** d'abord le plugin *Baaboul Houda Core*, puis le thème
+   *Baaboul Houda* (le thème a besoin des fonctions du plugin ; la configuration
+   est rejouée automatiquement à chaque nouvelle version du plugin). Il **crée automatiquement toutes les pages
    sections** (En direct, Radio, Programmes, Replays, Coran, Prières,
    Événements, Animateurs, Contact, À propos, Actualités) et définit « En
    direct » comme page d'accueil.

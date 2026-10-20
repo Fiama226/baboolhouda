@@ -1,7 +1,7 @@
 <?php
 /** Episode (replay) card. Expects $post (WP_Post). */
 defined('ABSPATH') || exit;
-$e   = $post;
+$e   = $args["post"] ?? get_post();
 $src = bh_episode_source($e->ID);
 $prog = bh_episode_programme($e->ID);
 $thumb = has_post_thumbnail($e) ? get_the_post_thumbnail_url($e, 'bh-card') : '';

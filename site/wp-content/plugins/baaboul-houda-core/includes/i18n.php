@@ -59,10 +59,18 @@ function bh_alt_url(string $lang): string {
         $path = '/ar/';
     } elseif (preg_match('#^/ar/?$#', $path) && 'fr' === $lang) {
         $path = '/';
+    } elseif (preg_match('#^/ar/(coran/[0-9]+)/?$#', $path, $m) && 'fr' === $lang) {
+        $path = '/' . $m[1] . '/';
+    } elseif (preg_match('#^/coran/[0-9]+/?$#', $path) && 'ar' === $lang) {
+        $path = '/ar' . rtrim($path, '/') . '/';
+        unset($args['lang']);
     } elseif (preg_match('#^/ar/([a-z0-9\-]+)/?$#', $path, $m) && 'fr' === $lang) {
         $path = '/' . $m[1] . '/';
     } elseif (in_array(substr($path, 1, -1), bh_pretty_sections(), true) && 'ar' === $lang) {
         $path = '/ar' . $path; // /section/ -> /ar/section/
+    }
+    if (0 === strpos($path, '/ar/') || '/ar/' === $path) {
+        unset($args['lang']); // the pretty URL already carries the language
     }
 
     $qs = $args ? '?' . http_build_query($args) : '';
@@ -134,8 +142,87 @@ function bh_opt_l(string $base_key, $default = ''): string {
  * ------------------------------------------------------------------- */
 add_action('init', function () {
     add_rewrite_rule('^ar/?$', 'index.php?bh_lang=ar', 'top');
-    add_rewrite_rule('^ar/([a-z0-9\-]+)/?$', 'index.php?bh_lang=ar&name=$matches[1]', 'top');
+    add_rewrite_rule('^ar/coran/([1-9][0-9]{0,2})/?$', 'index.php?bh_lang=ar&bh_surah=$matches[1]', 'top');
+    add_rewrite_rule('^ar/([a-z0-9\-]+)/?$', 'index.php?bh_lang=ar&pagename=$matches[1]', 'top');
     add_rewrite_rule('^coran/([1-9][0-9]{0,2})/?$', 'index.php?bh_surah=$matches[1]', 'top');
+});
+// The WordPress locale is en_US (no language pack): translate month/day names
+// produced by date_i18n()/wp_date() into French or Arabic.
+function bh_translate_date($formatted) {
+    static $maps = null;
+    if (null === $maps) {
+        $en_m = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $en_d = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $fr_m = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        $fr_d = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+        $ar_m = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        $ar_d = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+        $build = static function (array $m, array $d) use ($en_m, $en_d): array {
+            $map = array_combine($en_m, $m) + array_combine($en_d, $d);
+            $abbr = ['janvier' => 'janv.', 'février' => 'févr.', 'avril' => 'avr.', 'juillet' => 'juil.', 'septembre' => 'sept.', 'octobre' => 'oct.', 'novembre' => 'nov.', 'décembre' => 'déc.'];
+            foreach ($en_m as $i => $name) {
+                if ('May' !== $name) { // "May" is both the full and the short form: keep the full translation
+                    $map[substr($name, 0, 3)] = $abbr[$m[$i]] ?? $m[$i];
+                }
+            }
+            foreach ($en_d as $i => $name) {
+                $map[substr($name, 0, 3)] = $d[$i];
+            }
+            return $map;
+        };
+        $maps = ['fr' => $build($fr_m, $fr_d), 'ar' => $build($ar_m, $ar_d)];
+    }
+    if (is_admin() || (function_exists('get_locale') && 0 === strpos(get_locale(), 'fr'))) {
+        return $formatted;
+    }
+    $map = $maps[bh_is_ar() ? 'ar' : 'fr'];
+    // Whole words only, so e.g. "Mar" inside other text is not touched.
+    return preg_replace_callback('/\b[A-Z][a-z]{2,8}\b/', static function ($m) use ($map) {
+        return $map[$m[0]] ?? $m[0];
+    }, (string) $formatted);
+}
+add_filter('wp_date', 'bh_translate_date');
+add_filter('date_i18n', 'bh_translate_date');
+
+// Keep Arabic visitors in Arabic: permalinks of single posts/episodes/programmes
+// carry ?lang=ar, section pages use their pretty /ar/{slug}/ URL.
+add_filter('post_link', 'bh_ar_permalink', 10, 2);
+add_filter('post_type_link', 'bh_ar_permalink', 10, 2);
+function bh_ar_permalink($url, $post = null) {
+    if (is_admin() || (defined('REST_REQUEST') && REST_REQUEST) || !bh_is_ar()) {
+        return $url;
+    }
+    return add_query_arg('lang', 'ar', $url);
+}
+add_filter('page_link', function ($url, $post_id) {
+    if (is_admin() || (defined('REST_REQUEST') && REST_REQUEST) || !bh_is_ar()) {
+        return $url;
+    }
+    if ((int) get_option('page_on_front') === (int) $post_id) {
+        return home_url('/ar/');
+    }
+    $slug = get_post_field('post_name', $post_id);
+    return in_array($slug, bh_pretty_sections(), true) ? home_url('/ar/' . $slug . '/') : add_query_arg('lang', 'ar', $url);
+}, 10, 2);
+
+// /ar/ alone would resolve to the posts index; serve the static front page instead.
+add_filter('request', function (array $qv): array {
+    if ('ar' === ($qv['bh_lang'] ?? '') && 1 === count($qv) && 'page' === get_option('show_on_front')) {
+        $front = (int) get_option('page_on_front');
+        if ($front) {
+            $qv['page_id'] = $front;
+        }
+    }
+    return $qv;
+});
+
+// /ar/{slug}/ is rewritten to ?name={slug}; without this WordPress would 301 it
+// back to the French permalink and the Arabic page would never be served.
+add_filter('redirect_canonical', function ($redirect) {
+    if ('ar' === get_query_var('bh_lang')) {
+        return false;
+    }
+    return $redirect;
 });
 add_filter('query_vars', function (array $vars): array {
     $vars[] = 'bh_lang';

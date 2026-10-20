@@ -140,13 +140,14 @@ function bh_seerah_ramadan(): array {
 /** Wudu (ablution) steps — FR + AR, public knowledge. */
 function bh_wudu_steps(): array {
     return [
-        ['fr' => 'Laver les mains jusqu’aux poignets, trois fois, en commençant par la bouche (polution légère).', 'ar' => 'اغسل يديك إلى الرسغين ثلاثاً، وابدأ بالشرب من الفم.'],
-        ['fr' => 'Rincer la bouche trois fois.', 'ar' => 'امضمض ثلاثاً.'],
-        ['fr' => 'Rincer le nez trois fois (inspiration légère, puis éternuement du doigt).', 'ar' => 'استنشق ثلاثاً ثم استنثر.'],
-        ['fr' => 'Laver le visage trois fois (du haut du front aux mâchoires, des oreilles aux oreilles).', 'ar' => 'اغسل الوجه ثلاثاً من منبت الشعر إلى ذقن، ومن الأذن إلى الأذن.'],
-        ['fr' => 'Laver les bras jusqu’aux coudes trois fois, en commençant par le droit.', 'ar' => 'اغسل يديك إلى المرفقين ثلاثاً، يبدأ باليمين.'],
-        ['fr' => 'Essuyer la tête une fois (et les oreilles extérieures/intérieures).', 'ar' => 'امسح الرأس مرة، والأذنين خارجاً ودخلاً.'],
-        ['fr' => 'Laver les pieds jusqu’aux chevilles trois fois, en commençant par le droit, en massant entre les orteils.', 'ar' => 'اغسل قدميك إلى الكعبين ثلاثاً، يبدأ باليمين، وفرّق الأصابع.'],
+        ['fr' => 'Faire l’intention (niyya) dans le cœur, puis dire « Bismillah ».', 'ar' => 'انوِ الوضوء بقلبك ثم قل: بسم الله.'],
+        ['fr' => 'Laver les mains jusqu’aux poignets, trois fois.', 'ar' => 'اغسل كفيك إلى الرسغين ثلاث مرات.'],
+        ['fr' => 'Rincer la bouche trois fois.', 'ar' => 'تمضمض ثلاث مرات.'],
+        ['fr' => 'Aspirer un peu d’eau par le nez puis la rejeter (istinshaq / istinthar), trois fois.', 'ar' => 'استنشق الماء ثم استنثر ثلاث مرات.'],
+        ['fr' => 'Laver le visage trois fois (du haut du front au menton, et d’une oreille à l’autre).', 'ar' => 'اغسل وجهك ثلاث مرات، من منبت شعر الرأس إلى الذقن، ومن الأذن إلى الأذن.'],
+        ['fr' => 'Laver les avant-bras jusqu’aux coudes inclus trois fois, en commençant par le droit.', 'ar' => 'اغسل يديك مع المرفقين ثلاث مرات، مبتدئًا باليمنى.'],
+        ['fr' => 'Passer la main mouillée sur la tête une fois, puis sur les oreilles.', 'ar' => 'امسح رأسك مرة واحدة، ثم أذنيك.'],
+        ['fr' => 'Laver les pieds jusqu’aux chevilles incluses trois fois, en commençant par le droit, en passant entre les orteils.', 'ar' => 'اغسل رجليك مع الكعبين ثلاث مرات، مبتدئًا باليمنى، وخلّل بين الأصابع.'],
     ];
 }
 

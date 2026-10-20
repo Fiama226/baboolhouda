@@ -21,6 +21,24 @@ l'accueil affiche le player. Pour finir : décocher la case → Enregistrer.
 > Astuce : pour YouTube, copiez le lien depuis *Partager > Copier le lien* de
 > la vidéo en cours.
 
+### Publication automatique sur Facebook (optionnel)
+
+Quand la chaîne passe de « hors antenne » à « en direct », le site peut publier
+tout seul un message « 🔴 EN DIRECT — titre — lien vers /direct/ » sur la page Facebook.
+
+1. Créer une application sur *developers.facebook.com* et générer un **jeton d'accès
+   de la Page** (permissions `pages_show_list` et `pages_manage_posts`), idéalement
+   un jeton longue durée.
+2. Dans **Réglages du site > Publication automatique Facebook** : cocher
+   *Activer*, renseigner le **Page ID** (numéro de la page) et le **jeton**.
+3. Enregistrer. La publication a lieu uniquement lors du passage 0 → 1 de
+   « La chaîne est en direct » (pas à chaque enregistrement). Si l'URL de la
+   diffusion n'a pas changé depuis la dernière publication, rien n'est reposté.
+
+> Un échec Facebook (jeton expiré, permission manquante) n'empêche jamais
+> l'enregistrement des réglages ; il est simplement silencieux. Si les posts
+> n'apparaissent pas, régénérer le jeton.
+
 ## 2. 📻 Radio
 
 **Réglages du site > Radio** : cocher *Activer le player radio* et coller

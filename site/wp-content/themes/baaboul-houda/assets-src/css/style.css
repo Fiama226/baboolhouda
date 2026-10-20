@@ -55,7 +55,7 @@ a:hover { color: var(--bh-green-dark); }
 [x-cloak] { display: none !important; }
 
 /* ---------------- Topbar ---------------- */
-.bh-topbar { background: var(--bh-green-deep); color: #e8f3ee; font-size: 13px; }
+.bh-topbar { background: var(--bh-green-deep); color: #e8f3ee; font-size: 13px; overflow-x: clip; }
 .bh-topbar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 34px; flex-wrap: wrap; }
 .bh-topbar__date { opacity: .92; }
 .bh-topbar__hijri { color: var(--bh-gold); font-weight: 600; margin-inline-start: 8px; }
@@ -75,7 +75,7 @@ a:hover { color: var(--bh-green-dark); }
 .bh-header__names em { font-style: normal; font-size: 12px; color: var(--bh-ink-soft); }
 
 .bh-nav__list { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.bh-nav__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; border-radius: 10px; font-weight: 600; font-size: 15px; color: var(--bh-ink); }
+.bh-nav__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; border-radius: 10px; font-weight: 600; white-space: nowrap; font-size: 15px; color: var(--bh-ink); }
 .bh-nav__link:hover { background: #f4f1e8; color: var(--bh-green-deep); }
 .bh-nav__link--live { color: var(--bh-red); }
 .bh-live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--bh-red); animation: bh-pulse 1.4s infinite; }
@@ -213,7 +213,7 @@ a.bh-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(23,37,
 
 .bh-contact-form label { display: block; font-weight: 700; margin-bottom: 6px; }
 .bh-contact-form input[type=text], .bh-contact-form input[type=email], .bh-contact-form textarea { width: 100%; font-family: inherit; font-size: 15px; padding: 11px 14px; border: 1px solid var(--bh-line); border-radius: 10px; margin-bottom: 14px; background: #fff; color: var(--bh-ink); }
-.bh-contact-form .bh-hp { position: absolute; left: -9999px; }
+.bh-contact-form .bh-hp { position: absolute; inset-inline-start: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 .bh-req { color: var(--bh-red); }
 .bh-alert { padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-weight: 600; }
 .bh-alert-ok { background: #e7f5ec; color: #14532d; }
@@ -386,6 +386,7 @@ body:has(.bh-radio-bar) { padding-bottom: 64px; }
 /* ================= v2: shared bits ================= */
 .bh-breadcrumb { font-size: 13px; color: var(--bh-ink-soft); margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
 .bh-breadcrumb a { color: var(--bh-green); text-decoration: none; }
+.bh-page-hero .bh-breadcrumb, .bh-page-hero .bh-breadcrumb a { color: var(--bh-gold); }
 .bh-page { padding: 34px 0 56px; }
 .bh-page__head { margin-bottom: 26px; }
 .bh-page__head h1 { font-size: 30px; margin: 0 0 8px; }
@@ -399,7 +400,7 @@ body:has(.bh-radio-bar) { padding-bottom: 64px; }
 .bh-dark .bh-tag { background: #1c2b22; color: #cfe0d7; }
 .bh-form-ok { color: var(--bh-green); font-weight: 600; margin-top: 10px; }
 .bh-form-err { color: var(--bh-red); font-weight: 600; margin-top: 10px; }
-.bh-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.bh-hp { position: absolute; inset-inline-start: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 .bh-select {
     appearance: auto; background: var(--bh-card); color: var(--bh-ink);
     border: 1px solid var(--bh-line); border-radius: 10px; padding: 8px 10px; font-family: var(--bh-font-ui);
@@ -649,7 +650,10 @@ a.bh-card--tool:hover { transform: translateY(-2px); box-shadow: var(--bh-shadow
 .bh-ayah__tafsir { margin-top: 8px; background: var(--bh-paper); border-radius: 10px; padding: 10px 12px; font-size: 15px; line-height: 1.8; }
 .bh-dark .bh-ayah__tafsir { background: #0b120e; }
 .bh-ayah__w2w { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; direction: rtl; }
-.bh-w2w__w { font-family: var(--bh-font-quran); font-size: 19px; cursor: help; }
+.bh-w2w { display: flex; flex-wrap: wrap; gap: 10px 16px; direction: rtl; }
+.bh-w2w__w { display: inline-flex; flex-direction: column; align-items: center; text-align: center; font-size: 12px; cursor: help; }
+.bh-w2w__w b { font-family: var(--bh-font-quran); font-size: 22px; font-weight: 400; }
+.bh-w2w__w small { font-size: 11px; color: var(--bh-muted, #666); direction: ltr; max-width: 9em; }
 .bh-w2w__w:hover { color: var(--bh-green); }
 .bh-reader-bookmarks { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; font-size: 14px; }
 .bh-quran-reader__foot-nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -869,3 +873,13 @@ a.bh-card--tool:hover { transform: translateY(-2px); box-shadow: var(--bh-shadow
 .bh-quran-grid--juz { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); }
 .bh-quran-card--juz { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; }
 .bh-quran-card--juz .bh-quran-card__num { font-size: 20px; font-weight: 800; color: var(--bh-green-dark); background: #f1eee4; border-radius: 50%; width: 42px; height: 42px; display: grid; place-items: center; }
+
+/* Topbar on narrow screens: keep every control reachable (no clipping). */
+@media (max-width: 520px) {
+  .bh-topbar__links { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+  .bh-search input { width: 120px; }
+  .bh-search input:focus { width: 150px; }
+}
+
+/* Keep the WhatsApp button above the persistent radio bar. */
+body:has(.bh-radio-bar) .bh-wa-float { bottom: 88px; }

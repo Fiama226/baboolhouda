@@ -30,7 +30,7 @@ add_shortcode('bh_contact_form', function (): string {
         . '<input type="text" id="bh-cf-name" name="bh_name" required maxlength="120"></p>';
     $html .= '<p><label for="bh-cf-email">' . esc_html(bh_l('Email', 'البريد الإلكتروني')) . ' <span class="bh-req">*</span></label>'
         . '<input type="email" id="bh-cf-email" name="bh_email" required maxlength="190"></p>';
-    $html .= '<p><label for="bh-cf-ws" class="bh-hp" aria-hidden="true">Site web</label>'
+    $html .= '<p class="bh-hp" aria-hidden="true"><label for="bh-cf-ws">Site web</label>'
         . '<input type="text" id="bh-cf-ws" name="bh_website" tabindex="-1" autocomplete="off"></p>';
     $html .= '<p><label for="bh-cf-subject">' . esc_html(bh_l('Sujet', 'الموضوع')) . '</label>'
         . '<input type="text" id="bh-cf-subject" name="bh_subject" maxlength="190"></p>';
@@ -38,7 +38,7 @@ add_shortcode('bh_contact_form', function (): string {
         . '<textarea id="bh-cf-msg" name="bh_message" rows="5" required maxlength="5000"></textarea></p>';
     $html .= '<p><button type="submit" class="bh-btn bh-btn-primary">' . esc_html(bh_l('Envoyer le message', 'إرسال الرسالة')) . '</button>';
     if ($whatsapp) {
-        $html .= ' <a class="bh-btn bh-btn-ghost" href="https://wa.me/' . esc_attr($whatsapp) . '" target="_blank" rel="noopener">' . esc_html(bh_l('Ou écrivoir sur WhatsApp', 'أو راسلونا عبر واتساب')) . '</a>';
+        $html .= ' <a class="bh-btn bh-btn-ghost" href="https://wa.me/' . esc_attr($whatsapp) . '" target="_blank" rel="noopener">' . esc_html(bh_l('Ou écrivez-nous sur WhatsApp', 'أو راسلونا عبر واتساب')) . '</a>';
     }
     $html .= '</p></form></div>';
 
@@ -84,6 +84,18 @@ function bh_handle_contact(): void {
         ['Reply-To: ' . $name . ' <' . $email . '>'],
     );
 
+    if (!$ok) {
+        // Do not lose the message when the mail transport is unavailable (dev, misconfigured SMTP).
+        error_log('[bh-contact] wp_mail failed; message kept here: ' . str_replace("
+", ' | ', $body));
+    }
+
     wp_safe_redirect(add_query_arg('bh_contact', $ok ? 'ok' : 'err', $redirect_to));
     exit;
 }
+
+// PHPMailer rejects "wordpress@localhost" (no dotted domain): fall back to the admin address.
+add_filter('wp_mail_from', function ($from) {
+    $host = substr((string) strrchr((string) $from, '@'), 1);
+    return (false === strpos($host, '.')) ? (string) get_option('admin_email') : $from;
+});

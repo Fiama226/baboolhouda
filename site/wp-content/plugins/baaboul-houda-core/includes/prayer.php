@@ -6,6 +6,23 @@
 
 defined('ABSPATH') || exit;
 
+/** Coordinates of a configured city (geocoding by name is unreliable on Aladhan). */
+function bh_prayer_coords(string $city): ?array {
+    if (function_exists('bh_known_cities')) {
+        foreach (bh_known_cities() as $name => $c) {
+            if (0 === strcasecmp($name, $city)) {
+                return $c;
+            }
+        }
+    }
+    return null;
+}
+
+/** Strip AM/PM and timezone suffixes such as "04:45 (GMT)". */
+function bh_prayer_clean_time($v): string {
+    return trim((string) preg_replace('/\s*(\(.*\)|AM|PM)\s*$/i', '', trim((string) $v)));
+}
+
 function bh_prayer_times(string $city, string $date = ''): array {
     $city  = $city ? $city : bh_settings()['prayer_city'];
     $date  = $date ? $date : date('Y-m-d');
@@ -18,14 +35,17 @@ function bh_prayer_times(string $city, string $date = ''): array {
     }
 
     [$y, $m, $d] = array_map('intval', explode('-', $date));
-    $api  = sprintf('https://api.aladhan.com/v1/timingsByCity/%d-%02d-%02d?city=%s&method=%d', $d, $m, $y, rawurlencode($city), $method);
+    $coords = bh_prayer_coords($city);
+    $api    = $coords
+        ? sprintf('https://api.aladhan.com/v1/timings/%02d-%02d-%04d?latitude=%s&longitude=%s&method=%d', $d, $m, $y, $coords['lat'], $coords['lon'], $method)
+        : sprintf('https://api.aladhan.com/v1/timingsByCity/%02d-%02d-%04d?city=%s&country=%s&method=%d', $d, $m, $y, rawurlencode($city), rawurlencode('Burkina Faso'), $method);
     $resp = wp_remote_get($api, ['timeout' => 6, 'sslverify' => true]);
 
     if (!is_wp_error($resp) && 200 === wp_remote_retrieve_response_code($resp)) {
         $body = json_decode(wp_remote_retrieve_body($resp), true);
         if (isset($body['code'], $body['data']['timings'])) {
             $t = $body['data']['timings'];
-            $clean = static fn ($v) => preg_replace('/\s*(AM|PM)$/', '', trim($v));
+            $clean = static fn ($v) => bh_prayer_clean_time($v);
             $out = [
                 'times' => [
                     'fajr'    => $clean($t['Fajr']),
@@ -76,12 +96,45 @@ function bh_prayer_fallback(string $city, string $date): array {
     ];
 }
 
-/** Month of the current city for the "monthly table" page. */
+/** Month of the current city for the "monthly table" page (one Aladhan call, cached). */
 function bh_prayer_month(int $month, int $year, string $city): array {
+    $method = (int) bh_settings()['prayer_method'];
+    $key    = 'bh_pm_' . md5($city . '|' . $year . '-' . $month . '|' . $method);
+    $cached = get_transient($key);
+    if (is_array($cached) && $cached) {
+        return $cached;
+    }
+    $coords = bh_prayer_coords($city);
+    if ($coords) {
+        $api  = sprintf('https://api.aladhan.com/v1/calendar/%d/%d?latitude=%s&longitude=%s&method=%d', $year, $month, $coords['lat'], $coords['lon'], $method);
+        $resp = wp_remote_get($api, ['timeout' => 8]);
+        if (!is_wp_error($resp) && 200 === wp_remote_retrieve_response_code($resp)) {
+            $body = json_decode(wp_remote_retrieve_body($resp), true);
+            if (!empty($body['data']) && is_array($body['data'])) {
+                $out = [];
+                foreach ($body['data'] as $i => $row) {
+                    $t = $row['timings'] ?? [];
+                    $d = (int) ($row['date']['gregorian']['day'] ?? ($i + 1));
+                    $out[$d] = ['times' => [
+                        'fajr'    => bh_prayer_clean_time($t['Fajr'] ?? ''),
+                        'sunrise' => bh_prayer_clean_time($t['Sunrise'] ?? ''),
+                        'dhuhr'   => bh_prayer_clean_time($t['Dhuhr'] ?? ''),
+                        'asr'     => bh_prayer_clean_time($t['Asr'] ?? ''),
+                        'maghrib' => bh_prayer_clean_time($t['Maghrib'] ?? ''),
+                        'isha'    => bh_prayer_clean_time($t['Isha'] ?? ''),
+                    ], 'source' => 'aladhan'];
+                }
+                if ($out) {
+                    set_transient($key, $out, 12 * HOUR_IN_SECONDS);
+                    return $out;
+                }
+            }
+        }
+    }
+    // Offline: approximate monthly table (not cached, so the API is retried next time).
     $out = [];
     for ($d = 1; $d <= (int) date('t', mktime(0, 0, 0, $month, 1, $year)); $d++) {
-        $date = sprintf('%04d-%02d-%02d', $year, $month, $d);
-        $out[$d] = bh_prayer_times($city, $date);
+        $out[$d] = bh_prayer_fallback($city, sprintf('%04d-%02d-%02d', $year, $month, $d));
     }
     return $out;
 }

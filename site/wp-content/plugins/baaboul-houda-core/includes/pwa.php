@@ -86,13 +86,16 @@ self.addEventListener('fetch', (e) => {
     }).catch(() => caches.match(req)));
     return;
   }
-  // Static assets: cache first.
-  if (/\\.(css|js|png|jpg|jpeg|webp|svg|woff2?|mp3)$/i.test(url.pathname)) {
-    e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((res) => {
-      const copy = res.clone();
-      caches.open(CACHE).then((c) => c.put(req, copy));
-      return res;
-    })));
+  // Static assets: stale-while-revalidate (instant from cache, refreshed in
+  // the background so a rebuilt bundle with the same ?ver= is picked up).
+  if (/\\.(css|js|png|jpg|jpeg|webp|svg|woff2?|mp3)$/i.test(url.pathname) && !req.headers.has('range')) {
+    e.respondWith(caches.match(req).then((hit) => {
+      const net = fetch(req).then((res) => {
+        if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
+        return res;
+      }).catch(() => hit);
+      return hit || net;
+    }));
   }
 });
 JS;

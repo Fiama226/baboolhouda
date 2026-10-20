@@ -15,7 +15,7 @@ $hasCh2  = !empty($live2['enabled']);
 
 <section class="bh-hero">
     <div class="bh-container bh-hero__grid"
-         x-data="bhLive(<?php echo wp_json_encode([
+         x-data="bhLive(<?php echo esc_attr(wp_json_encode([
              'ch1'   => [
                  'enabled'  => !empty($live['enabled']) && '' !== trim((string) $live['url']),
                  'platform' => $live['platform'],
@@ -28,7 +28,7 @@ $hasCh2  = !empty($live2['enabled']);
              ],
              'now'   => $nowNext,
              'page'  => get_permalink(),
-         ]); ?>)">
+         ])); ?>)">
         <div class="bh-hero__live">
             <div class="bh-hero__live-head">
                 <span class="bh-live-pill" :class="{ 'is-on': currentOn() }" x-text="currentOn() ? liveLabel() : offLabel()"></span>
@@ -88,7 +88,7 @@ $hasCh2  = !empty($live2['enabled']);
             <!-- Live tools: QR + quality (HLS only) -->
             <div class="bh-live-tools">
                 <button type="button" class="bh-btn bh-btn--ghost" @click="showQr = !showQr">
-                    ⚠ <?php echo esc_html(bh_l('Regarder sur téléphone', 'شاهد على الهاتف')) ?>
+                    📱 <?php echo esc_html(bh_l('Regarder sur téléphone', 'شاهد على الهاتف')) ?>
                 </button>
                 <select class="bh-select bh-select--small" x-show="currentPlatform() === 'hls'"
                         x-model="quality" @change="applyQuality()" aria-label="<?php echo esc_attr(bh_l('Qualité vidéo', 'جودة الفيديو')); ?>">
@@ -109,7 +109,7 @@ $hasCh2  = !empty($live2['enabled']);
         <aside class="bh-hero__side">
             <div class="bh-card bh-card--ayah" x-data="bhAyah()">
                 <h2 class="bh-card__title"><?php echo esc_html(bh_l('Verset du jour', 'آية اليوم')); ?></h2>
-                <p class="bh-ayah-ar" dir="rtl" x-text="ayah.text"></p>
+                <p class="bh-ayah-ar" dir="rtl" x-text="text"></p>
                 <p class="bh-ayah-ref" x-text="ref"></p>
                 <a class="bh-link" :href="coranUrl + (surah ? '/' + surah : '')"><?php echo esc_html(bh_l('Lire le Coran →', 'اقرأ القرآن →')); ?></a>
             </div>

@@ -33,7 +33,7 @@ $q = new \WP_Query([
                         <span class="bh-card__img"><img src="<?php echo esc_url($cover); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" loading="lazy"></span>
                     <?php endif; ?>
                     <span class="bh-card__body">
-                        <strong><?php echo esc_html(bh_post_title(get_the_ID())); ?></strong>
+                        <strong><?php echo esc_html(bh_post_title(get_queried_object_id())); ?></strong>
                         <?php if ($ids) : ?>
                             <small><?php echo esc_html(sprintf(bh_l('%d photo(s)', '%d صورة'), count($ids))); ?></small>
                         <?php endif; ?>

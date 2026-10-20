@@ -64,7 +64,7 @@ defined('ABSPATH') || exit;
             </span>
         </a>
 
-        <button class="bh-burger" type="button" @click="open = !open" :aria-expanded="open ? 'true' : 'false'" aria-label="<?php echo esc_attr(bh_l('Menu', 'القائمة')); ?>">
+        <button class="bh-burger" type="button" @click.stop="open = !open" :aria-expanded="open ? 'true' : 'false'" aria-label="<?php echo esc_attr(bh_l('Menu', 'القائمة')); ?>">
             <span></span><span></span><span></span>
         </button>
 
@@ -75,10 +75,10 @@ defined('ABSPATH') || exit;
                 foreach (bh_nav_items() as $item) {
                     $isLiveBadge = !empty($item['live']);
                     $url = $isLiveBadge
-                        ? (function_exists('bh_alt_url') ? bh_alt_url(bh_lang()) : home_url('/'))
+                        ? bh_nav_url('direct')
                         : bh_nav_url($item['slug']);
                     $active = false;
-                    if (function_exists('bh_page_id')) {
+                    if (!$isLiveBadge && function_exists('bh_page_id')) {
                         $id = bh_page_id($item['slug']);
                         if ($id && in_array($id, [get_queried_object_id(), (int) get_option('page_on_front')], true)) {
                             $active = true;

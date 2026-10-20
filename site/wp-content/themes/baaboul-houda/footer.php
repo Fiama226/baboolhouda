@@ -55,9 +55,9 @@ $s = function_exists('bh_settings') ? bh_settings() : [];
                 <li><a href="<?php echo esc_url(bh_nav_url('presse')); ?>"><?php echo esc_html(bh_l('Espace presse', 'الصحافة')); ?></a></li>
             </ul>
             <?php if (!empty($s['newsletter_enabled'])) : ?>
-                <form class="bh-footer__newsletter" x-data="bhNewsletterFooter(<?php echo wp_json_encode([
+                <form class="bh-footer__newsletter" x-data="bhNewsletterFooter(<?php echo esc_attr(wp_json_encode([
                     'rest' => esc_url_raw(rest_url('bh/v1/newsletter')),
-                ]); ?>)" @submit.prevent="subscribe()">
+                ])); ?>)" @submit.prevent="subscribe()">
                     <label class="bh-visually-hidden" for="bh-fn-email"><?php echo esc_html(bh_l('Votre email pour la newsletter', 'بريدك للنشرة')); ?></label>
                     <input id="bh-fn-email" type="email" x-model="email" required placeholder="<?php echo esc_attr(bh_l('Votre email (newsletter)', 'بريدك (النشرة)')); ?>">
                     <button type="submit" class="bh-btn"><?php echo esc_html(bh_l('OK', 'حسناً')); ?></button>
