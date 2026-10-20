@@ -2,9 +2,15 @@
 site/wp-*.php
 site/wp-includes/
 site/wp-admin/
+site/index.php
 site/license.txt
 site/readme.html
 site/xmlrpc.php
+site/wp-content/index.php
+site/wp-content/plugins/hello.php
+site/wp-content/plugins/index.php
+site/wp-content/themes/index.php
+site/wp-content/themes/twenty*/
 
 # WordPress runtime state
 site/wp-content/uploads/*
@@ -18,7 +24,9 @@ site/wp-config.php
 # (we intentionally commit dist/ so the release zip needs no Node on the host)
 node_modules/
 build/tmp/
-release/
+/release/
 .tmp/
 *.log
 .DS_Store
+# wp-config-sample.php IS part of the release (the wp-*.php rule above hides it)
+!site/wp-config-sample.php
