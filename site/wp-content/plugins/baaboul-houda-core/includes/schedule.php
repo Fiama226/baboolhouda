@@ -52,6 +52,11 @@ function bh_now_next(): array {
     if (null === $next && $slots) {
         $next = $slots[0]; // wraps to tomorrow's first slot
     }
+    // Attach human titles so the front-end (countdown, "just ended") needs no extra requests.
+    foreach ($slots as &$slot) {
+        $slot['title'] = bh_slot_title($slot);
+    }
+    unset($slot);
     return ['current' => $current, 'next' => $next, 'slots' => $slots];
 }
 

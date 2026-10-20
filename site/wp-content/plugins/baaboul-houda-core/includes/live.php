@@ -63,8 +63,12 @@ function bh_youtube_id(string $url): string {
 
 /** Embed HTML for the live platform. Returns '' when unconfigured. */
 function bh_live_embed_html(): string {
-    $live = bh_live();
-    if (!$live['enabled'] || '' === trim($live['url'])) {
+    return bh_live_embed_html_for(bh_live());
+}
+
+/** Embed HTML for ANY channel config (used for the TV2 "Coran 24/7" channel). */
+function bh_live_embed_html_for(array $live): string {
+    if (empty($live['enabled']) || '' === trim((string) ($live['url'] ?? ''))) {
         return '';
     }
     switch ($live['platform']) {

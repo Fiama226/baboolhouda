@@ -39,9 +39,51 @@ $radioEnabled = !empty($s['radio_enabled']) && '' !== trim((string) $s['radio_ur
             </div>
         </div>
 
+        <?php
+        $nowNext = function_exists('bh_now_next') ? bh_now_next() : ['slots' => []];
+        $slots   = is_array($nowNext) ? (array) ($nowNext['slots'] ?? []) : [];
+        $slotNow = null;
+        $slotNext = null;
+        foreach ($slots as $s) {
+            if (!empty($s['now']) && $slotNow === null) {
+                $slotNow = $s;
+            } elseif ($slotNow !== null && $slotNext === null) {
+                $slotNext = $s;
+            }
+        }
+        ?>
+        <?php if ($slotNow) : ?>
+            <div class="bh-card bh-card--now">
+                <p class="bh-now-banner"><?php echo esc_html(bh_l('À l\'antenne', 'على الموجة')); ?></p>
+                <strong class="bh-now-banner__title"><?php echo esc_html($slotNow['title'] ?: ($slotNow['programme'] ? (string) get_the_title((int) $slotNow['programme']) : '')); ?></strong>
+                <span class="bh-time-range"><?php echo esc_html(($slotNow['start'] ?? '') . ' – ' . ($slotNow['end'] ?? '')); ?></span>
+                <?php if ($slotNext) : ?>
+                    <p class="bh-note"><?php echo esc_html(bh_l('À suivre', 'يتبع')); ?> :
+                        <strong><?php echo esc_html($slotNext['title'] ?: ($slotNext['programme'] ? (string) get_the_title((int) $slotNext['programme']) : '')); ?></strong>
+                        <?php echo esc_html($slotNext['start'] ?? ''); ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
         <div class="bh-radio-page__about">
             <?php echo bh_post_content(get_the_ID()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </div>
+
+        <?php $history = function_exists('bh_radio_history') ? bh_radio_history() : []; ?>
+        <?php if ($history) : ?>
+            <div class="bh-card bh-card--history">
+                <h2 class="bh-card__title"><?php echo esc_html(bh_l('Derniers programmes diffusés', 'آخر البرامج المذاعة')); ?></h2>
+                <ul class="bh-history">
+                    <?php foreach ($history as $h) : ?>
+                        <li>
+                            <strong><?php echo esc_html($h['title']); ?></strong>
+                            <?php if (!empty($h['time'])) : ?><span class="bh-time-range"><?php echo esc_html($h['time']); ?></span><?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 

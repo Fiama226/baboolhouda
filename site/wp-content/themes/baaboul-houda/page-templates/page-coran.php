@@ -15,14 +15,36 @@ $quranData = bh_quran_data();
 </section>
 
 <section class="bh-section">
-    <div class="bh-container" x-data="bhQuranIndex()">
+    <div class="bh-container" x-data="bhQuranIndex()" x-init="initAll()">
+        <div class="bh-quran-extras">
+            <a class="bh-btn" x-show="resumeUrl()" :href="resumeUrl()">
+                ⏵ <?php echo esc_html(bh_l('Reprendre ma lecture', 'أكمل قراءتي')); ?>
+                <small x-text="resumeLabel()"></small>
+            </a>
+            <a class="bh-btn bh-btn--ghost" href="<?php echo esc_url(bh_nav_url('dates')); ?>">
+                📅 <?php echo esc_html(bh_l('Calendrier & jeûnes', 'التقويم والصيام')); ?>
+            </a>
+        </div>
         <div class="bh-quran-tools">
             <input type="search" x-model.debounce.200ms="q" @input="match()" class="bh-input bh-quran-search"
                    placeholder="<?php echo esc_attr(bh_l('Rechercher une sourate (nom arabe ou français)…', 'ابحث عن سورة (بالاسم العربي أو الفرنسي)…')); ?>"
                    aria-label="<?php echo esc_attr(bh_l('Rechercher une sourate', 'ابحث عن سورة')); ?>">
+            <label class="bh-reader-toggle">
+                <input type="checkbox" x-model="fullText">
+                <span><?php echo esc_html(bh_l('Recherche dans les versets', 'البحث في الآيات')); ?></span>
+            </label>
             <span class="bh-quran-count" x-text="count()"></span>
         </div>
-        <div class="bh-quran-grid">
+        <div class="bh-quran-search-results" x-show="fullText && results().length" x-cloak>
+            <template x-for="r in results().slice(0, 12)" :key="r.ref">
+                <a class="bh-quran-hit" :href="r.url">
+                    <strong x-text="r.ref"></strong>
+                    <span x-text="r.text"></span>
+                </a>
+            </template>
+            <p class="bh-muted" x-text="resultsHint()"></p>
+        </div>
+        <div class="bh-quran-grid" x-show="view === 'surahs'">
             <?php foreach ($quranData['surahs'] as $su) : ?>
                 <a class="bh-quran-card" href="<?php echo esc_url(home_url('/coran/' . $su['n'] . '/')); ?>"
                    x-show="!q.trim() || matchCard($el.dataset.name)"

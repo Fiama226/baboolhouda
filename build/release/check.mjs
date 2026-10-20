@@ -46,6 +46,11 @@ const TEMPLATES = [
   'page-direct', 'page-radio', 'page-programmes', 'page-emissions', 'page-coran',
   'page-prieres', 'page-evenements', 'page-animateurs', 'page-contact',
   'page-actualites', 'page-apropos',
+  // v2 section pages (activation.php)
+  'page-outils', 'page-zakat', 'page-qibla', 'page-dates', 'page-tasbih',
+  'page-wudu', 'page-mosquees', 'page-dons', 'page-publicite', 'page-temoignages',
+  'page-messages', 'page-question', 'page-fatwas', 'page-galeries', 'page-podcast',
+  'page-ramadan', 'page-enfants', 'page-presse', 'page-newsletter',
 ];
 let templateCount = 0;
 for (const t of TEMPLATES) {
@@ -81,8 +86,12 @@ checkJson(data('prayer-fallback.json'), 'prayer-fallback.json', (d) => {
 // --- Built assets (committed for the cPanel zip) ---------------------------
 check(path.join(theme, 'assets/dist/css/style.css'), 'theme style.css');
 check(path.join(theme, 'assets/dist/js/main.js'), 'theme main.js');
+check(path.join(theme, 'assets/dist/js/quran.js'), 'theme quran.js (lazy chunk)');
 check(path.join(plugin, 'assets/dist/js/admin.js'), 'built admin.js');
 check(path.join(plugin, 'assets/dist/css/admin.css'), 'built admin.css');
+// CPT single templates (v2 community)
+check(path.join(theme, 'single-fatwa.php'), 'single-fatwa template');
+check(path.join(theme, 'single-galerie.php'), 'single-galerie template');
 
 // --- PWA ------------------------------------------------------------------
 check(path.join(theme, 'assets/icons/icon-512.png'), 'PWA icon-512');

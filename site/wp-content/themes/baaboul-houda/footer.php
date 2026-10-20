@@ -45,6 +45,27 @@ $s = function_exists('bh_settings') ? bh_settings() : [];
             </ul>
         </div>
         <div class="bh-footer__col">
+            <h3><?php echo esc_html(bh_l('La chaîne', 'القناة')); ?></h3>
+            <ul>
+                <li><a href="<?php echo esc_url(bh_nav_url('outils')); ?>"><?php echo esc_html(bh_l('Outils & calculs', 'الأدوات')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('podcast')); ?>"><?php echo esc_html(bh_l('Podcasts', 'البودكاست')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('fatwas')); ?>"><?php echo esc_html(bh_l('Questions & réponses', 'الأسئلة والأجوبة')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('dons')); ?>"><?php echo esc_html(bh_l('Dons & soutien', 'التبرع')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('publicite')); ?>"><?php echo esc_html(bh_l('Publicité', 'الإعلان')); ?></a></li>
+                <li><a href="<?php echo esc_url(bh_nav_url('presse')); ?>"><?php echo esc_html(bh_l('Espace presse', 'الصحافة')); ?></a></li>
+            </ul>
+            <?php if (!empty($s['newsletter_enabled'])) : ?>
+                <form class="bh-footer__newsletter" x-data="bhNewsletterFooter(<?php echo wp_json_encode([
+                    'rest' => esc_url_raw(rest_url('bh/v1/newsletter')),
+                ]); ?>)" @submit.prevent="subscribe()">
+                    <label class="bh-visually-hidden" for="bh-fn-email"><?php echo esc_html(bh_l('Votre email pour la newsletter', 'بريدك للنشرة')); ?></label>
+                    <input id="bh-fn-email" type="email" x-model="email" required placeholder="<?php echo esc_attr(bh_l('Votre email (newsletter)', 'بريدك (النشرة)')); ?>">
+                    <button type="submit" class="bh-btn"><?php echo esc_html(bh_l('OK', 'حسناً')); ?></button>
+                    <small x-text="msg" x-show="msg" class="bh-muted"></small>
+                </form>
+            <?php endif; ?>
+        </div>
+        <div class="bh-footer__col">
             <h3><?php echo esc_html(bh_l('Programmes du jour', 'برامج اليوم')); ?></h3>
             <ul class="bh-footer__schedule">
                 <?php
@@ -113,6 +134,24 @@ endif;
         });
     }
 </script>
+
+<!-- Floating WhatsApp (hidden by JS when unconfigured) -->
+<a class="bh-wa-float" data-bh-wa-float href="#" target="_blank" rel="noopener" aria-label="<?php echo esc_attr(bh_l('Écrire sur WhatsApp', 'راسلنا واتساب')) ?>" style="display:none">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23M18.12 15.09c-.03-.06-.59-.7-.7-.78s-.18-.08-.26-.01-.32.28-.39.34-.13.07-.24 0a6.72 6.72 0 0 1-3.16-2.74c-.24-.4.24-.37.7-1.13.07-.12.03-.22 0-.3s-.26-.72-.36-.98c-.09-.26-.18-.22-.26-.23h-.22c-.08 0-.2.03-.31.16-.12.12-.44.42-.44 1.02s.46 1.19.53 1.3c.07.12 1.02 1.56 2.46 2.19.86.38 1.52.49 2.07.5.86.02 1.32-.45 1.47-.73.16-.28.16-.51.12-.71z"/></svg>
+</a>
+
+<!-- Live "we're on air" toast (JS) -->
+<div class="bh-live-toast" id="bh-live-toast" data-bh-live-toast hidden role="status"></div>
+
+<?php
+// Analytics: built-in pageview counter (no third party) + optional custom snippet.
+if (!empty($s['analytics_enabled'])) {
+    echo '<script>window.addEventListener("load",function(){try{fetch("' . esc_js(rest_url('bh/v1/analytics')) . '",{method:"POST",keepalive:true,credentials:"omit"})}catch(err){}});</script>';
+}
+if (!empty($s['analytics_snippet'])) {
+    echo wp_kses_post($s['analytics_snippet']);
+}
+?>
 <?php wp_footer(); ?>
 </body>
 </html>

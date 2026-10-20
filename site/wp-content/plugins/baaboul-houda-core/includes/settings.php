@@ -75,6 +75,7 @@ function bh_default_settings(): array {
         // Compteur de vues / tendances
         'views_enabled'   => '1',
         // Divers
+        'analytics_enabled' => '0',
         'analytics_snippet' => '',
         'footer_text_fr'  => 'TV Baaboul Houda — Média islamique en ligne, Ouagadougou (Burkina Faso).',
         'footer_text_ar'  => 'قناة باب الهدى — إعلام إسلامي إلكتروني، واغادوغو (بوركينا فاسو).',
@@ -120,7 +121,7 @@ function bh_sanitize_settings($input): array {
     $clean['analytics_snippet'] = isset($input['analytics_snippet']) ? wp_kses_post(wp_unslash($input['analytics_snippet'])) : $clean['analytics_snippet'];
 
     foreach (['live_enabled', 'radio_enabled', 'contact_enabled', 'live2_enabled', 'adhan_enabled',
-              'donate_enabled', 'ads_enabled', 'fb_autopost', 'newsletter_enabled', 'views_enabled'] as $flag) {
+              'donate_enabled', 'ads_enabled', 'fb_autopost', 'newsletter_enabled', 'views_enabled', 'analytics_enabled'] as $flag) {
         $clean[$flag] = !empty($input[$flag]) ? '1' : '0';
     }
 
@@ -397,6 +398,7 @@ function bh_render_settings_page(): void {
 
             <h2>📧 Newsletter</h2>
             <?php bh_field($s, 'newsletter_enabled', 'checkbox', ['label' => 'Activer le formulaire d’inscription (pied de page + page Newsletter)']); ?>
+            <?php bh_field($s, 'analytics_enabled', 'checkbox', ['label' => 'Compteur de pages vues intégré (aucun tiers)']); ?>
 
             <?php submit_button(); ?>
         </form>

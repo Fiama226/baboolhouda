@@ -58,9 +58,31 @@ $epDate = get_post_meta($id, '_bh_date', true);
         </div>
 
         <div class="bh-episode__side">
+            <?php
+            $presenterId = (int) get_post_meta($id, '_bh_presenter_id', true);
+            $transcript  = (string) get_post_meta($id, '_bh_transcript', true);
+            ?>
             <div class="bh-prose">
                 <?php echo bh_post_content($id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             </div>
+
+            <?php if ($presenterId && $presenterId !== 0) : ?>
+                <div class="bh-episode__presenter">
+                    <strong><?php echo esc_html(bh_l('Animé par', 'يقدم')); ?></strong>
+                    <a class="bh-link" href="<?php echo esc_url(get_permalink($presenterId)); ?>"><?php echo esc_html(bh_post_title($presenterId)); ?></a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ('' !== trim($transcript)) : ?>
+                <details class="bh-card bh-episode__transcript">
+                    <summary><?php echo esc_html(bh_l('Transcript / compte-rendu', 'نص الحلقة / الملخص')); ?></summary>
+                    <div class="bh-prose"><?php echo wp_kses_post(wpautop($transcript)); ?></div>
+                </details>
+            <?php endif; ?>
+
+            <p class="bh-episode__views" x-data="bhViews(<?php echo function_exists('bh_view_count') ? (int) bh_view_count($id) : 0; ?>)" x-show="views">
+                <span aria-hidden="true">👁</span> <span x-text="views"></span> <?php echo esc_html(bh_l('vues', 'مشاهدة')); ?>
+            </p>
 
             <div class="bh-share">
                 <strong><?php echo esc_html(bh_l('Partager', 'مشاركة')); ?></strong>
@@ -68,12 +90,44 @@ $epDate = get_post_meta($id, '_bh_date', true);
                 <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr($shareUrl); ?>" target="_blank" rel="noopener" class="bh-share__btn">Facebook</a>
                 <a href="https://wa.me/?text=<?php echo esc_attr($shareText . ' ' . $shareUrl); ?>" target="_blank" rel="noopener" class="bh-share__btn">WhatsApp</a>
                 <a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr($shareUrl); ?>&text=<?php echo esc_attr($shareText); ?>" target="_blank" rel="noopener" class="bh-share__btn">X</a>
-                <button class="bh-share__btn" type="button" onclick="navigator.clipboard.writeText('<?php echo esc_js(get_permalink($id)); ?>')">
-                    <?php echo esc_html(bh_l('Copier le lien', 'نسخ الرابط')); ?>
-                </button>
+                    <button class="bh-share__btn" type="button" onclick="navigator.clipboard.writeText('<?php echo esc_js(get_permalink($id)); ?>')">
+                        <?php echo esc_html(bh_l('Copier le lien', 'نسخ الرابط')); ?>
+                    </button>
             </div>
         </div>
     </div>
 </section>
+
+<?php
+// Related episodes — same programme, excluding current.
+$related = new WP_Query([
+    'post_type'      => 'episode',
+    'posts_per_page' => 3,
+    'no_found_rows'  => true,
+    'post__not_in'   => [$id],
+    'meta_query'     => $prog
+        ? [['key' => '_bh_programme_id', 'value' => (int) $prog->ID]]
+        : [],
+]);
+if ($related->have_posts()) :
+    ?>
+    <section class="bh-section bh-section--alt">
+        <div class="bh-container">
+            <div class="bh-section__head">
+                <h2><?php echo esc_html(bh_l('À ne pas manquer', 'لا تفوّت')); ?></h2>
+            </div>
+            <div class="bh-grid bh-grid--3">
+                <?php
+                foreach ($related->posts as $rel) {
+                    get_template_part('template-parts/episode', 'card', ['post' => $rel]);
+                }
+                wp_reset_postdata();
+                ?>
+            </div>
+        </div>
+    </section>
+    <?php
+endif;
+?>
 
 <?php get_footer(); ?>

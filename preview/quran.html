@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecteur Coran — aperçu (Al-Fātiḥa)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/site/wp-content/themes/baaboul-houda/assets/dist/css/style.css">
+<style>
+  .bh-preview-note { background:#fff8e6; border-bottom:2px solid var(--bh-gold); color:#5c4a0e; text-align:center; font-size:13px; padding:8px 16px; }
+  .bh-preview-note a { font-weight:700; }
+  .bh-select { padding:7px 10px; border:1px solid var(--bh-line); border-radius:9px; background:var(--bh-card); color:var(--bh-ink); font-family:var(--bh-font-ui); font-size:13.5px; }
+  .bh-bismillah { text-align:center; font-size:26px; margin:0 0 18px; }
+  .bh-quran-reader__head { display:grid; gap:14px; margin-bottom:18px; }
+  .bh-quran-reader__tools { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .bh-reader-reciter { display:flex; gap:6px; align-items:center; font-size:13.5px; font-weight:600; }
+  .bh-reader-toggle { display:flex; gap:6px; align-items:center; font-size:13.5px; font-weight:600; }
+  .bh-btn { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:9px 16px; font-weight:700; font-size:14px; cursor:pointer; border:1px solid transparent; text-decoration:none; }
+  .bh-btn-primary { background:var(--bh-green); color:#fff; }
+  .bh-btn-ghost { background:transparent; border-color:var(--bh-line); color:var(--bh-ink); }
+  .bh-tag { background:var(--bh-gold-soft); border-radius:999px; padding:3px 10px; font-size:13px; }
+  .bh-ayah { margin:0 0 18px; padding:4px 6px; border-radius:10px; }
+</style>
+</head>
+<body>
+<div class="bh-preview-note">
+  ⚠️ <strong>Aperçu interactif — lecteur du Coran</strong> (Al-Fātiḥa) ·
+  <a href="/">Aperçu design FR</a> · <a href="/ar.html">العربية</a> · <a href="/tools.html">Outils interactifs</a>
+</div>
+
+<main class="bh-main">
+<section class="bh-section bh-quran-reader-section">
+    <div class="bh-container bh-container--narrow">
+        <nav class="bh-quran-reader__nav" aria-label="Navigation entre les sourates">
+            <a class="bh-btn bh-btn-ghost" href="/coran-demo">← Sourate précédente</a>
+            <a class="bh-btn bh-btn-ghost" href="/">Toutes les sourates</a>
+            <a class="bh-btn bh-btn-ghost" href="#">Sourate suivante →</a>
+        </nav>
+
+        <div class="bh-quran-reader" data-bh-reader data-surah="1" data-start-global="1"
+             x-data="bhReader(1)" x-init="init()">
+
+            <header class="bh-quran-reader__head">
+                <div class="bh-quran-reader__title">
+                    <h1 dir="rtl" class="bh-font-quran">الفاتحة</h1>
+                    <p>
+                        <strong>Al-Fātiha</strong> — L'Ouverture
+                        · 7 versets · mecquoise
+                    </p>
+                </div>
+                <div class="bh-quran-reader__tools">
+                    <label class="bh-reader-reciter">
+                        <span>Récitateur</span>
+                        <select x-model="reciter" class="bh-select">
+                            <option value="ar.alafasy">Mishary Alafasy</option>
+                            <option value="ar.minshawi">Minshawi</option>
+                            <option value="ar.abdulbasitmurattal">Abdul Basit (Murattal)</option>
+                        </select>
+                    </label>
+                    <label class="bh-reader-reciter">
+                        <span>Traduction</span>
+                        <select x-model="frEdition" class="bh-select">
+                            <option value="fr-cherrier">Cherrier (1897)</option>
+                            <option value="fr-fati">Fāti (Berque)</option>
+                            <option value="fr-que">Que (Al-Que)</option>
+                        </select>
+                    </label>
+                    <label class="bh-reader-toggle" x-show="frEdition !== ''">
+                        <input type="checkbox" x-model="showFr"><span>Traduction</span>
+                    </label>
+                    <label class="bh-reader-toggle">
+                        <input type="checkbox" x-model="simpleScript"><span>Script simplifié</span>
+                    </label>
+                    <label class="bh-reader-toggle">
+                        <input type="checkbox" x-model="tafsirOpen"><span>Tafsir</span>
+                    </label>
+                    <label class="bh-reader-reciter">
+                        <span aria-hidden="true">⏩</span>
+                        <select x-model="speed" class="bh-select">
+                            <option value="0.75">0.75×</option>
+                            <option value="1">1×</option>
+                            <option value="1.25">1.25×</option>
+                            <option value="1.5">1.5×</option>
+                        </select>
+                    </label>
+                    <label class="bh-reader-reciter">
+                        <span aria-hidden="true">🔁</span>
+                        <select x-model="repeatN" class="bh-select">
+                            <option value="0">Non</option>
+                            <option value="1">1×</option>
+                            <option value="3">3×</option>
+                            <option value="5">5×</option>
+                            <option value="10">10×</option>
+                        </select>
+                    </label>
+                    <label class="bh-reader-toggle">
+                        <input type="checkbox" x-model="sequential"><span>Verset par verset</span>
+                    </label>
+                    <button class="bh-btn bh-btn-primary" type="button" @click="toggleAll()">
+                        <span x-show="!allPlaying">▶ Écouter la sourate</span>
+                        <span x-show="allPlaying">⏸ Arrêter</span>
+                    </button>
+                    <a class="bh-btn bh-btn-ghost" href="#bh-quiz">Quiz mémorisation</a>
+                </div>
+            </header>
+
+            <div class="bh-quran-reader__body" dir="rtl" lang="ar">
+                <p class="bh-bismillah bh-font-quran" x-show="surahN !== 1 && surahN !== 9">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                
+                    <p class="bh-ayah" data-ayah="1" data-global="1"
+                       :class="{ 'is-playing': playingAyah === 1 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(1)">
+                            بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+                            <a class="bh-ayah__num" href="#a-1" id="a-1">1</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(1)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(1)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(1)" :class="{ 'is-on': isBookmarked(1) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(1)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(1)" :class="{ 'is-on': tafsirAyah === 1 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(1)" :class="{ 'is-on': w2wAyah === 1 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(1)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 1" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(1)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 1" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(1)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 1" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(1)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="2" data-global="2"
+                       :class="{ 'is-playing': playingAyah === 2 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(2)">
+                            ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ
+                            <a class="bh-ayah__num" href="#a-2" id="a-2">2</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(2)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(2)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(2)" :class="{ 'is-on': isBookmarked(2) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(2)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(2)" :class="{ 'is-on': tafsirAyah === 2 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(2)" :class="{ 'is-on': w2wAyah === 2 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(2)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 2" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(2)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 2" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(2)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 2" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(2)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="3" data-global="3"
+                       :class="{ 'is-playing': playingAyah === 3 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(3)">
+                            ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+                            <a class="bh-ayah__num" href="#a-3" id="a-3">3</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(3)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(3)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(3)" :class="{ 'is-on': isBookmarked(3) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(3)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(3)" :class="{ 'is-on': tafsirAyah === 3 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(3)" :class="{ 'is-on': w2wAyah === 3 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(3)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 3" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(3)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 3" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(3)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 3" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(3)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="4" data-global="4"
+                       :class="{ 'is-playing': playingAyah === 4 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(4)">
+                            مَـٰلِكِ يَوْمِ ٱلدِّينِ
+                            <a class="bh-ayah__num" href="#a-4" id="a-4">4</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(4)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(4)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(4)" :class="{ 'is-on': isBookmarked(4) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(4)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(4)" :class="{ 'is-on': tafsirAyah === 4 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(4)" :class="{ 'is-on': w2wAyah === 4 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(4)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 4" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(4)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 4" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(4)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 4" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(4)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="5" data-global="5"
+                       :class="{ 'is-playing': playingAyah === 5 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(5)">
+                            إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ
+                            <a class="bh-ayah__num" href="#a-5" id="a-5">5</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(5)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(5)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(5)" :class="{ 'is-on': isBookmarked(5) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(5)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(5)" :class="{ 'is-on': tafsirAyah === 5 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(5)" :class="{ 'is-on': w2wAyah === 5 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(5)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 5" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(5)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 5" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(5)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 5" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(5)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="6" data-global="6"
+                       :class="{ 'is-playing': playingAyah === 6 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(6)">
+                            ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ
+                            <a class="bh-ayah__num" href="#a-6" id="a-6">6</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(6)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(6)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(6)" :class="{ 'is-on': isBookmarked(6) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(6)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(6)" :class="{ 'is-on': tafsirAyah === 6 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(6)" :class="{ 'is-on': w2wAyah === 6 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(6)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 6" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(6)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 6" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(6)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 6" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(6)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+
+                    <p class="bh-ayah" data-ayah="7" data-global="7"
+                       :class="{ 'is-playing': playingAyah === 7 }">
+                        <span class="bh-ayah__ar bh-font-quran" x-html="arText(7)">
+                            صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ
+                            <a class="bh-ayah__num" href="#a-7" id="a-7">7</a>
+                        </span>
+                        <span class="bh-ayah__fr" x-show="showFr" x-text="frText(7)" dir="ltr" lang="fr"></span>
+                        <div class="bh-ayah__actions">
+                            <button type="button" class="bh-ayah__act" @click="shareAyah(7)" title="Partager (image)">⤴</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleBookmark(7)" :class="{ 'is-on': isBookmarked(7) }" title="Signet">★</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleNote(7)" title="Note personnelle">✎</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleTafsir(7)" :class="{ 'is-on': tafsirAyah === 7 }" title="Tafsir">✦</button>
+                            <button type="button" class="bh-ayah__act" @click="toggleW2W(7)" :class="{ 'is-on': w2wAyah === 7 }" title="Mot à mot">Aa</button>
+                            <button type="button" class="bh-ayah__act" @click="playAyah(7)" title="Écouter ce verset">▶</button>
+                        </div>
+                        <div class="bh-ayah__note" x-show="noteOpen === 7" x-cloak>
+                            <textarea rows="2" x-model="noteDraft" placeholder="Votre note sur ce verset…"></textarea>
+                            <span>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="saveNote(7)">Enregistrer</button>
+                                <button type="button" class="bh-btn bh-btn--ghost" @click="noteOpen = null">Fermer</button>
+                            </span>
+                        </div>
+                        <div class="bh-ayah__tafsir" x-show="tafsirOpen && tafsirAyah === 7" x-cloak>
+                            <p class="bh-muted" x-text="tafsirLoading() ? '…' : ''"></p>
+                            <div class="bh-ayah__tafsir-body" x-html="tafsirHtml(7)"></div>
+                        </div>
+                        <div class="bh-ayah__w2w" x-show="w2wAyah === 7" x-cloak>
+                            <div class="bh-w2w" x-html="w2wHtml(7)"></div>
+                            <p class="bh-muted" x-show="w2wError()">Analyse mot-à-mot indisponible hors ligne.</p>
+                        </div>
+                    </p>
+            </div>
+
+            <footer class="bh-quran-reader__foot">
+                <div class="bh-reader-bookmarks" x-show="bookmarksFor(thisSurah()).length">
+                    <strong>Vos signets dans cette sourate :</strong>
+                    <template x-for="b in bookmarksFor(thisSurah())" :key="b">
+                        <a class="bh-tag" :href="'#a-' + b" @click="playAyah(b)" x-text="'آية ' + b"></a>
+                    </template>
+                </div>
+                <nav class="bh-quran-reader__foot-nav">
+                    <a class="bh-btn bh-btn-ghost" href="#">← Précédente</a>
+                    <a class="bh-btn bh-btn-ghost" href="/">Sourates</a>
+                    <a class="bh-btn bh-btn-ghost" href="#">Suivante →</a>
+                </nav>
+            </footer>
+
+            <section class="bh-quran-plan" id="bh-quiz" x-data="bhPlan()" x-init="init()">
+                <div class="bh-quran-plan__inner">
+                    <h2>Plan de lecture & quiz</h2>
+                    <div class="bh-grid bh-grid--2">
+                        <div>
+                            <label class="bh-reader-toggle">
+                                <span>Plan :</span>
+                                <select x-model="planDays" @change="setPlan()" class="bh-select">
+                                    <option value="30">30 jours (1 juzu/jour)</option>
+                                    <option value="15">15 jours</option>
+                                    <option value="7">7 jours</option>
+                                </select>
+                            </label>
+                            <div class="bh-plan-progress" role="progressbar" :aria-valuenow="pct()" aria-valuemin="0" aria-valuemax="100">
+                                <span :style="'width:' + pct() + '%'"></span>
+                            </div>
+                            <p class="bh-plan-status" x-text="planStatus()"></p>
+                        </div>
+                        <div>
+                            <button type="button" class="bh-btn" @click="openQuiz()">Quiz : mémoriser cette sourate</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bh-quiz" x-show="quizActive" x-cloak>
+                    <p class="bh-quiz__q" x-text="quizQuestion()"></p>
+                    <div class="bh-quiz__opts">
+                        <template x-for="opt in quizOptions()" :key="opt">
+                            <button type="button" class="bh-quiz__opt" @click="quizPick(opt)" x-text="opt" dir="rtl"></button>
+                        </template>
+                    </div>
+                    <p class="bh-quiz__res" x-text="quizResult()"></p>
+                    <p>
+                        <button type="button" class="bh-btn" x-show="quizDone()" @click="nextQuiz()">Question suivante</button>
+                        <span x-text="'Question ' + quizIndex() + '/' + quizTotal()"></span>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+</main>
+
+<script>
+    window.bhCfg = {
+        isAr: false,
+        coranUrl: '/coran/',
+        quran: {
+            index: [],
+            audioBases: {
+                'ar.alafasy': 'https://cdn.islamic.network/quran/audio/128/ar.alafasy',
+                'ar.minshawi': 'https://cdn.islamic.network/quran/audio/128/ar.minshawi',
+                'ar.abdulbasitmurattal': 'https://cdn.islamic.network/quran/audio/128/ar.abdulbasitmurattal',
+            },
+        },
+        rest: { search: '', newsletter: '' },
+    };
+</script>
+<script type="module" src="/site/wp-content/themes/baaboul-houda/assets/dist/js/quran.js"></script>
+</body>
+</html>

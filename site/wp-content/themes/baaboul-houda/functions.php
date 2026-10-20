@@ -49,6 +49,10 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('bh-style', BH_THEME_ASSETS . '/css/style.css', [], BH_THEME_VERSION);
     wp_enqueue_script('bh-main', BH_THEME_ASSETS . '/js/main.js', [], BH_THEME_VERSION, true);
     wp_localize_script('bh-main', 'bhCfg', bh_client_config());
+    // Quran reader features — only on /coran/{n}/ to keep other pages light.
+    if (get_query_var('bh_surah')) {
+        wp_enqueue_script('bh-quran', BH_THEME_ASSETS . '/js/quran.js', ['bh-main'], BH_THEME_VERSION, true);
+    }
 });
 
 /**
@@ -79,6 +83,16 @@ function bh_client_config(): array {
     $f = function_exists('bh_prayer_fallback') ? bh_prayer_fallback('Ouagadougou', date('Y-m-d')) : [];
     if ($f) {
         $fallback = $f['times'];
+    }
+
+    $qiblaBears = [];
+    if (function_exists('bh_known_cities') && function_exists('bh_qibla_for_city')) {
+        foreach (array_keys(bh_known_cities()) as $city) {
+            $b = bh_qibla_for_city($city);
+            if ($b !== null) {
+                $qiblaBears[(string) $city] = round((float) $b, 1);
+            }
+        }
     }
 
     return [
@@ -113,6 +127,14 @@ function bh_client_config(): array {
         ],
         'dailyAyah'     => function_exists('bh_daily_ayah') ? bh_daily_ayah() : null,
         'hijri'         => null, // filled client-side by the prayer widget
+        'live2'         => function_exists('bh_live_channel2') ? bh_live_channel2() : ['enabled' => false],
+        'rest'          => [
+            'status'     => esc_url_raw(rest_url('bh/v1/status')),
+            'search'     => esc_url_raw(rest_url('bh/v1/search')),
+            'newsletter' => esc_url_raw(rest_url('bh/v1/newsletter')),
+        ],
+        'qiblaBears'    => $qiblaBears,
+        'analytics'     => !empty($s['analytics_enabled']),
     ];
 }
 
@@ -164,6 +186,7 @@ function bh_nav_items(): array {
         ['label_fr' => 'Replays', 'label_ar' => 'البث المسجل', 'slug' => 'emissions'],
         ['label_fr' => 'Coran', 'label_ar' => 'القرآن', 'slug' => 'coran'],
         ['label_fr' => 'Prières', 'label_ar' => 'الصلاة', 'slug' => 'prieres'],
+        ['label_fr' => 'Outils', 'label_ar' => 'الأدوات', 'slug' => 'outils'],
         ['label_fr' => 'Actualités', 'label_ar' => 'الأخبار', 'slug' => 'actualites'],
         ['label_fr' => 'Événements', 'label_ar' => 'الفعاليات', 'slug' => 'evenements'],
         ['label_fr' => 'Contact', 'label_ar' => 'اتصل بنا', 'slug' => 'contact'],

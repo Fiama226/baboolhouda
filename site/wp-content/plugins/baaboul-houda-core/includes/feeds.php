@@ -230,3 +230,31 @@ add_action('rest_api_init', function () {
         },
     ]);
 });
+
+/**
+ * Lightweight built-in pageview counter (no third-party).
+ * POST /wp-json/bh/v1/analytics?path=/foo — increments a daily counter.
+ */
+add_action('rest_api_init', function () {
+    \register_rest_route('bh/v1', '/analytics', [
+        'methods'             => 'POST',
+        'permission_callback' => '__return_true',
+        'callback'            => function ($req) {
+            $day = date('Y-m-d');
+            $key = "bh_views_{$day}";
+            $all = get_option('bh_analytics', []);
+            if (!is_array($all)) {
+                $all = [];
+            }
+            // keep at most 60 days
+            $keys = array_keys($all);
+            if (count($keys) > 60) {
+                ksort($all);
+                $all = array_slice($all, -60, null, true);
+            }
+            $all[$day] = (int) ($all[$day] ?? 0) + 1;
+            update_option('bh_analytics', $all, false);
+            return new \WP_REST_Response(['ok' => true], 200, ['Access-Control-Allow-Origin' => '*']);
+        },
+    ]);
+});

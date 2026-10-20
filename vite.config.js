@@ -17,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/js/main.js', import.meta.url)),
+        quran: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/js/quran.js', import.meta.url)),
         style: fileURLToPath(new URL('./site/wp-content/themes/baaboul-houda/assets-src/css/style.css', import.meta.url)),
         admin: fileURLToPath(new URL('./site/wp-content/plugins/baaboul-houda-core/assets-src/js/admin.js', import.meta.url)),
       },

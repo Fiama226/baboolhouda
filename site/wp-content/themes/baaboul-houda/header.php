@@ -19,6 +19,10 @@ defined('ABSPATH') || exit;
             <span class="bh-topbar__hijri" data-bh-hijri></span>
         </span>
         <span class="bh-topbar__links">
+            <button type="button" class="bh-theme-toggle" data-bh-theme-toggle aria-label="<?php echo esc_attr(bh_l('Mode sombre / clair', 'الوضع الداكن/الفاتح')); ?>">
+                <span data-bh-theme-icon aria-hidden="true">🌙</span>
+            </button>
+
             <?php
             $s = function_exists('bh_settings') ? bh_settings() : [];
             if (!empty($s['phone'])) {
@@ -34,6 +38,17 @@ defined('ABSPATH') || exit;
                 echo '<a class="bh-topbar__social" href="' . esc_url($s['youtube_url']) . '" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/></svg></a>';
             }
             ?>
+            <span class="bh-search" x-data="bhSearch()" @click.outside="open = false">
+                <input type="search" x-model="q" @input="_timer()" @keydown.enter.prevent="submit()"
+                       :aria-expanded="open" placeholder="<?php echo esc_attr(bh_l('Rechercher…', 'بحث…')); ?>"
+                       aria-label="<?php echo esc_attr(bh_l('Rechercher sur le site', 'ابحث في الموقع')); ?>"
+                       autocomplete="off">
+                <ul class="bh-search__list" x-show="open" x-cloak>
+                    <template x-for="r in results" :key="r.url">
+                        <li><a :href="r.url"><span class="bh-search__type" x-text="r.type"></span><span x-text="r.title"></span></a></li>
+                    </template>
+                </ul>
+            </span>
             <?php echo bh_lang_switch_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_ in functions.php ?>
         </span>
     </div>

@@ -1,39 +1,65 @@
 <?php
 /**
  * Template Name: Accueil — En direct
- * Front page: live player + now/next + today's schedule + programmes +
- * latest replays + daily ayah + news.
+ * Front page: live player (TV1/TV2 switcher, quality, QR, countdown) +
+ * now/next + today's schedule + programmes + latest replays + daily ayah + news.
  */
 defined('ABSPATH') || exit;
 get_header();
 
-$live   = bh_live();
+$live    = bh_live();
+$live2   = function_exists('bh_live_channel2') ? bh_live_channel2() : ['enabled' => false];
 $nowNext = bh_now_next();
+$hasCh2  = !empty($live2['enabled']);
 ?>
 
 <section class="bh-hero">
-    <div class="bh-container bh-hero__grid">
+    <div class="bh-container bh-hero__grid"
+         x-data="bhLive(<?php echo wp_json_encode([
+             'ch1'   => [
+                 'enabled'  => !empty($live['enabled']) && '' !== trim((string) $live['url']),
+                 'platform' => $live['platform'],
+                 'title'    => function_exists('bh_l') ? bh_l($live['title_fr'] ?: 'Diffusion en direct', $live['title_ar'] ?: 'بث مباشر') : '',
+             ],
+             'ch2'   => [
+                 'enabled'  => $hasCh2,
+                 'platform' => $live2['platform'],
+                 'title'    => function_exists('bh_l') ? bh_l($live2['title_fr'] ?: 'Coran en continu', $live2['title_ar'] ?: 'القرآن الكريم 24/7') : '',
+             ],
+             'now'   => $nowNext,
+             'page'  => get_permalink(),
+         ]); ?>)">
         <div class="bh-hero__live">
             <div class="bh-hero__live-head">
-                <span class="bh-live-pill" x-data="{ on: <?php echo !empty($live['enabled']) ? 'true' : 'false'; ?> }" :class="{ 'is-on': on }">
-                    <?php echo !empty($live['enabled'])
-                        ? esc_html(bh_l('● EN DIRECT', '● بث مباشر'))
-                        : esc_html(bh_l('Hors antenne', 'خارج البث')); ?>
-                </span>
-                <h1 class="bh-hero__title"><?php echo esc_html(bh_l($live['title_fr'] ?: 'Diffusion en direct', $live['title_ar'] ?: 'بث مباشر')); ?></h1>
+                <span class="bh-live-pill" :class="{ 'is-on': currentOn() }" x-text="currentOn() ? liveLabel() : offLabel()"></span>
+                <h1 class="bh-hero__title" x-text="currentTitle()"></h1>
+
+                <?php if ($hasCh2) : ?>
+                    <span class="bh-channels" role="tablist" aria-label="<?php echo esc_attr(bh_l('Chaînes', 'القنوات')); ?>">
+                        <button type="button" class="bh-channels__btn" :class="{ 'is-active': ch === 1 }" @click="ch = 1" role="tab"><?php echo esc_html(bh_l('TV1', 'قناة 1')); ?></button>
+                        <button type="button" class="bh-channels__btn" :class="{ 'is-active': ch === 2 }" @click="ch = 2" role="tab"><?php echo esc_html(bh_l('TV2', 'قناة 2')); ?></button>
+                    </span>
+                <?php endif; ?>
             </div>
 
-            <?php if (!empty($live['enabled']) && '' !== trim($live['url'])) : ?>
+            <template x-if="ch1.enabled && (!hasCh2 || ch === 1)">
                 <div class="bh-hero__player"><?php echo bh_live_embed_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
-            <?php else : ?>
+            </template>
+            <template x-if="hasCh2 && ch === 2 && ch2.enabled">
+                <div class="bh-hero__player"><?php echo function_exists('bh_live_embed_html_for') ? bh_live_embed_html_for(function_exists('bh_live_channel2') ? bh_live_channel2() : []) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+            </template>
+            <template x-if="!ch1.enabled && (!hasCh2 || ch === 1)">
                 <div class="bh-hero__off">
                     <div class="bh-hero__off-icon" aria-hidden="true">📡</div>
                     <p><?php echo esc_html(bh_l('La chaîne est momentanément hors antenne. Retrouvez la grille des programmes ci-dessous et suivez-nous sur Facebook pour les prochains directs.', 'القناة غير موجودة على الهواء حاليًا. تجدون أدناه شبكة البرامج، وتابعونا على فيسبوك لآخر البثوث المباشرة.')); ?></p>
-                    <?php if ($nowNext['next']) : ?>
-                        <p class="bh-hero__off-next"><?php echo esc_html(bh_l('Prochaine antenne', 'البث القادم')) ?> : <strong><?php echo esc_html(bh_slot_title($nowNext['next'])); ?></strong> <?php echo esc_html($nowNext['next']['start']); ?></p>
-                    <?php endif; ?>
+                    <p class="bh-hero__off-next" x-show="nextTitle()">
+                        <?php echo esc_html(bh_l('Prochaine antenne', 'البث القادم')) ?> :
+                        <strong x-text="nextTitle()"></strong>
+                        <span class="bh-time-range" x-text="nextStart()"></span>
+                        <span class="bh-countdown" x-text="countdown()"></span>
+                    </p>
                 </div>
-            <?php endif; ?>
+            </template>
 
             <?php if ($nowNext['current']) : ?>
                 <p class="bh-hero__now">
@@ -43,7 +69,41 @@ $nowNext = bh_now_next();
                     </a>
                     <span class="bh-time-range"><?php echo esc_html($nowNext['current']['start'] . '–' . $nowNext['current']['end']); ?></span>
                 </p>
+            <?php else : ?>
+                <p class="bh-hero__now" x-show="nextTitle()">
+                    <?php echo esc_html(bh_l('Prochaine antenne', 'البث القادم')) ?> :
+                    <strong x-text="nextTitle()"></strong>
+                    <span class="bh-time-range" x-text="nextStart()"></span>
+                    <span class="bh-countdown" x-text="countdown()"></span>
+                </p>
             <?php endif; ?>
+
+            <!-- Just-ended banner (filled by JS from the schedule) -->
+            <div class="bh-just-ended" x-show="justEndedTitle()" x-cloak>
+                <?php echo esc_html(bh_l('C’est terminé : ', 'انتهى للتو: ')) ?>
+                <strong x-text="justEndedTitle()"></strong>
+                <a class="bh-link" :href="justEndedUrl()" x-show="justEndedUrl()"><?php echo esc_html(bh_l('Voir le programme →', 'عرض البرنامج ←')); ?></a>
+            </div>
+
+            <!-- Live tools: QR + quality (HLS only) -->
+            <div class="bh-live-tools">
+                <button type="button" class="bh-btn bh-btn--ghost" @click="showQr = !showQr">
+                    ⚠ <?php echo esc_html(bh_l('Regarder sur téléphone', 'شاهد على الهاتف')) ?>
+                </button>
+                <select class="bh-select bh-select--small" x-show="currentPlatform() === 'hls'"
+                        x-model="quality" @change="applyQuality()" aria-label="<?php echo esc_attr(bh_l('Qualité vidéo', 'جودة الفيديو')); ?>">
+                    <option value="auto"><?php echo esc_html(bh_l('Qualité auto (recommandée)', 'جودة تلقائية (مقترح)')); ?></option>
+                    <option value="720"><?php echo esc_html(bh_l('720p', '720p')); ?></option>
+                    <option value="480"><?php echo esc_html(bh_l('480p', '480p')); ?></option>
+                </select>
+            </div>
+            <div class="bh-qr-modal" x-show="showQr" x-cloak @click.outside="showQr = false">
+                <div class="bh-qr-modal__box" role="dialog" aria-label="<?php echo esc_attr(bh_l('QR code', 'رمز QR')); ?>">
+                    <canvas id="bh-live-qr" width="220" height="220" aria-hidden="true"></canvas>
+                    <small x-text="qrText()"></small>
+                    <button type="button" class="bh-btn bh-btn--ghost" @click="showQr = false"><?php echo esc_html(bh_l('Fermer', 'إغلاق')); ?></button>
+                </div>
+            </div>
         </div>
 
         <aside class="bh-hero__side">
@@ -69,6 +129,22 @@ $nowNext = bh_now_next();
                     </template>
                 </div>
                 <p class="bh-prayer__src" x-show="source === 'fallback'"><?php echo esc_html(bh_l('Horaires indicatifs (hors-ligne)', 'أوقات تقريبية (دون اتصال)')); ?></p>
+            </div>
+
+            <div class="bh-card bh-card--dhikr">
+                <?php if (function_exists('bh_name_of_day')) : $bh_name = bh_name_of_day(); ?>
+                    <h2 class="bh-card__title"><?php echo esc_html(bh_l('Nom d’Allah du jour', 'اسم من أسماء الله اليوم')); ?></h2>
+                    <p class="bh-dhikr__name" dir="rtl"><?php echo esc_html($bh_name['ar'] ?? ''); ?></p>
+                    <p class="bh-dhikr__fr"><?php echo esc_html($bh_name['fr'] ?? ''); ?></p>
+                <?php endif; ?>
+                <?php if (function_exists('bh_daily_hadith')) : $bh_hadith = bh_daily_hadith(); ?>
+                    <h2 class="bh-card__title"><?php echo esc_html(bh_l('Hadith du jour', 'حديث اليوم')); ?></h2>
+                    <blockquote class="bh-dhikr__hadith">
+                        <p dir="rtl"><?php echo esc_html($bh_hadith['ar'] ?? ''); ?></p>
+                        <p><?php echo esc_html($bh_hadith['fr'] ?? ''); ?></p>
+                        <?php if (!empty($bh_hadith['source'])) : ?><footer><?php echo esc_html($bh_hadith['source']); ?></footer><?php endif; ?>
+                    </blockquote>
+                <?php endif; ?>
             </div>
         </aside>
     </div>

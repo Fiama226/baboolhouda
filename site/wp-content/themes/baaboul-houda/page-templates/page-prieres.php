@@ -43,6 +43,27 @@ $s = bh_settings();
             </p>
         </div>
 
+        <div class="bh-grid bh-grid--3 bh-prayer-tools">
+            <a class="bh-card bh-card--tool" href="<?php echo esc_url(bh_nav_url('qibla')); ?>">
+                <span class="bh-card__icon" aria-hidden="true">🧭</span>
+                <span class="bh-card__body"><strong><?php echo esc_html(bh_l('Direction de la Qibla', 'اتجاه القبلة')); ?></strong>
+                <small><?php echo esc_html(bh_l('Boussole & angle', 'بوصلة وزاوية')); ?></small></span>
+            </a>
+            <a class="bh-card bh-card--tool" href="<?php echo esc_url(bh_nav_url('dates')); ?>">
+                <span class="bh-card__icon" aria-hidden="true">📅</span>
+                <span class="bh-card__body"><strong><?php echo esc_html(bh_l('Jeûnes & calendrier', 'الصيام والتقويم')); ?></strong>
+                <small><?php echo esc_html(bh_l('Hégirien, jours de jeûne, fêtes', 'هجري، أيام صيام، أعياد')); ?></small></span>
+            </a>
+            <?php if (!empty($s['adhan_enabled']) && !empty($s['adhan_url'])) : ?>
+                <div class="bh-card bh-card--tool bh-card--adhan">
+                    <span class="bh-card__icon" aria-hidden="true">🔔</span>
+                    <span class="bh-card__body"><strong><?php echo esc_html(bh_l('Adhan', 'الأذان')); ?></strong>
+                    <small><?php echo esc_html(bh_l('L’adhan sonne à chaque appel (dans votre navigateur).', 'يُسمع الأذان مع كل أذان (في متصفحكم).')); ?></small></span>
+                    <audio class="bh-adhan" data-bh-adhan preload="none" src="<?php echo esc_url($s['adhan_url']); ?>"></audio>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <div class="bh-prayer-month">
             <h2><?php echo esc_html(bh_l('Calendrier du mois', 'تقويم الشهر')); ?></h2>
             <div class="bh-table-wrap">
