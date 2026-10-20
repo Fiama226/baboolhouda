@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "site/wp-content/themes/baaboul-houda/assets-src/css/style.css"
+        ],
+        "createdAt": "2026-10-20T18:33:22.850Z",
+        "reason": "User confirmed: 3px neutral inline-start rule marks blockquotes, not a coloured card accent"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "site/wp-content/themes/baaboul-houda/assets-src/css/style.css"
+        ],
+        "createdAt": "2026-10-20T18:33:23.151Z",
+        "reason": "User confirmed: width transition on the 10px reading-plan progress bar fill is intentional"
+      }
+    ]
+  }
+}
