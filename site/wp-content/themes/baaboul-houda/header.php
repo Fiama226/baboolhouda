@@ -1,6 +1,27 @@
 <?php
-/** Theme header: topbar + logo + nav (+ live badge) + mobile menu. */
+/**
+ * Theme header: slim topbar (date, contact, social, language) + main bar
+ * (brand, primary nav + "Plus" menu, search, theme toggle, EN DIRECT button).
+ */
 defined('ABSPATH') || exit;
+
+// Group the nav: visible links, the "Plus" menu, and the live button.
+$bh_main = $bh_more = [];
+$bh_live_item = null;
+foreach (bh_nav_items() as $bh_item) {
+    $bh_item['current'] = bh_nav_is_current($bh_item);
+    if (!empty($bh_item['live'])) {
+        $bh_live_item = $bh_item;
+    } elseif (($bh_item['zone'] ?? 'main') === 'more') {
+        $bh_more[] = $bh_item;
+    } else {
+        $bh_main[] = $bh_item;
+    }
+}
+$bh_more_current = (bool) array_filter($bh_more, static fn($i) => $i['current']);
+$bh_live         = function_exists('bh_live') ? bh_live() : ['enabled' => false];
+$bh_is_live      = !empty($bh_live['enabled']);
+$bh_chevron      = '<svg class="bh-ico bh-ico--chev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -15,14 +36,10 @@ defined('ABSPATH') || exit;
 <div class="bh-topbar">
     <div class="bh-container bh-topbar__inner">
         <span class="bh-topbar__date">
-            <span data-bh-date><?php echo esc_html(bh_l(date_i18n('j F Y', current_time('timestamp')), date_i18n('j F Y', current_time('timestamp')))); ?></span>
+            <span data-bh-date><?php echo esc_html(date_i18n('j F Y', current_time('timestamp'))); ?></span>
             <span class="bh-topbar__hijri" data-bh-hijri></span>
         </span>
         <span class="bh-topbar__links">
-            <button type="button" class="bh-theme-toggle" data-bh-theme-toggle aria-label="<?php echo esc_attr(bh_l('Mode sombre / clair', 'الوضع الداكن/الفاتح')); ?>">
-                <span data-bh-theme-icon aria-hidden="true">🌙</span>
-            </button>
-
             <?php
             $s = function_exists('bh_settings') ? bh_settings() : [];
             if (!empty($s['phone'])) {
@@ -37,69 +54,96 @@ defined('ABSPATH') || exit;
             if (!empty($s['youtube_url'])) {
                 echo '<a class="bh-topbar__social" href="' . esc_url($s['youtube_url']) . '" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/></svg></a>';
             }
+            echo bh_lang_switch_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_ in functions.php
             ?>
-            <span class="bh-search" x-data="bhSearch()" @click.outside="open = false">
-                <input type="search" x-model="q" @input="_timer()" @keydown.enter.prevent="submit()"
-                       :aria-expanded="open" placeholder="<?php echo esc_attr(bh_l('Rechercher…', 'بحث…')); ?>"
-                       aria-label="<?php echo esc_attr(bh_l('Rechercher sur le site', 'ابحث في الموقع')); ?>"
-                       autocomplete="off">
-                <ul class="bh-search__list" x-show="open" x-cloak>
-                    <template x-for="r in results" :key="r.url">
-                        <li><a :href="r.url"><span class="bh-search__type" x-text="r.type"></span><span x-text="r.title"></span></a></li>
-                    </template>
-                </ul>
-            </span>
-            <?php echo bh_lang_switch_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_ in functions.php ?>
         </span>
     </div>
 </div>
 
-<header class="bh-header">
-    <div class="bh-container bh-header__inner" x-data="{ open: false }">
+<header class="bh-header" x-data="{ open: false, scrolled: false }"
+        @scroll.window.passive="scrolled = window.scrollY > 4" :class="{ 'is-scrolled': scrolled }"
+        @keydown.escape.window="open = false">
+    <div class="bh-container bh-header__inner">
         <a class="bh-header__brand" href="<?php echo esc_url(function_exists('bh_alt_url') ? bh_alt_url(bh_lang()) : home_url('/')); ?>">
-            <?php echo bh_logo_html(50); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            <?php echo bh_logo_html(46); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span class="bh-header__names">
                 <strong><?php bloginfo('name'); ?></strong>
-                <em><?php echo esc_html(bh_l('TV &amp; Radio islamiques', 'قناة تلفزيونية وإذاعية إسلامية')); ?></em>
+                <em><?php echo esc_html(bh_l('TV & Radio islamiques', 'قناة تلفزيونية وإذاعية إسلامية')); ?></em>
             </span>
         </a>
 
-        <button class="bh-burger" type="button" @click.stop="open = !open" :aria-expanded="open ? 'true' : 'false'" aria-label="<?php echo esc_attr(bh_l('Menu', 'القائمة')); ?>">
-            <span></span><span></span><span></span>
-        </button>
-
-        <nav class="bh-nav" :class="{ 'bh-nav--open': open }" @click.outside="open = false" aria-label="<?php echo esc_attr(bh_l('Navigation principale', 'التنقل الرئيسي')); ?>">
+        <nav class="bh-nav" id="bh-nav" :class="{ 'bh-nav--open': open }" @click.outside="open = false" aria-label="<?php echo esc_attr(bh_l('Navigation principale', 'التنقل الرئيسي')); ?>">
             <ul class="bh-nav__list">
-                <?php
-                $live = function_exists('bh_live') ? bh_live() : ['enabled' => false];
-                foreach (bh_nav_items() as $item) {
-                    $isLiveBadge = !empty($item['live']);
-                    $url = $isLiveBadge
-                        ? bh_nav_url('direct')
-                        : bh_nav_url($item['slug']);
-                    $active = false;
-                    if (!$isLiveBadge && function_exists('bh_page_id')) {
-                        $id = bh_page_id($item['slug']);
-                        if ($id && in_array($id, [get_queried_object_id(), (int) get_option('page_on_front')], true)) {
-                            $active = true;
-                        }
-                    }
-                    $label = bh_l($item['label_fr'], $item['label_ar']);
-                    echo '<li' . ($active ? ' class="is-active"' : '') . '>';
-                    if ($isLiveBadge) {
-                        echo '<a class="bh-nav__link bh-nav__link--live" href="' . esc_url($url) . '">';
-                        if (!empty($live['enabled'])) {
-                            echo '<span class="bh-live-dot" aria-hidden="true"></span>';
-                        }
-                        echo esc_html($label) . '</a>';
-                    } else {
-                        echo '<a class="bh-nav__link" href="' . esc_url($url) . '">' . esc_html($label) . '</a>';
-                    }
-                    echo '</li>';
-                }
-                ?>
+                <?php foreach ($bh_main as $bh_item) : ?>
+                    <li<?php echo $bh_item['current'] ? ' class="is-active"' : ''; ?>>
+                        <a class="bh-nav__link" href="<?php echo esc_url(bh_nav_url($bh_item['slug'])); ?>"<?php echo $bh_item['current'] ? ' aria-current="page"' : ''; ?>>
+                            <?php echo esc_html(bh_l($bh_item['label_fr'], $bh_item['label_ar'])); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+
+                <?php if ($bh_more) : ?>
+                    <li class="bh-nav__more<?php echo $bh_more_current ? ' is-active' : ''; ?>" x-data="{ more: false }" @click.outside="more = false" @keydown.escape="more = false">
+                        <button type="button" class="bh-nav__link bh-nav__more-btn" @click="more = !more" :aria-expanded="more ? 'true' : 'false'" aria-haspopup="true" aria-controls="bh-nav-more">
+                            <?php echo esc_html(bh_l('Plus', 'المزيد')); ?>
+                            <?php echo $bh_chevron; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </button>
+                        <ul class="bh-nav__menu" id="bh-nav-more" x-show="more" x-cloak>
+                            <?php foreach ($bh_more as $bh_item) : ?>
+                                <li>
+                                    <a class="bh-nav__sublink<?php echo $bh_item['current'] ? ' is-current' : ''; ?>" href="<?php echo esc_url(bh_nav_url($bh_item['slug'])); ?>"<?php echo $bh_item['current'] ? ' aria-current="page"' : ''; ?>>
+                                        <?php echo esc_html(bh_l($bh_item['label_fr'], $bh_item['label_ar'])); ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
             </ul>
+            <div class="bh-nav__tools">
+                <button type="button" class="bh-icon-btn bh-theme-toggle" data-bh-theme-toggle>
+                    <svg class="bh-ico bh-ico--moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+                    <svg class="bh-ico bh-ico--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>
+                    <span><?php echo esc_html(bh_l('Mode sombre / clair', 'الوضع الداكن/الفاتح')); ?></span>
+                </button>
+            </div>
         </nav>
+
+        <div class="bh-header__actions">
+            <div class="bh-search" x-data="bhSearch()" @click.outside="close()" @keydown.escape.window="close()">
+                <button type="button" class="bh-icon-btn" @click="toggle()" :aria-expanded="panel ? 'true' : 'false'" aria-controls="bh-search-panel"
+                        aria-label="<?php echo esc_attr(bh_l('Rechercher sur le site', 'ابحث في الموقع')); ?>">
+                    <svg class="bh-ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+                </button>
+                <div class="bh-search__panel" id="bh-search-panel" x-show="panel" x-cloak>
+                    <input type="search" x-ref="q" x-model="q" @input="_timer()" @keydown.enter.prevent="submit()"
+                           placeholder="<?php echo esc_attr(bh_l('Rechercher une émission, une sourate…', 'ابحث عن برنامج أو سورة…')); ?>"
+                           aria-label="<?php echo esc_attr(bh_l('Rechercher sur le site', 'ابحث في الموقع')); ?>"
+                           autocomplete="off">
+                    <ul class="bh-search__list" x-show="open" x-cloak>
+                        <template x-for="r in results" :key="r.url">
+                            <li><a :href="r.url"><span class="bh-search__type" x-text="r.type"></span><span x-text="r.title"></span></a></li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+
+            <button type="button" class="bh-icon-btn bh-theme-toggle" data-bh-theme-toggle aria-label="<?php echo esc_attr(bh_l('Mode sombre / clair', 'الوضع الداكن/الفاتح')); ?>">
+                <svg class="bh-ico bh-ico--moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+                <svg class="bh-ico bh-ico--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>
+            </button>
+
+            <?php if ($bh_live_item) : ?>
+                <a class="bh-live-cta<?php echo $bh_is_live ? ' is-on' : ''; ?>" href="<?php echo esc_url(bh_nav_url($bh_live_item['slug'])); ?>">
+                    <?php if ($bh_is_live) : ?><span class="bh-live-dot" aria-hidden="true"></span><?php endif; ?>
+                    <?php echo esc_html($bh_is_live ? bh_l('EN DIRECT', 'مباشر') : bh_l('Direct', 'البث')); ?>
+                </a>
+            <?php endif; ?>
+
+            <button class="bh-burger" type="button" @click.stop="open = !open" :class="{ 'is-open': open }" :aria-expanded="open ? 'true' : 'false'" aria-controls="bh-nav" aria-label="<?php echo esc_attr(bh_l('Menu', 'القائمة')); ?>">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </div>
 </header>
 

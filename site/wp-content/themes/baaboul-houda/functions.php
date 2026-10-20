@@ -185,21 +185,37 @@ function bh_lang_switch_html(): string {
     return '<a class="' . $cls . '" href="' . esc_url(bh_alt_url($other)) . '" rel="alternate" hreflang="' . esc_attr($other) . '">' . esc_html($label) . '</a>';
 }
 
-/** Nav items — hand-rolled (no walker bloat), bilingual labels. */
+/**
+ * Nav items — hand-rolled (no walker bloat), bilingual labels.
+ * 'zone': main = always visible in the bar, more = inside the "Plus" menu,
+ * the item flagged 'live' is rendered as the EN DIRECT button instead.
+ * (footer.php shows the first 8 entries: keep that order stable.)
+ */
 function bh_nav_items(): array {
     return [
-        ['label_fr' => 'Accueil', 'label_ar' => 'الرئيسية', 'slug' => 'direct', 'front' => true],
-        ['label_fr' => 'En direct', 'label_ar' => 'مباشر', 'slug' => 'direct', 'live' => true],
-        ['label_fr' => 'Radio', 'label_ar' => 'الإذاعة', 'slug' => 'radio'],
-        ['label_fr' => 'Programmes', 'label_ar' => 'البرامج', 'slug' => 'programmes'],
-        ['label_fr' => 'Replays', 'label_ar' => 'البث المسجل', 'slug' => 'emissions'],
-        ['label_fr' => 'Coran', 'label_ar' => 'القرآن', 'slug' => 'coran'],
-        ['label_fr' => 'Prières', 'label_ar' => 'الصلاة', 'slug' => 'prieres'],
-        ['label_fr' => 'Outils', 'label_ar' => 'الأدوات', 'slug' => 'outils'],
-        ['label_fr' => 'Actualités', 'label_ar' => 'الأخبار', 'slug' => 'actualites'],
-        ['label_fr' => 'Événements', 'label_ar' => 'الفعاليات', 'slug' => 'evenements'],
-        ['label_fr' => 'Contact', 'label_ar' => 'اتصل بنا', 'slug' => 'contact'],
+        ['label_fr' => 'Accueil', 'label_ar' => 'الرئيسية', 'slug' => 'direct', 'front' => true, 'zone' => 'main'],
+        ['label_fr' => 'En direct', 'label_ar' => 'مباشر', 'slug' => 'direct', 'live' => true, 'zone' => 'live'],
+        ['label_fr' => 'Radio', 'label_ar' => 'الإذاعة', 'slug' => 'radio', 'zone' => 'main'],
+        ['label_fr' => 'Programmes', 'label_ar' => 'البرامج', 'slug' => 'programmes', 'zone' => 'main'],
+        ['label_fr' => 'Replays', 'label_ar' => 'البث المسجل', 'slug' => 'emissions', 'zone' => 'main'],
+        ['label_fr' => 'Coran', 'label_ar' => 'القرآن', 'slug' => 'coran', 'zone' => 'main'],
+        ['label_fr' => 'Prières', 'label_ar' => 'الصلاة', 'slug' => 'prieres', 'zone' => 'main'],
+        ['label_fr' => 'Outils', 'label_ar' => 'الأدوات', 'slug' => 'outils', 'zone' => 'more'],
+        ['label_fr' => 'Actualités', 'label_ar' => 'الأخبار', 'slug' => 'actualites', 'zone' => 'more'],
+        ['label_fr' => 'Événements', 'label_ar' => 'الفعاليات', 'slug' => 'evenements', 'zone' => 'more'],
+        ['label_fr' => 'Contact', 'label_ar' => 'اتصل بنا', 'slug' => 'contact', 'zone' => 'more'],
+        ['label_fr' => 'Animateurs', 'label_ar' => 'المقدمون', 'slug' => 'animateurs', 'zone' => 'more'],
+        ['label_fr' => 'À propos', 'label_ar' => 'من نحن', 'slug' => 'apropos', 'zone' => 'more'],
     ];
+}
+
+/** Is this nav item the page being viewed? (the live button is never "current") */
+function bh_nav_is_current(array $item): bool {
+    if (!empty($item['live']) || !function_exists('bh_page_id')) {
+        return false;
+    }
+    $id = bh_page_id($item['slug']);
+    return $id && $id === get_queried_object_id();
 }
 
 add_action('wp_head', function () {

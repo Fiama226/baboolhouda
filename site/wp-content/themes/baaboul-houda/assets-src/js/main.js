@@ -643,23 +643,27 @@ function initDate() {
     el.textContent = cfg.isAr
         ? d.toLocaleDateString('ar-EG-u-nu-latn', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
         : d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    // Hijri date on every page (the prayer widget replaces it with the Aladhan value where it runs).
+    const hijri = formatHijri(gregToHijri(d), cfg.isAr ? 'ar' : 'fr');
+    document.querySelectorAll('[data-bh-hijri]').forEach((n) => { if (!n.textContent) n.textContent = hijri; });
 }
 
 /* ============================ dark mode ============================ */
 function initTheme() {
-    const btn = document.querySelector('[data-bh-theme-toggle]');
-    const icon = document.querySelector('[data-bh-theme-icon]');
+    // One toggle in the bar, one in the mobile sheet; moon/sun are both in
+    // the markup and CSS shows the right one per .bh-dark.
+    const btns = document.querySelectorAll('[data-bh-theme-toggle]');
     const apply = (dark) => {
         document.documentElement.classList.toggle('bh-dark', dark);
-        if (icon) icon.textContent = dark ? '☀️' : '🌙';
+        btns.forEach((b) => b.setAttribute('aria-pressed', dark ? 'true' : 'false'));
     };
     const saved = store('bh-theme', null);
     apply(saved ? saved === 'dark' : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    if (btn) btn.addEventListener('click', () => {
+    btns.forEach((b) => b.addEventListener('click', () => {
         const dark = !document.documentElement.classList.contains('bh-dark');
         apply(dark);
         save('bh-theme', dark ? 'dark' : 'light');
-    });
+    }));
 }
 
 /* ============================ WhatsApp float ============================ */
@@ -835,8 +839,18 @@ function bhSearch() {
     return {
         q: '',
         open: false,
+        panel: false,
         busy: false,
         results: [],
+        toggle() {
+            this.panel = !this.panel;
+            if (this.panel) this.$nextTick(() => this.$refs.q && this.$refs.q.focus());
+            else this.open = false;
+        },
+        close() {
+            this.panel = false;
+            this.open = false;
+        },
         _timer() {
             clearTimeout(timer);
             timer = setTimeout(() => this.run(), 250);
