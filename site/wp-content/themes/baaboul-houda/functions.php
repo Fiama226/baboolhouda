@@ -56,6 +56,15 @@ add_action('wp_enqueue_scripts', function () {
     }
 });
 
+// The Vite bundles are ES modules (shared ./lib.js chunk): they must be
+// loaded with type="module", otherwise `import` is a syntax error.
+add_filter('script_loader_tag', function (string $tag, string $handle): string {
+    if (in_array($handle, ['bh-main', 'bh-quran'], true) && false === strpos($tag, 'type=')) {
+        return str_replace('<script ', '<script type="module" ', $tag);
+    }
+    return $tag;
+}, 10, 2);
+
 /**
  * Everything the front-end JS needs, in one small JSON blob.
  */

@@ -44,7 +44,7 @@ function bh_current_url(): string {
 add_action('wp_head', function () {
     $s   = bh_settings();
     $url = bh_current_url();
-    $desc = wp_html_entity_decode(bh_meta_description(), ENT_QUOTES, get_bloginfo('charset'));
+    $desc = html_entity_decode(bh_meta_description(), ENT_QUOTES, get_bloginfo('charset'));
 
     // Title
     $title = get_the_title();

@@ -60,8 +60,11 @@ function bh_activate(): void {
         if (is_wp_error($page) || !$page) {
             continue;
         }
+        // get_page_by_path() returns a WP_Post; wp_insert_post() an int ID.
+        $page = $page instanceof WP_Post ? $page->ID : (int) $page;
         update_post_meta($page, '_bh_title_ar', $titleAr);
-        update_post_meta($page, '_wp_page_template', $template);
+        // Templates live in the theme's page-templates/ subfolder.
+        update_post_meta($page, '_wp_page_template', 'page-templates/' . $template);
     }
 
     // Newsletter table (idempotent).
@@ -85,6 +88,16 @@ function bh_activate(): void {
 
     flush_rewrite_rules();
 }
+
+// Re-run the (idempotent) setup once per plugin version, so sites that were
+// activated by an older release get their pages/templates repaired.
+add_action('init', function () {
+    if (get_option('bh_core_version') === BH_VERSION) {
+        return;
+    }
+    update_option('bh_core_version', BH_VERSION);
+    bh_activate();
+}, 20);
 
 function bh_deactivate(): void {
     flush_rewrite_rules();

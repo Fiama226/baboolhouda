@@ -22,6 +22,15 @@ function bh_icon_base(): string {
     return get_template_directory_uri() . '/assets/icons/';
 }
 
+// WordPress would 301 /sw.js and /sitemap.xml to a trailing-slash URL; a
+// service worker script must not be behind a redirect.
+add_filter('redirect_canonical', function ($redirect) {
+    if (get_query_var('bh_sw') || get_query_var('bh_manifest') || get_query_var('bh_sitemap')) {
+        return false;
+    }
+    return $redirect;
+});
+
 add_action('template_redirect', function () {
     $s = bh_settings();
 

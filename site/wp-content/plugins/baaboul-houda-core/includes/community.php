@@ -330,7 +330,7 @@ function bh_handle_message_wall_form(): void {
  * ------------------------------------------------------------------- */
 
 add_action('template_redirect', function () {
-    if (!is_singular() || wp_is_post_request() || is_admin()) {
+    if (!is_singular() || ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' || is_admin()) {
         return;
     }
     $s = function_exists('bh_settings') ? bh_settings() : [];

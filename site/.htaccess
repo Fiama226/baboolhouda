@@ -42,7 +42,7 @@ RewriteRule . /index.php [L]
 # Protect uploads from script execution
 <IfModule mod_php.c>
     <FilesMatch "\.(?i:php|phtml|php[0-9])$">
-        <If "%{SCRIPT_FILENAME} -match '/wp-content/uploads/'">
+        <If "%{SCRIPT_FILENAME} =~ m#/wp-content/uploads/#">
             Require all denied
         </If>
     </FilesMatch>

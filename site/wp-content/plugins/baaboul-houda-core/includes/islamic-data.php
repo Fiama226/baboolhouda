@@ -26,7 +26,8 @@ function bh_adhkar(): array {
 }
 
 function bh_hadiths(): array {
-    return bh_json_data('hadiths.json');
+    // File shape: { meta: {...}, hadiths: [ {...}, ... ] }
+    return bh_json_data('hadiths.json')['hadiths'] ?? [];
 }
 
 /** Hadith du jour (stable per calendar day). */

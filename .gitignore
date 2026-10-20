@@ -30,3 +30,6 @@ build/tmp/
 .DS_Store
 # wp-config-sample.php IS part of the release (the wp-*.php rule above hides it)
 !site/wp-config-sample.php
+
+# Local environment (secrets/ports)
+.env

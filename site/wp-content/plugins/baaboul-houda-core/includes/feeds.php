@@ -52,8 +52,11 @@ function bh_podcast_feed(): void {
     echo '</channel></rss>';
 }
 
-function esc_xml(string $s): string {
-    return htmlspecialchars($s, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+// WordPress core ships esc_xml() since 5.5; only polyfill when it is missing.
+if (!function_exists('esc_xml')) {
+    function esc_xml(string $s): string {
+        return htmlspecialchars($s, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+    }
 }
 
 /* ---------------------------------------------------------------------
@@ -123,7 +126,7 @@ function bh_rest_search(\WP_REST_Request $req): \WP_REST_Response {
             'orderby'        => 'relevance',
         ]);
         foreach ($query->posts as $p) {
-            $label = $t === 'post' ? 'Actualité' : $t === 'page' ? 'Page' : $t === 'programme' ? 'Programme' : 'Épisode';
+            $label = $t === 'post' ? 'Actualité' : ($t === 'page' ? 'Page' : ($t === 'programme' ? 'Programme' : 'Épisode'));
             $out[] = [
                 'title' => get_the_title($p),
                 'url'   => get_permalink($p),

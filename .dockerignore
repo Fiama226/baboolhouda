@@ -16,7 +16,6 @@ Dockerfile
 docker-compose.yml
 .env
 .env.example
-sources.json
 package.json
 package-lock.json
 vite.config.js

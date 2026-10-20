@@ -45,8 +45,49 @@ services:
       WORDPRESS_TABLE_PREFIX: wp_
       WORDPRESS_DEBUG: "0"
     volumes:
-      # Optional live dev: mount the site tree for hot edits (PHP).
-      - ./site:/var/www/html/site-dev
+      - wp-html:/var/www/html
+      # Live dev: theme + core plugin are mounted from the repo, so edits show
+      # up immediately and a rebuild never leaves stale copies in the volume.
+      - ./site/wp-content/themes/baaboul-houda:/var/www/html/wp-content/themes/baaboul-houda
+      - ./site/wp-content/plugins/baaboul-houda-core:/var/www/html/wp-content/plugins/baaboul-houda-core
+
+  # One-shot: installs WordPress and activates the theme + core plugin, so the
+  # site is ready at first `docker compose up` (no installer to click through).
+  wpcli:
+    image: wordpress:cli-php8.3
+    user: "33:33"   # same uid as www-data in the site image
+    depends_on:
+      - site
+    restart: "no"
+    volumes:
+      - wp-html:/var/www/html
+      - ./site/wp-content/themes/baaboul-houda:/var/www/html/wp-content/themes/baaboul-houda
+      - ./site/wp-content/plugins/baaboul-houda-core:/var/www/html/wp-content/plugins/baaboul-houda-core
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME:-baboul_wp}
+      WORDPRESS_DB_USER: ${DB_USER:-baboul}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-baboulpass}
+      HTTP_PORT: ${HTTP_PORT:-8080}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        set -e
+        until [ -f wp-config.php ] && wp db check >/dev/null 2>&1; do sleep 2; done
+        wp core is-installed 2>/dev/null || wp core install \
+          --url="http://localhost:$${HTTP_PORT}" \
+          --title="TV Baaboul Houda" \
+          --admin_user="${WP_ADMIN_USER:-admin}" \
+          --admin_password="${WP_ADMIN_PASSWORD:-admin}" \
+          --admin_email="${WP_ADMIN_EMAIL:-admin@example.com}" \
+          --skip-email
+        # Plugin first: the theme calls helpers (bh_l) defined by the plugin, and
+        # it is already the (only) active theme after install, so skip it here.
+        wp plugin activate baaboul-houda-core --skip-themes
+        wp theme activate baaboul-houda
+        wp rewrite structure '/%postname%/'
+        echo ">> Ready: theme + core plugin active"
 
 volumes:
   db-data:
+  wp-html:
