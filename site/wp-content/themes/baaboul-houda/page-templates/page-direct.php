@@ -104,16 +104,8 @@ $hasCh2  = !empty($live2['enabled']);
                     <button type="button" class="bh-btn bh-btn--ghost" @click="showQr = false"><?php echo esc_html(bh_l('Fermer', 'إغلاق')); ?></button>
                 </div>
             </div>
-        </div>
 
-        <aside class="bh-hero__side">
-            <div class="bh-card bh-card--ayah" x-data="bhAyah()">
-                <h2 class="bh-card__title"><?php echo esc_html(bh_l('Verset du jour', 'آية اليوم')); ?></h2>
-                <p class="bh-ayah-ar" dir="rtl" x-text="text"></p>
-                <p class="bh-ayah-ref" x-text="ref"></p>
-                <a class="bh-link" :href="coranUrl + (surah ? '/' + surah : '')"><?php echo esc_html(bh_l('Lire le Coran →', 'اقرأ القرآن →')); ?></a>
-            </div>
-
+            <!-- Prayer times: sits under the player so both hero columns stay balanced -->
             <div class="bh-card bh-card--prayer" x-data="bhPrayer()">
                 <h2 class="bh-card__title">
                     <select x-model="city" @change="load()" aria-label="<?php echo esc_attr(bh_l('Ville', 'المدينة')); ?>" class="bh-select bh-select--small">
@@ -129,6 +121,15 @@ $hasCh2  = !empty($live2['enabled']);
                     </template>
                 </div>
                 <p class="bh-prayer__src" x-show="source === 'fallback'"><?php echo esc_html(bh_l('Horaires indicatifs (hors-ligne)', 'أوقات تقريبية (دون اتصال)')); ?></p>
+            </div>
+        </div>
+
+        <aside class="bh-hero__side">
+            <div class="bh-card bh-card--ayah" x-data="bhAyah()">
+                <h2 class="bh-card__title"><?php echo esc_html(bh_l('Verset du jour', 'آية اليوم')); ?></h2>
+                <p class="bh-ayah-ar" dir="rtl" x-text="text"></p>
+                <p class="bh-ayah-ref" x-text="ref"></p>
+                <a class="bh-link" :href="coranUrl + (surah ? '/' + surah : '')"><?php echo esc_html(bh_l('Lire le Coran →', 'اقرأ القرآن →')); ?></a>
             </div>
 
             <div class="bh-card bh-card--dhikr">

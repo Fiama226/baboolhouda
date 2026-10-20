@@ -194,6 +194,9 @@ li.is-active > .bh-nav__link::after { background: var(--bh-green); transform: sc
 .bh-hero__off-next { color: var(--bh-gold); font-weight: 700; }
 .bh-hero__now { margin-top: 12px; font-size: 15px; }
 .bh-hero__side { display: flex; flex-direction: column; gap: 16px; }
+/* Prayer times under the player: one row of six on wide screens (balances the two columns). */
+.bh-hero__live .bh-card--prayer { margin-top: 24px; }
+@media (min-width: 881px) { .bh-hero__live .bh-prayer-grid { grid-template-columns: repeat(6, 1fr); } }
 
 /* ---------------- Cards ---------------- */
 .bh-card { background: var(--bh-card); border: 1px solid var(--bh-line); border-radius: var(--bh-radius); box-shadow: var(--bh-shadow); padding: 18px; display: block; color: inherit; transition: transform .15s, box-shadow .15s; }
