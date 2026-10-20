@@ -87,7 +87,8 @@ add_action('wp_head', function () {
         $src = wp_get_attachment_image_src(get_post_thumbnail_id(), 'large');
         $img = $src ? $src[0] : '';
     }
-    $img = $img ?: $s['og_image_url'];
+    // Fallback chain: admin OG image, then the official logo shipped with the theme.
+    $img = $img ?: $s['og_image_url'] ?: get_template_directory_uri() . '/assets/brand/logo-512.png';
     echo '<meta property="og:type" content="' . (is_singular('episode') ? 'video.other' : 'website') . '">' . "\n";
     echo '<meta property="og:site_name" content="' . esc_attr($site) . '">' . "\n";
     echo '<meta property="og:title" content="' . esc_attr(wp_trim_words($full, 20)) . '">' . "\n";

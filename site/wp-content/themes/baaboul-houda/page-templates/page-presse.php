@@ -35,7 +35,10 @@ $s = function_exists('bh_settings') ? bh_settings() : [];
             <div class="bh-presskit__logo">
                 <?php echo bh_logo_html(96); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             </div>
-            <p><a class="bh-btn" href="<?php echo esc_url(BH_THEME_SRC . '/../svg/logo.svg'); ?>" download><?php echo esc_html(bh_l('Télécharger le logo (SVG)', 'تحميل الشعار (SVG)')); ?></a></p>
+            <p>
+                <a class="bh-btn" href="<?php echo esc_url(bh_brand_url('logo-512.png')); ?>" download><?php echo esc_html(bh_l('Logo (PNG transparent)', 'الشعار (PNG شفاف)')); ?></a>
+                <a class="bh-btn" href="<?php echo esc_url(bh_brand_url('logo-tv-baaboul-houda.jpg')); ?>" download><?php echo esc_html(bh_l('Logo original (JPG)', 'الشعار الأصلي (JPG)')); ?></a>
+            </p>
             <p class="bh-muted"><?php echo esc_html(bh_l('Image de partage : 1200×630 — sur simple demande.', 'صورة المشاركة: 1200×630 — عند الطلب.')); ?></p>
         </div>
     </div>

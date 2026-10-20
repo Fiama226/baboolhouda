@@ -65,7 +65,7 @@ $bh_chevron      = '<svg class="bh-ico bh-ico--chev" viewBox="0 0 24 24" width="
         @keydown.escape.window="open = false">
     <div class="bh-container bh-header__inner">
         <a class="bh-header__brand" href="<?php echo esc_url(function_exists('bh_alt_url') ? bh_alt_url(bh_lang()) : home_url('/')); ?>">
-            <?php echo bh_logo_html(46); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            <?php echo bh_logo_html(54); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             <span class="bh-header__names">
                 <strong><?php bloginfo('name'); ?></strong>
                 <em><?php echo esc_html(bh_l('TV & Radio islamiques', 'قناة تلفزيونية وإذاعية إسلامية')); ?></em>

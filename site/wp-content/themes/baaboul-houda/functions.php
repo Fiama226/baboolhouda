@@ -147,19 +147,16 @@ function bh_client_config(): array {
     ];
 }
 
-/** Logo: admin URL if set, otherwise the theme SVG. */
+/** URL of a file in the theme's assets/brand/ folder (the official logo files). */
+function bh_brand_url(string $file): string {
+    return get_template_directory_uri() . '/assets/brand/' . $file;
+}
+
+/** Logo: admin URL if set (Réglages > Identité), otherwise the official TV Baaboul Houda logo. */
 function bh_logo_html(int $height = 52): string {
-    $s = function_exists('bh_settings') ? bh_settings() : [];
-    if (!empty($s['logo_url'])) {
-        return '<img class="bh-logo-img" src="' . esc_url($s['logo_url']) . '" alt="' . esc_attr(get_bloginfo('name')) . '" height="' . (int) $height . '" loading="eager">';
-    }
-    return '<svg class="bh-logo" viewBox="0 0 64 64" height="' . (int) $height . '" role="img" aria-label="' . esc_attr(get_bloginfo('name')) . '">'
-        . '<rect width="64" height="64" rx="14" fill="var(--bh-green)"/>'
-        . '<path d="M32 12c-9 0-16 7-16 16v6h4v-6c0-6.6 5.4-12 12-12s12 5.4 12 12v6h4v-6c0-9-7-16-16-16z" fill="#fff"/>'
-        . '<circle cx="32" cy="38" r="7" fill="#fff"/>'
-        . '<path d="M30 38a6 6 0 0 1 0-7.5 5 5 0 1 0 0 15A6 6 0 0 1 30 38z" fill="var(--bh-green)"/>'
-        . '<rect x="18" y="49" width="28" height="3.5" rx="1.75" fill="var(--bh-gold)"/>'
-        . '</svg>';
+    $s   = function_exists('bh_settings') ? bh_settings() : [];
+    $src = !empty($s['logo_url']) ? $s['logo_url'] : bh_brand_url('logo-192.png');
+    return '<img class="bh-logo-img" src="' . esc_url($src) . '" alt="' . esc_attr(get_bloginfo('name')) . '" width="' . (int) $height . '" height="' . (int) $height . '" loading="eager" decoding="async">';
 }
 
 /** Current nav URL (language-aware: /ar/{slug}/ in Arabic mode). */
@@ -221,7 +218,8 @@ function bh_nav_is_current(array $item): bool {
 add_action('wp_head', function () {
     // PWA
     echo '<link rel="manifest" href="' . esc_url(home_url('/manifest.json')) . '">' . "\n";
-    echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/favicon.svg') . '" type="image/svg+xml">' . "\n";
+    echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/favicon-32.png') . '" type="image/png" sizes="32x32">' . "\n";
+    echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/icon-192.png') . '" type="image/png" sizes="192x192">' . "\n";
     echo '<link rel="apple-touch-icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/apple-touch-icon.png') . '">' . "\n";
     echo '<meta name="theme-color" content="' . esc_attr(function_exists('bh_opt') ? bh_opt('color_accent', '#0e7a4e') : '#0e7a4e') . '">' . "\n";
 });

@@ -6,7 +6,7 @@
  * Output: site/wp-content/themes/baaboul-houda/assets/dist/icons/
  */
 import { deflateSync } from 'node:zlib';
-import { writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -15,6 +15,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 // (emptyOutDir) never wipes them.
 const outDir = path.join(root, 'site/wp-content/themes/baaboul-houda/assets/icons');
 mkdirSync(outDir, { recursive: true });
+
+// The official logo (assets/brand/logo-tv-baaboul-houda.jpg) provides the app
+// icons: they were rendered from it once and are committed. Never overwrite
+// them with the placeholder emblem below (kept only as a fallback for forks
+// without a logo file).
+if (existsSync(path.join(root, 'site/wp-content/themes/baaboul-houda/assets/brand/logo-tv-baaboul-houda.jpg'))) {
+    console.log('icons: official logo present (assets/brand) — nothing to generate');
+    process.exit(0);
+}
 
 /* ---------------- PNG encoder (RGBA, 8-bit) ---------------- */
 const crcTable = (() => {
@@ -127,5 +136,8 @@ writeIcon('icon-maskable-512.png', 512, 0.15);
 writeIcon('apple-touch-icon.png', 180, 0);
 
 // Favicon: SVG (crisp at any size).
-copyFileSync(path.join(root, 'site/wp-content/themes/baaboul-houda/svg/logo.svg'), path.join(outDir, 'favicon.svg'));
-console.log('icon favicon.svg (copied)');
+const fallbackSvg = path.join(root, 'site/wp-content/themes/baaboul-houda/svg/logo.svg');
+if (existsSync(fallbackSvg)) {
+    copyFileSync(fallbackSvg, path.join(outDir, 'favicon.svg'));
+    console.log('icon favicon.svg (copied)');
+}

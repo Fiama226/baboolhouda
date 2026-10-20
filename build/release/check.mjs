@@ -9,7 +9,7 @@
  *    hadiths (>=40), prayer fallback (6 daily times)
  *  - built assets: theme dist (css/style.css, js/main.js, js/admin.js),
  *    plugin dist (js/admin.js, css/admin.css)
- *  - PWA icons (icon-512, favicon.svg)
+ *  - PWA icons (icon-512, favicon-32) and the official logo files (assets/brand)
  *  - scaffolding: wp-config-sample.php + .htaccess present,
  *    NO committed wp-config.php
  */
@@ -95,7 +95,9 @@ check(path.join(theme, 'single-galerie.php'), 'single-galerie template');
 
 // --- PWA ------------------------------------------------------------------
 check(path.join(theme, 'assets/icons/icon-512.png'), 'PWA icon-512');
-check(path.join(theme, 'assets/icons/favicon.svg'), 'favicon.svg');
+check(path.join(theme, 'assets/icons/favicon-32.png'), 'favicon-32.png');
+check(path.join(theme, 'assets/brand/logo-tv-baaboul-houda.jpg'), 'official logo (original)');
+check(path.join(theme, 'assets/brand/logo-192.png'), 'logo-192.png (header)');
 
 // --- Scaffolding ------------------------------------------------------------
 check(path.join(site, 'wp-config-sample.php'), 'wp-config-sample.php');
