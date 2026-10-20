@@ -22,6 +22,26 @@ function bh_section_pages(): array {
         'contact'   => ['Contact', 'اتصل بنا', 'page-contact.php'],
         'apropos'   => ['À propos', 'من نحن', 'page-apropos.php'],
         'actualites' => ['Actualités', 'الأخبار', 'page-actualites.php'],
+        // Extension v1.1 (audit concurrentiel)
+        'outils'      => ['Outils & calculs', 'الأدوات والحسابات', 'page-outils.php'],
+        'zakat'       => ['Calculateur Zakat', 'حاسبة الزكاة', 'page-zakat.php'],
+        'qibla'       => ['Direction de la Qibla', 'اتجاه القبلة', 'page-qibla.php'],
+        'dates'       => ['Dates & calendrier', 'التواريخ والتقويم', 'page-dates.php'],
+        'tasbih'      => ['Tasbih numérique', 'سبحة إلكترونية', 'page-tasbih.php'],
+        'wudu'        => ['Guide du Wudu', 'دليل الوضوء', 'page-wudu.php'],
+        'mosquees'    => ['Mosquées', 'الجمع', 'page-mosquees.php'],
+        'dons'        => ['Dons & soutien', 'التبرع والدعم', 'page-dons.php'],
+        'publicite'   => ['Publicité', 'الإعلان', 'page-publicite.php'],
+        'temoignages' => ['Témoignages', 'الشهادات', 'page-temoignages.php'],
+        'messages'    => ['Mots des fidèles', 'كلمات المصلين', 'page-messages.php'],
+        'question'    => ['Posez une question', 'اطرح سؤالك', 'page-question.php'],
+        'fatwas'      => ['Questions & réponses', 'الأسئلة والأجوبة', 'page-fatwas.php'],
+        'galeries'    => ['Galleries photo', 'معرض الصور', 'page-galeries.php'],
+        'podcast'     => ['Podcasts', 'البودكاست', 'page-podcast.php'],
+        'ramadan'     => ['Ramadan', 'رمضان', 'page-ramadan.php'],
+        'enfants'     => ['Enfants & jeunesse', 'الأطفال والشباب', 'page-enfants.php'],
+        'presse'      => ['Espace presse', 'الصحافة', 'page-presse.php'],
+        'newsletter'  => ['Newsletter', 'النشرة الإخبارية', 'page-newsletter.php'],
     ];
 }
 
@@ -42,6 +62,11 @@ function bh_activate(): void {
         }
         update_post_meta($page, '_bh_title_ar', $titleAr);
         update_post_meta($page, '_wp_page_template', $template);
+    }
+
+    // Newsletter table (idempotent).
+    if (function_exists('bh_newsletter_install')) {
+        bh_newsletter_install();
     }
 
     // Mark the "direct" page as the static front page (recommended layout).

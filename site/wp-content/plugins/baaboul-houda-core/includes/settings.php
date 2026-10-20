@@ -39,6 +39,41 @@ function bh_default_settings(): array {
         // Contact
         'contact_to'      => '',
         'contact_enabled' => '1',
+        // Deuxième chaîne (« Coran 24/7 »)
+        'live2_enabled'   => '0',
+        'live2_platform'  => 'youtube',
+        'live2_url'       => '',
+        'live2_title_fr'  => 'Coran en continu',
+        'live2_title_ar'  => 'القرآن الكريم 24/7',
+        // Radio : historique « dernier programme diffusé »
+        'radio_history'   => '', // lignes "Titre — HH:MM"
+        // Adhan
+        'adhan_enabled'   => '0',
+        'adhan_url'       => '',
+        // Zakat (référence affichée ; le calcul se fait côté visiteur)
+        'zakat_nisab_amount' => 0,
+        'zakat_currency'     => 'FCFA',
+        'zakat_nisab_fr'     => '',
+        'zakat_nisab_ar'     => '',
+        // Dons
+        'donate_enabled'  => '1',
+        'donate_om'       => '',   // numéro Orange Money
+        'donate_wave'     => '',   // numéro Wave
+        'donate_bank'     => '',   // RIB / banque
+        'donate_email'    => '',
+        // Publicité
+        'ads_enabled'     => '1',
+        'ads_email'       => '',
+        'ads_fr'          => '',
+        'ads_ar'          => '',
+        // Facebook auto-post (direct → page)
+        'fb_autopost'     => '0',
+        'fb_page_id'      => '',
+        'fb_token'        => '',
+        // Newsletter
+        'newsletter_enabled' => '1',
+        // Compteur de vues / tendances
+        'views_enabled'   => '1',
         // Divers
         'analytics_snippet' => '',
         'footer_text_fr'  => 'TV Baaboul Houda — Média islamique en ligne, Ouagadougou (Burkina Faso).',
@@ -70,19 +105,28 @@ function bh_sanitize_settings($input): array {
     foreach (['logo_url', 'og_image_url', 'facebook_url', 'youtube_url', 'whatsapp', 'phone', 'address',
               'live_url', 'radio_url', 'radio_cover_url', 'prayer_city', 'prayer_cities', 'contact_to',
               'live_title_fr', 'live_title_ar', 'radio_title_fr', 'radio_title_ar',
+              'live2_url', 'live2_title_fr', 'live2_title_ar', 'adhan_url',
+              'donate_om', 'donate_wave', 'donate_bank', 'donate_email', 'ads_email',
+              'fb_page_id', 'fb_token',
               'footer_text_fr', 'footer_text_ar'] as $key) {
         $clean[$key] = $str($key);
+    }
+    foreach (['radio_history', 'zakat_nisab_fr', 'zakat_nisab_ar', 'ads_fr', 'ads_ar'] as $key) {
+        $clean[$key] = isset($input[$key]) ? sanitize_textarea_field(wp_unslash($input[$key])) : $clean[$key];
     }
     $clean['color_accent'] = isset($input['color_accent']) && preg_match('/^#[0-9a-fA-F]{6}$/', $input['color_accent']) ? $input['color_accent'] : $clean['color_accent'];
     $clean['email']        = isset($input['email']) ? (sanitize_email($input['email']) ?: $clean['email']) : $clean['email'];
     $clean['contact_to']   = isset($input['contact_to']) ? (sanitize_email($input['contact_to']) ?: $clean['contact_to']) : $clean['contact_to'];
     $clean['analytics_snippet'] = isset($input['analytics_snippet']) ? wp_kses_post(wp_unslash($input['analytics_snippet'])) : $clean['analytics_snippet'];
 
-    foreach (['live_enabled', 'radio_enabled', 'contact_enabled'] as $flag) {
+    foreach (['live_enabled', 'radio_enabled', 'contact_enabled', 'live2_enabled', 'adhan_enabled',
+              'donate_enabled', 'ads_enabled', 'fb_autopost', 'newsletter_enabled', 'views_enabled'] as $flag) {
         $clean[$flag] = !empty($input[$flag]) ? '1' : '0';
     }
 
     $clean['live_platform'] = in_array($input['live_platform'] ?? '', ['youtube', 'facebook', 'hls', 'off'], true) ? $input['live_platform'] : 'off';
+    $clean['live2_platform'] = in_array($input['live2_platform'] ?? '', ['youtube', 'facebook', 'hls', 'off'], true) ? $input['live2_platform'] : 'youtube';
+    $clean['zakat_nisab_amount'] = isset($input['zakat_nisab_amount']) ? max(0, (float) $input['zakat_nisab_amount']) : 0.0;
     $clean['prayer_method'] = isset($input['prayer_method']) && preg_match('/^[0-9]{1,2}$/', (string) $input['prayer_method']) ? (string) (int) $input['prayer_method'] : '3';
 
     // Schedule repeater.
@@ -299,7 +343,60 @@ function bh_render_settings_page(): void {
             bh_field($s, 'footer_text_fr', 'textarea', ['label' => 'Texte du pied de page (français)']);
             bh_field($s, 'footer_text_ar', 'textarea', ['label' => 'نص التذييل (العربية)']);
             bh_field($s, 'analytics_snippet', 'textarea', ['label' => 'Analytique (collez ici le script Google Analytics / Plausible…)', 'help' => 'Optionnel.']);
+            bh_field($s, 'views_enabled', 'checkbox', ['label' => 'Compteur de vues (alimente « Les plus lus »)']);
             ?>
+
+            <h2>📖 Deuxième chaîne — Coran 24/7</h2>
+            <p class="description">Une seconde antenne en continu (ex. récitation du Coran non-stop). Quand elle est active, un sélecteur TV1 / TV2 apparaît sur la page d’accueil.</p>
+            <?php
+            bh_field($s, 'live2_enabled', 'checkbox', ['label' => 'Activer la chaîne 2 (TV2)']);
+            bh_field($s, 'live2_platform', 'select', ['label' => 'Plateforme', 'options' => ['youtube' => 'YouTube', 'facebook' => 'Facebook', 'hls' => 'Flux vidéo (HLS/.m3u8)', 'off' => 'Hors ligne']]);
+            bh_field($s, 'live2_url', 'url', ['label' => 'URL de la diffusion']);
+            bh_field($s, 'live2_title_fr', 'text', ['label' => 'Titre (français)']);
+            bh_field($s, 'live2_title_ar', 'text', ['label' => 'العنوان (العربية)']);
+            ?>
+
+            <h2>📻 Radio — historique</h2>
+            <p class="description">Un programme par ligne : « Titre du programme — heure ». Affiché « Derniers programmes » sur la page radio.</p>
+            <?php bh_field($s, 'radio_history', 'textarea', ['label' => 'Derniers programmes (les plus récents en premier)', 'help' => 'Ex. : Coran de la nuit — 06:00']); ?>
+
+            <h2>🕌 Adhan & Zakat</h2>
+            <?php
+            bh_field($s, 'adhan_enabled', 'checkbox', ['label' => 'Jouer l’adhan à l’heure de la prière (si la page est ouverte)']);
+            bh_field($s, 'adhan_url', 'url', ['label' => 'URL du fichier audio adhan (.mp3)', 'help' => 'Videz pour utiliser l’adhan par défaut (cdn.islamic.network).']);
+            bh_field($s, 'zakat_nisab_amount', 'text', ['label' => 'Seuil du nisab (montant)', 'help' => 'Ex. 8500000 pour 8 500 000 FCFA. Mis à jour chaque mois selon le cours de l’or.']);
+            bh_field($s, 'zakat_currency', 'text', ['label' => 'Devise', 'help' => 'Ex. FCFA, €']);
+            bh_field($s, 'zakat_nisab_fr', 'text', ['label' => 'Note du nisab (français)']);
+            bh_field($s, 'zakat_nisab_ar', 'text', ['label' => 'ملاحظة nisab (العربية)']);
+            ?>
+
+            <h2>💛 Dons</h2>
+            <?php
+            bh_field($s, 'donate_enabled', 'checkbox', ['label' => 'Afficher la page de dons']);
+            bh_field($s, 'donate_om', 'text', ['label' => 'Orange Money (numéro)']);
+            bh_field($s, 'donate_wave', 'text', ['label' => 'Wave (numéro)']);
+            bh_field($s, 'donate_bank', 'text', ['label' => 'Banque / RIB']);
+            bh_field($s, 'donate_email', 'text', ['label' => 'Email à indiquer après don']);
+            ?>
+
+            <h2>📢 Publicité & sponsoring</h2>
+            <?php
+            bh_field($s, 'ads_enabled', 'checkbox', ['label' => 'Afficher la page publicité']);
+            bh_field($s, 'ads_email', 'text', ['label' => 'Email pour les annonceurs']);
+            bh_field($s, 'ads_fr', 'textarea', ['label' => 'Taux & formats (français)', 'help' => 'Ex. : Spot TV 30s — 50 000 FCFA…']);
+            bh_field($s, 'ads_ar', 'textarea', ['label' => 'الأسعار (العربية)']);
+            ?>
+
+            <h2>📣 Publication automatique Facebook</h2>
+            <p class="description">Quand vous cochez « La chaîne est en direct », un message est publié automatiquement sur votre page Facebook.</p>
+            <?php
+            bh_field($s, 'fb_autopost', 'checkbox', ['label' => 'Activer la publication automatique']);
+            bh_field($s, 'fb_page_id', 'text', ['label' => 'Page ID (visible dans l’URL de la page)']);
+            bh_field($s, 'fb_token', 'text', ['label' => 'Jeton d’accès de la page (pages_show_list + pages_manage_posts)']);
+            ?>
+
+            <h2>📧 Newsletter</h2>
+            <?php bh_field($s, 'newsletter_enabled', 'checkbox', ['label' => 'Activer le formulaire d’inscription (pied de page + page Newsletter)']); ?>
 
             <?php submit_button(); ?>
         </form>

@@ -13,7 +13,12 @@ defined('ABSPATH') || exit;
 
 /** Sections that get pretty /ar/{slug}/ URLs (created by activation.php). */
 function bh_pretty_sections(): array {
-    return ['direct', 'radio', 'programmes', 'emissions', 'coran', 'prieres', 'evenements', 'animateurs', 'contact', 'apropos', 'actualites'];
+    return [
+        'direct', 'radio', 'programmes', 'emissions', 'coran', 'prieres', 'evenements', 'animateurs', 'contact', 'apropos', 'actualites',
+        // Extension (competitive audit, v1.1)
+        'outils', 'zakat', 'qibla', 'dates', 'tasbih', 'wudu', 'mosquees', 'dons', 'publicite',
+        'temoignages', 'messages', 'question', 'fatwas', 'galeries', 'podcast', 'ramadan', 'enfants', 'presse', 'newsletter',
+    ];
 }
 
 function bh_is_ar(): bool {

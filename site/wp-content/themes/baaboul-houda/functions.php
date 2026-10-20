@@ -173,7 +173,7 @@ function bh_nav_items(): array {
 add_action('wp_head', function () {
     // PWA
     echo '<link rel="manifest" href="' . esc_url(home_url('/manifest.json')) . '">' . "\n";
-    echo '<link rel="icon" href="' . esc_url(BH_THEME_ASSETS . '/icons/favicon.svg') . '" type="image/svg+xml">' . "\n";
-    echo '<link rel="apple-touch-icon" href="' . esc_url(BH_THEME_ASSETS . '/icons/apple-touch-icon.png') . '">' . "\n";
+    echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/favicon.svg') . '" type="image/svg+xml">' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . esc_url(get_template_directory_uri() . '/assets/icons/apple-touch-icon.png') . '">' . "\n";
     echo '<meta name="theme-color" content="' . esc_attr(function_exists('bh_opt') ? bh_opt('color_accent', '#0e7a4e') : '#0e7a4e') . '">' . "\n";
 });

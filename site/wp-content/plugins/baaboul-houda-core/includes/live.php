@@ -16,6 +16,40 @@ function bh_live(): array {
     ];
 }
 
+/** Second channel (e.g. "Coran 24/7") — same shape as bh_live(). */
+function bh_live_channel2(): array {
+    $s = bh_settings();
+    return [
+        'enabled'  => !empty($s['live2_enabled']) && !empty($s['live2_platform']) && 'off' !== $s['live2_platform'],
+        'platform' => in_array($s['live2_platform'] ?? '', ['youtube', 'facebook', 'hls'], true) ? $s['live2_platform'] : 'off',
+        'url'      => (string) ($s['live2_url'] ?? ''),
+        'title_fr' => (string) ($s['live2_title_fr'] ?? ''),
+        'title_ar' => (string) ($s['live2_title_ar'] ?? ''),
+    ];
+}
+
+/** "Last played" radio list (admin textarea, one "Title — HH:MM" per line). */
+function bh_radio_history(): array {
+    $s = bh_settings();
+    $out = [];
+    foreach (preg_split('/\n+/', (string) ($s['radio_history'] ?? '')) as $line) {
+        $line = trim($line);
+        if ('' === $line) {
+            continue;
+        }
+        $time = '';
+        if (preg_match('/—\s*(\d{1,2}:\d{2})\s*$/', $line, $m)) {
+            $time = $m[1];
+            $line = trim(substr($line, 0, -strlen($m[0])));
+        }
+        $out[] = ['title' => $line, 'time' => $time];
+        if (count($out) >= 8) {
+            break;
+        }
+    }
+    return $out;
+}
+
 /** Extract a YouTube video ID from any common URL shape. */
 function bh_youtube_id(string $url): string {
     if (preg_match('~(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([A-Za-z0-9_-]{11})~', $url, $m)) {

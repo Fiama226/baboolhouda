@@ -17,7 +17,7 @@ const parser = new phpParser({
 });
 
 const files = execSync(
-  'find site -name "*.php" -not -path "*/wp-includes/*" -not -path "*/wp-admin/*" -type f | sort',
+  'find site/wp-content/themes/baaboul-houda site/wp-content/plugins/baaboul-houda-core site/wp-content/mu-plugins -name "*.php" -type f | sort',
   { cwd: repoRoot, encoding: 'utf8' },
 )
   .trim()
