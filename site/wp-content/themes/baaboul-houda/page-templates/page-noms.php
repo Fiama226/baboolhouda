@@ -45,7 +45,7 @@ $xdata = "{ q: '', none: false, n: " . $norm . ",
                     <h2 class="bh-ayah-ar" dir="rtl" lang="ar" style="text-align:center;font-size:34px;margin:4px 0"><?php echo esc_html($nm['ar'] ?? ''); ?></h2>
                     <p style="text-align:center;margin:0 0 6px"><strong><?php echo esc_html($nm['translit'] ?? ''); ?></strong></p>
                     <?php if (!empty($nm['fr'])) : ?>
-                        <p lang="fr" dir="ltr" style="text-align:center;margin:0;color:var(--bh-green-deep)"><?php echo esc_html($nm['fr']); ?></p>
+                        <p class="bh-names__fr" lang="fr" dir="ltr" style="text-align:center;margin:0"><?php echo esc_html($nm['fr']); ?></p>
                     <?php endif; ?>
                     <?php if (!empty($nm['fr_desc'])) : ?>
                         <div style="margin-top:10px">

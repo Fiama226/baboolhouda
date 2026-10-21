@@ -494,6 +494,20 @@ body:has(.bh-radio-bar) .bh-footer { padding-bottom: 68px; }
     .bh-footer__title { font-size: 15px; }
     .bh-footer__grid { gap: 28px 20px; }
 }
+/* Phones: link groups become wrapping chips (tap targets stay 40px+) instead of one tall list each. */
+@media (max-width: 640px) {
+    .bh-footer { margin-top: 28px; padding-top: 28px; }
+    .bh-footer__grid { grid-template-columns: 1fr; gap: 22px; padding-block: 28px 20px; }
+    .bh-footer__col:nth-last-child(2) { grid-column: auto; }
+    .bh-footer__col:not(.bh-footer__today) .bh-footer__links,
+    .bh-footer__col:nth-last-child(2) .bh-footer__links { display: flex; flex-wrap: wrap; gap: 8px; grid-template-columns: none; }
+    .bh-footer__col:not(.bh-footer__today) .bh-footer__links a {
+        min-height: 40px; padding: 0 14px; border: 1px solid rgba(255, 255, 255, .16); border-radius: 999px; font-size: 14px;
+    }
+    .bh-footer__title { margin-bottom: 10px; }
+    .bh-footer__about { display: none; }
+    .bh-footer__schedule li:nth-child(n+4) { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
     .bh-footer__cta, .bh-footer__social, .bh-footer__top-btn { transition: none; }
 }
@@ -1180,3 +1194,37 @@ main select:not(.bh-select), .bh-tasbih__top select {
   body:has(.bh-radio-bar) .bh-wa-float { bottom: 88px; }
   [dir='rtl'] .bh-wa-float { right: auto; left: 14px; }
 }
+
+/* ================= dark mode: text that is dark green in light mode ================= */
+/* --bh-green-deep / --bh-green-dark are also section backgrounds, so the text
+   uses are overridden here instead of redefining the variables. */
+.bh-dark .bh-hero__title,
+.bh-dark .bh-card__title,
+.bh-dark .bh-ayah-ar,
+.bh-dark .bh-prayer strong,
+.bh-dark .bh-section__head h2,
+.bh-dark .bh-section__title,
+.bh-dark .bh-week__col h3,
+.bh-dark .bh-quran-reader__title h1,
+.bh-dark .bh-bismillah,
+.bh-dark .bh-prose h2,
+.bh-dark .bh-prayer-lg__time { color: var(--bh-ink); }
+.bh-dark .bh-card--seerah .bh-card__title,
+.bh-dark .bh-card--seerah h2 { color: var(--bh-gold); }
+.bh-dark .bh-time-range,
+.bh-dark .bh-article__byline,
+.bh-dark .bh-dates__hijri,
+.bh-dark .bh-fasts__date,
+.bh-dark .bh-quran-card--juz .bh-quran-card__num,
+.bh-dark a:not([class]):hover,
+.bh-dark .bh-btn-ghost:hover,
+.bh-dark .bh-share__btn:hover { color: #6fe0ac; }
+.bh-dark .bh-btn-primary:hover, .bh-dark .bh-btn-primary { color: #fff; }
+.bh-dark .bh-quran-card--juz .bh-quran-card__num { background: #1c2b22; }
+.bh-dark .bh-nav__sublink:hover, .bh-dark .bh-nav__sublink.is-current { color: #6fe0ac; }
+.bh-dark .bh-prayer.is-next strong, .bh-dark .bh-prayer-lg__cell.is-next .bh-prayer-lg__time { color: #6fe0ac; }
+.bh-names__fr { color: var(--bh-green-deep); }
+.bh-dark .bh-names__fr { color: #6fe0ac; }
+.bh-dark .bh-table tr.is-today td { background: #1c2b22; }
+.bh-dark .bh-contact-card--wa { background: #0f2a1b; }
+.bh-dark .bh-card--presenter-img, .bh-dark .bh-presenter-placeholder { background: #1c2b22; }
