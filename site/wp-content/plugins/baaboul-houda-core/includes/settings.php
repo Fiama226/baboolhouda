@@ -405,3 +405,18 @@ function bh_render_settings_page(): void {
     </div>
     <?php
 }
+
+/**
+ * Per-visitor throttle for public write endpoints (forms, newsletter, counter).
+ * Returns true when $max hits were already seen within $window seconds.
+ */
+function bh_rate_limited(string $bucket, int $max = 5, int $window = 600): bool {
+    $ip  = isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : '';
+    $key = 'bh_rl_' . md5($bucket . '|' . $ip);
+    $hits = (int) get_transient($key);
+    if ($hits >= $max) {
+        return true;
+    }
+    set_transient($key, $hits + 1, $window);
+    return false;
+}

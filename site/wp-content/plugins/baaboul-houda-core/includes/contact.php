@@ -64,10 +64,14 @@ function bh_handle_contact(): void {
         exit;
     }
 
-    $name    = sanitize_text_field(wp_unslash($_POST['bh_name'] ?? ''));
+    if (bh_rate_limited('contact', 5, 3600)) {
+        $fail();
+    }
+
+    $name    = mb_substr(sanitize_text_field(wp_unslash($_POST['bh_name'] ?? '')), 0, 80);
     $email   = sanitize_email(wp_unslash($_POST['bh_email'] ?? ''));
-    $subject = sanitize_text_field(wp_unslash($_POST['bh_subject'] ?? ''));
-    $message = sanitize_textarea_field(wp_unslash($_POST['bh_message'] ?? ''));
+    $subject = mb_substr(sanitize_text_field(wp_unslash($_POST['bh_subject'] ?? '')), 0, 120);
+    $message = mb_substr(sanitize_textarea_field(wp_unslash($_POST['bh_message'] ?? '')), 0, 5000);
 
     if (!$name || !is_email($email) || !$message) {
         $fail();

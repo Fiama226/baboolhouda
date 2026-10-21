@@ -272,9 +272,13 @@ function bh_handle_question_form(): void {
         wp_safe_redirect(add_query_arg('bh_err', 'nonce', $redirect));
         exit;
     }
-    $name  = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
+    if (!empty($_POST['website']) || bh_rate_limited('question', 3, 3600)) {
+        wp_safe_redirect(add_query_arg('bh_ok', 'question', $redirect)); // silent for bots / floods
+        exit;
+    }
+    $name  = mb_substr(sanitize_text_field(wp_unslash($_POST['name'] ?? '')), 0, 80);
     $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
-    $text  = sanitize_textarea_field(wp_unslash($_POST['question'] ?? ''));
+    $text  = mb_substr(sanitize_textarea_field(wp_unslash($_POST['question'] ?? '')), 0, 2000);
     if ('' === $text) {
         wp_safe_redirect(add_query_arg('bh_err', 'empty', $redirect));
         exit;
@@ -306,8 +310,12 @@ function bh_handle_message_wall_form(): void {
         wp_safe_redirect(add_query_arg('bh_err', 'nonce', $redirect));
         exit;
     }
-    $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
-    $text = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+    if (!empty($_POST['website']) || bh_rate_limited('wall', 3, 3600)) {
+        wp_safe_redirect(add_query_arg('bh_ok', 'wall', $redirect)); // silent for bots / floods
+        exit;
+    }
+    $name = mb_substr(sanitize_text_field(wp_unslash($_POST['name'] ?? '')), 0, 80);
+    $text = mb_substr(sanitize_textarea_field(wp_unslash($_POST['message'] ?? '')), 0, 1000);
     if ('' === $text) {
         wp_safe_redirect(add_query_arg('bh_err', 'empty', $redirect));
         exit;

@@ -159,6 +159,9 @@ function bh_rest_newsletter(\WP_REST_Request $req): \WP_REST_Response {
     if (!is_email($email)) {
         return new \WP_REST_Response(['ok' => false, 'msg' => bh_l('Adresse email invalide.', 'بريد إلكتروني غير صالح.')], 400);
     }
+    if (bh_rate_limited('newsletter', 5, 3600)) {
+        return new \WP_REST_Response(['ok' => false, 'msg' => bh_l('Trop de tentatives, réessayez plus tard.', 'محاولات كثيرة، حاول لاحقاً.')], 429);
+    }
     global $wpdb;
     $table = bh_newsletter_table();
     $count = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE email = %s", $email));
@@ -244,6 +247,9 @@ add_action('rest_api_init', function () {
         'methods'             => 'POST',
         'permission_callback' => '__return_true',
         'callback'            => function ($req) {
+            if (bh_rate_limited('analytics', 120, 600)) {
+                return new \WP_REST_Response(['ok' => true], 200);
+            }
             $day = date('Y-m-d');
             $key = "bh_views_{$day}";
             $all = get_option('bh_analytics', []);
