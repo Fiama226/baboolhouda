@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidéo 3 · Le maquis introuvable — Digital Station</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .set{position:absolute;inset:0;width:100%;height:100%}
+  .bg-terrasse{background:linear-gradient(#ffedcb 0%,#ffe0ae 62%,#f2c078 62.2%,#e6a95c 100%)}
+  .spot{position:absolute;top:-6cqw;width:36cqw;height:64cqw;z-index:2;pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,0) 72%);
+    clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);transform-origin:50% 0}
+  .live{position:absolute;top:1.8cqw;left:2cqw;z-index:40;background:rgba(4,12,28,.55);color:#fff;
+    font-weight:800;font-size:1.5cqw;letter-spacing:.14cqw;padding:.7cqw 1.4cqw;border-radius:99px}
+  .live i{color:#ff5252;font-style:normal}
+  .glowfloor{position:absolute;width:38cqw;height:6.5cqw;border-radius:50%;background:rgba(255,255,255,.16);z-index:3}
+  .spark{position:absolute;color:#ffb054;font-size:2.6cqw;z-index:26;text-shadow:0 0 1cqw rgba(255,176,84,.8)}
+  .web{position:absolute;z-index:5;pointer-events:none}
+  .growl{position:absolute;z-index:28;font-weight:900;color:#e5484d;font-size:2.7cqw;letter-spacing:.06cqw;
+    transform:rotate(-7deg);text-shadow:.18cqw .18cqw 0 #fff,-.18cqw -.18cqw 0 #fff,.18cqw -.18cqw 0 #fff,-.18cqw .18cqw 0 #fff}
+  .growl.on{transform:rotate(-7deg) scale(1)}
+  .orbit{position:absolute;z-index:26;font-size:2.7cqw}
+  .scene.active .orbit{animation:orbit 3.1s linear infinite}
+  @keyframes orbit{0%{transform:translate(0,0)}25%{transform:translate(3.4cqw,-1.7cqw)}50%{transform:translate(.6cqw,-3.2cqw)}75%{transform:translate(-2.6cqw,-1.3cqw)}100%{transform:translate(0,0)}}
+  .scene.active .sway{animation:swing 1.9s ease-in-out infinite alternate;transform-origin:50% 97%}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back" href="index.html">← Toutes les vidéos</a>
+    <h1>« Le maquis introuvable » <span class="badgeprod">SPOT N°3</span></h1>
+    <div class="meta">Déclinaison Restaurants &amp; Maquis · 16:9 · Humour<br>Production : Studio Digital Station</div>
+  </div>
+
+  <div class="stage-wrap">
+    <div class="stage paused" id="stage">
+
+      <!-- ================= PLAN 1 · TERRASSE ================= -->
+      <section class="scene bg-terrasse" id="v3s1">
+        <svg class="set" viewBox="0 0 1280 720" preserveAspectRatio="none">
+          <!-- guirlande lumineuse -->
+          <path d="M-10 54 Q 320 140 640 66 T 1290 54" stroke="#7c4f22" stroke-width="4" fill="none"/>
+          <g fill="#ffd34d">
+            <circle cx="110" cy="88" r="9"/><circle cx="250" cy="104" r="9"/><circle cx="400" cy="102" r="9"/>
+            <circle cx="540" cy="82" r="9"/><circle cx="700" cy="76" r="9"/><circle cx="850" cy="86" r="9"/>
+            <circle cx="1000" cy="92" r="9"/><circle cx="1140" cy="78" r="9"/>
+          </g>
+          <!-- parasol + table gauche -->
+          <g>
+            <path d="M250 640 V330" stroke="#7c4f22" stroke-width="10"/>
+            <path d="M108 336 L392 336 L250 226 Z" fill="#e5484d"/>
+            <path d="M180 336 L250 226 L320 336" stroke="#c23339" stroke-width="6" fill="none"/>
+            <ellipse cx="250" cy="528" rx="98" ry="18" fill="#fff" stroke="#12233f" stroke-width="5"/>
+            <path d="M250 546 v84 M216 632 h68" stroke="#12233f" stroke-width="7"/>
+            <ellipse cx="222" cy="520" rx="22" ry="7" fill="#dbe7f7"/>
+            <ellipse cx="282" cy="522" rx="22" ry="7" fill="#dbe7f7"/>
+          </g>
+          <!-- enseigne -->
+          <g transform="rotate(-2 1052 150)">
+            <rect x="922" y="118" width="262" height="64" rx="9" fill="#7c4f22"/>
+            <text x="1053" y="162" text-anchor="middle" font-size="37" font-weight="900" fill="#fff3d6">★ MAQUIS ★</text>
+          </g>
+          <!-- table droite -->
+          <g>
+            <ellipse cx="1046" cy="548" rx="92" ry="17" fill="#fff" stroke="#12233f" stroke-width="5"/>
+            <path d="M1046 564 v74 M1014 640 h64" stroke="#12233f" stroke-width="7"/>
+            <text x="1030" y="540" font-size="30">🍗</text>
+          </g>
+          <!-- palmier -->
+          <g stroke="#1fae62" stroke-width="10" fill="none" stroke-linecap="round">
+            <path d="M1246 660 C1236 540 1228 470 1204 400" stroke="#7c4f22"/>
+            <path d="M1204 400 q-70 -44 -128 -26 M1204 400 q-40 -66 -104 -76 M1204 400 q6 -76 -44 -116 M1204 400 q54 -58 40 -110"/>
+          </g>
+          <ellipse cx="320" cy="668" rx="120" ry="13" fill="rgba(122,72,20,.2)"/>
+          <ellipse cx="860" cy="668" rx="120" ry="13" fill="rgba(122,72,20,.2)"/>
+        </svg>
+
+        <!-- A affamé -->
+        <svg class="sm" style="left:17cqw;bottom:7cqw;width:18cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M100 92 l-9 14 9 34 9-34 Z" fill="#ff8a00"/>
+            <path class="ln" d="M100 100 L68 136 L94 158"/>
+            <g class="kf-wave" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L144 72"/></g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+            <path class="mouth" d="M82 56 Q100 74 118 56"/>
+            <path d="M93 66 q7 9 14 0 l-1.5 9 q-5.5 4 -11 0 Z" fill="#ff8fab"/>
+          </g>
+        </svg>
+        <span class="growl fx-pop" style="left:27.5cqw;top:31cqw" data-from="1.0" data-to="2.1">GRRR…</span>
+
+        <!-- B téléphone -->
+        <svg class="sm" style="left:58cqw;bottom:7cqw;width:18.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L72 142"/>
+            <g class="kf-tap" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L128 138"/></g>
+            <g transform="rotate(-8 112 146)">
+              <rect x="96" y="118" width="34" height="58" rx="7" fill="#12233f"/>
+              <rect x="101" y="126" width="24" height="42" rx="3" fill="#dff0ff"/>
+            </g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+            <circle class="eye" cx="90" cy="52" r="4.4"/><circle class="eye" cx="112" cy="52" r="4.4"/>
+            <path class="mouth" d="M86 64 Q100 74 114 64"/>
+          </g>
+        </svg>
+
+        <div class="bubble tail-l" style="left:6cqw;top:12cqw" data-from="0.45" data-to="3.3">J’ai une faim de loup ! Tu connais le meilleur maquis de Ouagadougou ?</div>
+        <div class="bubble tail-r" style="left:58cqw;top:11cqw" data-from="3.55" data-to="5.3">Bien sûr ! Deux secondes, je te trouve ça.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 2 · GOOGLE ================= -->
+      <section class="scene bg-soft" id="v3s2">
+        <div class="phone kf-zoom" style="left:38cqw;top:2.6cqw">
+          <div class="notch"><i></i></div>
+          <div class="scr">
+            <div class="g-logo"><span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span></div>
+            <div class="g-search"><span class="mag">🔍</span><span><span data-type="Meilleur maquis Ouagadougou" data-type-from="0.5" data-type-cps="16"></span><span class="caret"></span></span></div>
+            <div class="g-noresult fx-pop" data-from="2.45">
+              <div class="big">🍽️</div>
+              <div class="t1">Aucun résultat trouvé</div>
+              <div class="t2">Nous n’avons rien trouvé pour ce maquis.<br>Vérifiez l’orthographe…<br>ou son existence.</div>
+            </div>
+          </div>
+        </div>
+
+        <svg class="sm" style="left:8cqw;bottom:7cqw;width:19cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L66 148"/>
+            <g class="kf-scratch" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L146 78 L128 44"/></g>
+            <g class="kf-shake" style="transform-origin:100px 80px">
+              <circle class="head" cx="100" cy="46" r="33"/>
+              <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+              <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+              <circle class="eye" cx="88" cy="44" r="4.4"/><circle class="eye" cx="112" cy="44" r="4.4"/>
+              <path d="M78 30 l17 -4" stroke="#12233f" stroke-width="5" stroke-linecap="round"/>
+              <path class="mouth" d="M88 64 h24"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="bubble q" style="left:24.5cqw;top:14cqw" data-from="2.5" data-to="3.3">?!</div>
+        <div class="bubble tail-l" style="left:4cqw;top:4.5cqw" data-from="2.7" data-to="6.5">Hein ? Aucun résultat… bizarre. Il doit être sur Facebook.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 3 · FACEBOOK 2023 ================= -->
+      <section class="scene bg-soft" id="v3s3">
+        <svg class="sm" style="left:3cqw;bottom:7cqw;width:15.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L68 146"/>
+            <path class="ln" d="M100 100 L134 132"/>
+            <g transform="rotate(-8 122 138)"><rect x="106" y="110" width="32" height="54" rx="7" fill="#12233f"/><rect x="111" y="118" width="22" height="38" rx="3" fill="#dff0ff"/></g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+            <circle class="eye" cx="90" cy="50" r="4.4"/><circle class="eye" cx="112" cy="50" r="4.4"/>
+            <path class="mouth" d="M87 66 Q100 59 113 66"/>
+          </g>
+        </svg>
+
+        <div class="phone kf-slideL" style="left:24cqw;top:2.6cqw;width:25.5cqw">
+          <div class="fb-bar">facebook</div>
+          <div style="height:8.5cqw;background:linear-gradient(#d9a05b,#a97a35);display:flex;align-items:center;justify-content:center;font-size:4.4cqw">🍗</div>
+          <div style="padding:1.2cqw 1.6cqw">
+            <div style="font-weight:900;font-size:1.8cqw;color:#12233f;line-height:1.2">Maquis « Le Baobab Gourmand »</div>
+            <div style="font-size:1.25cqw;color:#75879e;margin-top:.3cqw">@baobabgourmand · Restaurant · Ouaga</div>
+            <div class="fb-card" style="margin:1.8cqw 0 0">
+              <div style="font-size:2.8cqw">🦴</div>
+              <div class="t1">Dernière publication</div>
+              <div style="font-size:2.7cqw;font-weight:900;color:#b3261e;margin-top:.4cqw">il y a 3 ans</div>
+              <div class="t2">« Menu du jour : poulet braisé ! »<br>— 14 mars 2023</div>
+            </div>
+          </div>
+          <svg class="web kf-web" style="top:3.2cqw;right:0;width:10.5cqw" viewBox="0 0 150 150">
+            <g stroke="#a8bdd6" stroke-width="3.5" fill="none">
+              <path pathLength="1000" d="M150 0 L8 14 M150 0 L34 60 M150 0 L72 104 M150 0 L116 132 M150 0 L146 148"/>
+              <path pathLength="1000" d="M70 8 Q56 30 62 48 Q76 62 86 84 Q104 82 118 100" transform="translate(-16 4)"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- assiette vide + mouche -->
+        <svg style="position:absolute;left:55cqw;top:33cqw;width:16cqw;z-index:8" viewBox="0 0 200 150">
+          <ellipse cx="100" cy="66" rx="86" ry="16" fill="#fff" stroke="#12233f" stroke-width="5"/>
+          <path d="M100 82 v52 M68 136 h64" stroke="#12233f" stroke-width="7"/>
+          <ellipse cx="100" cy="60" rx="44" ry="10" fill="#eef2f7" stroke="#c3d2e6" stroke-width="4"/>
+          <g transform="rotate(-24 100 58)">
+            <rect x="82" y="52" width="36" height="11" rx="5" fill="#efe7d2" stroke="#b8ab8e" stroke-width="3"/>
+            <circle cx="80" cy="50" r="8" fill="#efe7d2" stroke="#b8ab8e" stroke-width="3"/>
+            <circle cx="82" cy="64" r="8" fill="#efe7d2" stroke="#b8ab8e" stroke-width="3"/>
+            <circle cx="118" cy="50" r="8" fill="#efe7d2" stroke="#b8ab8e" stroke-width="3"/>
+            <circle cx="120" cy="64" r="8" fill="#efe7d2" stroke="#b8ab8e" stroke-width="3"/>
+          </g>
+        </svg>
+        <span class="orbit" style="left:61cqw;top:27cqw">🪰</span>
+
+        <!-- A qui dépérit de faim -->
+        <svg class="sm sway" style="left:78cqw;bottom:6.5cqw;width:16.5cqw" viewBox="0 0 200 320">
+          <path class="ln" d="M100 186 L72 272"/><path class="ln" d="M100 186 L130 272"/>
+          <path class="ln" d="M66 272 h20 M124 272 h20"/>
+          <path class="ln" d="M97 92 Q91 140 100 186"/>
+          <path d="M98 100 l-8 12 8 30 8-30 Z" fill="#ff8a00"/>
+          <path class="ln" d="M96 108 L68 174"/>
+          <path class="ln" d="M96 108 L124 168"/>
+          <g transform="translate(-3 8) rotate(6 97 58)">
+            <circle class="head" cx="97" cy="58" r="33"/>
+            <path d="M76 54 q7 6 14 0 M104 54 q7 6 14 0" stroke="#12233f" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path class="mouth" d="M88 76 h20"/>
+            <path d="M93 78 q5 12 10 0 l-1 10 q-4 3 -8 0 Z" fill="#ff8fab"/>
+          </g>
+          <text x="126" y="30" font-size="26" fill="#ffb054">✦</text>
+          <text x="36" y="22" font-size="20" fill="#ffb054">✦</text>
+        </svg>
+
+        <div class="bubble tail-l small" style="left:2cqw;top:13cqw;max-width:21cqw" data-from="2.35" data-to="5.7">Sa dernière publication… c’était il y a trois ans.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 4 · CHEZ TANTI ================= -->
+      <section class="scene bg-terrasse" id="v3s4">
+        <div class="floor-line"></div>
+        <!-- A désespéré qui pointe -->
+        <svg class="sm" style="left:3cqw;bottom:8cqw;width:16.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M100 92 l-9 14 9 34 9-34 Z" fill="#ff8a00"/>
+            <path class="ln" d="M100 100 L66 134 L92 156"/>
+            <g class="kf-tap" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L152 94"/></g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M78 26 l16 7 M106 33 l16 -7" stroke="#12233f" stroke-width="5" stroke-linecap="round"/>
+            <circle class="eye" cx="88" cy="44" r="4.4"/><circle class="eye" cx="112" cy="44" r="4.4"/>
+            <ellipse cx="100" cy="64" rx="7" ry="9" fill="#12233f"/>
+          </g>
+        </svg>
+        <span class="fx-pop" style="position:absolute;left:15.5cqw;top:16cqw;font-size:3.6cqw;z-index:28" data-from="5.2">🤤</span>
+
+        <!-- site concurrent -->
+        <div class="browser fx-pop" style="left:23.5cqw;top:8.5cqw;width:54cqw" data-from="2.4">
+          <div class="bar">
+            <span class="dot" style="background:#e5484d"></span><span class="dot" style="background:#fbbc05"></span><span class="dot" style="background:#1fae62"></span>
+            <span class="url">🔒 www.chez-tanti.bf</span>
+          </div>
+          <div class="site-head" style="background:#9c3d1e">
+            <span class="lg">CHEZ <span>TANTI</span></span>
+            <nav><span>Menu</span><span>Livraison</span><span>Contact</span></nav>
+          </div>
+          <div class="site-hero" style="background:linear-gradient(#fff2df,#ffe7c4)">
+            <div style="float:right;text-align:center;margin:.2cqw 0 .6cqw 1.6cqw;line-height:1">
+              <div style="font-size:6.4cqw">🍗</div>
+              <div style="font-size:3.4cqw">🔥🔥🔥</div>
+            </div>
+            <h3>Le vrai poulet braisé, livré bien chaud !</h3>
+            <p style="line-height:1.75">🍗 Poulet braisé — 2 500 F<br>
+            🐟 Capitaine braisé — 3 500 F<br>
+            ⭐⭐⭐⭐⭐ (326 avis) · Ouvert jusqu’à 23 h</p>
+            <span class="btn-cta" style="background:#25D366;border-color:#128C4B;box-shadow:0 .8cqw 1.8cqw rgba(37,211,102,.45)" data-from="0" data-to="4.4">Commander sur WhatsApp</span>
+            <span class="btn-cta ok fx-pop" data-from="4.45">✓ Commande envoyée !</span>
+            <svg class="cursor-arrow kf-cursor" style="left:12cqw;bottom:2.2cqw;animation-delay:3.1s" viewBox="0 0 40 52">
+              <path d="M6 2 L34 26 L20 28 L26 44 L17 48 L11 32 L4 40 Z" fill="#fff" stroke="#12233f" stroke-width="3"/>
+            </svg>
+            <span class="click-ring" style="left:10.5cqw;bottom:1cqw;border-color:#25D366" data-from="4.35" data-to="5.1"></span>
+          </div>
+        </div>
+        <span class="spark kf-twinkle fx-fade" style="left:22.5cqw;top:6cqw" data-from="2.7">✦</span>
+        <span class="spark kf-twinkle fx-fade" style="left:76.5cqw;top:10cqw;animation-delay:.3s" data-from="2.9">✦</span>
+
+        <!-- B émerveillé -->
+        <svg class="sm" style="left:80.5cqw;bottom:8cqw;width:16.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <g class="kf-wave2" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L58 64"/></g>
+            <path class="ln" d="M100 100 L146 70"/>
+            <g transform="rotate(-8 112 84)"><rect x="140" y="46" width="26" height="44" rx="6" fill="#12233f"/><rect x="144" y="53" width="18" height="30" rx="2" fill="#dff0ff"/></g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+            <text x="79" y="55" font-size="21" fill="#ff8a00">★</text>
+            <text x="103" y="55" font-size="21" fill="#ff8a00">★</text>
+            <path class="mouth" d="M84 62 Q100 76 116 62"/>
+            <path d="M94 68 q6 8 12 0 l-1 8 q-5 3 -10 0 Z" fill="#ff8fab"/>
+          </g>
+        </svg>
+
+        <div class="bubble tail-l" style="left:2.5cqw;top:5cqw" data-from="0.4" data-to="2.35">Vite ! Tape juste : poulet braisé !</div>
+        <div class="bubble tail-r" style="left:64cqw;top:3.4cqw" data-from="4.75" data-to="8.5">Oh ! Eux, on les trouve… et en plus, ça a l’air délicieux !</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 5 · PRÉSENTATRICE ================= -->
+      <section class="scene bg-brand" id="v3s5">
+        <div class="spot kf-spotL" style="left:2cqw"></div>
+        <div class="spot kf-spotR" style="right:2cqw"></div>
+        <div class="live"><i>●</i> SPOT PUB</div>
+        <div class="glowfloor" style="left:6.5cqw;bottom:4.2cqw"></div>
+
+        <svg class="sm kf-pop" style="left:9cqw;bottom:4.5cqw;width:21cqw;animation-delay:.05s" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="lnw" d="M88 206 L78 272"/><path class="lnw" d="M112 206 L124 272"/>
+            <path class="lnw" d="M72 272 h20 M118 272 h20"/>
+            <path d="M100 92 L62 210 L138 210 Z" fill="#ff8a00"/>
+            <path class="lnw" d="M100 80 L100 96"/>
+            <g class="kf-gesture" style="transform-origin:100px 104px"><path class="lnw" d="M100 104 L56 132"/></g>
+            <path class="lnw" d="M100 104 L136 92 L130 64"/>
+            <line x1="130" y1="64" x2="126" y2="50" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="124" cy="42" r="13" fill="#fff"/>
+            <circle cx="124" cy="42" r="13" fill="none" stroke="#12233f" stroke-width="4"/>
+            <circle cx="133" cy="20" r="11" fill="#6b4423"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 44 a33 33 0 0 1 66 0 l0 10 a33 26 0 0 0 -66 0 Z" fill="#6b4423"/>
+            <circle class="eye" cx="88" cy="46" r="4.4"/><circle class="eye" cx="112" cy="46" r="4.4"/>
+            <path d="M76 40 l-6 -4 M124 40 l6 -4" stroke="#12233f" stroke-width="4" stroke-linecap="round"/>
+            <path class="mouth" d="M80 58 Q100 78 120 58"/>
+            <circle cx="76" cy="58" r="5" fill="#ff9ecb" opacity=".7"/><circle cx="124" cy="58" r="5" fill="#ff9ecb" opacity=".7"/>
+          </g>
+        </svg>
+
+        <div class="kt" style="left:36cqw;top:11cqw;width:61cqw">
+          <div class="l1 fx-up" data-from="0.5">Si vos clients ne vous trouvent pas,</div>
+          <div class="l2 fx-up" data-from="2.3">ils mangent <span class="hl">chez vos concurrents.</span></div>
+          <div class="l3 fx-up" data-from="4.2">Ne soyez pas le meilleur maquis…<br><b>que personne ne connaît.</b></div>
+        </div>
+        <div class="wm on-dark">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 6 · FIN ================= -->
+      <section class="scene bg-end" id="v3s6">
+        <span class="pix" style="left:8cqw;top:9cqw;width:1.6cqw;height:1.6cqw"></span>
+        <span class="pix" style="right:9cqw;top:12cqw;width:1.4cqw;height:1.4cqw"></span>
+        <span class="pix" style="left:15cqw;bottom:12cqw;width:1.2cqw;height:1.2cqw;opacity:.75"></span>
+        <div class="endwrap">
+          <div class="logo-card kf-zoom" style="animation-delay:.25s">
+            <img src="assets/logo.png" alt="Digital Station — Bâtir le numérique de demain">
+            <div class="shine"></div>
+          </div>
+          <div class="end-cta fx-up" data-from="1.3">
+            Restaurateurs, maquis : devenez enfin visibles !
+            <small>Contactez Digital Station pour créer votre site web · Bâtir le numérique de demain</small>
+          </div>
+          <div class="chips fx-up" data-from="2.3">
+            <span class="chip">🌐 Sites web</span>
+            <span class="chip">📱 Réseaux sociaux</span>
+            <span class="chip">🔍 Référencement Google</span>
+          </div>
+          <div class="contact fx-up" data-from="2.8">
+            <img class="qr" src="assets/qr-whatsapp.png" alt="QR WhatsApp Digital Station">
+            <div class="cinfo">
+              <span class="cnum">📞 +226 70 71 93 66</span>
+              <span class="csub"><b>WhatsApp</b> — scannez le QR code ou appelez-nous</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="subs" id="subs"></div>
+
+      <div class="bigplay" id="bigplay">
+        <div class="ring"><div class="disc">▶</div></div>
+        <h2>« Le maquis introuvable »</h2>
+        <p>Cliquez pour lancer le spot · 🔊 pensez à activer le son</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="cbtn main" id="btnPlay" title="Lecture / Pause (Espace)">▶</button>
+    <button class="cbtn" id="btnRestart" title="Recommencer">⟲</button>
+    <div class="progress" id="progress" title="Cliquez pour aller à un plan">
+      <div class="track"><div class="fill" id="pfill"></div><span id="pticks"></span><div class="head" id="phead"></div></div>
+    </div>
+    <div class="time" id="time">0:00 / 0:00</div>
+    <div class="chapter" id="chapter"></div>
+    <button class="cbtn" id="btnMute" title="Son on/off">🔊</button>
+    <button class="cbtn" id="btnFs" title="Plein écran">⛶</button>
+    <div class="hint">Astuce : Espace = lecture/pause · ← → = plan précédent/suivant · cliquez la barre pour sauter à un plan.</div>
+  </div>
+</div>
+
+<script src="js/player.js"></script>
+<script>
+SpotPlayer({
+  scenes: [
+    { id:"v3s1", title:"Plan 1 · Une faim de loup", min:5.8,
+      audio:[{src:"audio/v3-a1.mp3",  at:0.4, rate:1.2,  est:3.45},
+             {src:"audio/v3-b1t.mp3", at:3.5, rate:1.2,  est:2.06}],
+      subs:[{from:0.45, to:3.3, who:"Stickman A", cls:"a", text:"J’ai une faim de loup ! Tu connais le meilleur maquis de Ouagadougou ?"},
+            {from:3.55, to:5.25, who:"Stickman B", cls:"b", text:"Bien sûr ! Deux secondes, je te trouve ça."}] },
+    { id:"v3s2", title:"Plan 2 · Recherche Google", min:7.0,
+      audio:[{src:"audio/v3-b2t.mp3", at:2.65, rate:1.25, est:4.78}],
+      subs:[{from:2.7, to:6.45, who:"Stickman B", cls:"b", text:"Hein ? Aucun résultat… bizarre. Il doit être sur Facebook."}] },
+    { id:"v3s3", title:"Plan 3 · Facebook… 2023", min:6.2,
+      audio:[{src:"audio/v3-b3t.mp3", at:2.3, rate:1.25, est:4.15}],
+      subs:[{from:2.35, to:5.6, who:"Stickman B", cls:"b", text:"Sa dernière publication… c’était il y a trois ans."}] },
+    { id:"v3s4", title:"Plan 4 · Chez Tanti régale", min:9.0,
+      audio:[{src:"audio/v3-a2t.mp3", at:0.35, rate:1.2,  est:2.35},
+             {src:"audio/v3-b4t.mp3", at:4.7,  rate:1.25, est:4.65}],
+      subs:[{from:0.4,  to:2.35, who:"Stickman A", cls:"a", text:"Vite ! Tape juste : poulet braisé !"},
+            {from:4.75, to:8.4,  who:"Stickman B", cls:"b", text:"Oh ! Eux, on les trouve… et en plus, ça a l’air délicieux !"}] },
+    { id:"v3s5", title:"Plan 5 · Le message", min:7.4,
+      audio:[{src:"audio/v3-pres.mp3", at:0.35, rate:1.2, est:7.75}],
+      subs:[{from:0.4,  to:3.6, who:"Présentatrice", cls:"p", text:"Si vos clients ne vous trouvent pas, ils mangent chez vos concurrents."},
+            {from:3.65, to:6.85, who:"Présentatrice", cls:"p", text:"Ne soyez pas le meilleur maquis… que personne ne connaît."}] },
+    { id:"v3s6", title:"Plan 6 · Digital Station", min:5.6,
+      audio:[{src:"audio/tagline.mp3", at:0.5, rate:1.05, est:4.75}],
+      subs:[{from:0.55, to:5.1, who:"Voix off", cls:"v", text:"Digital Station. Bâtir le numérique de demain."}] }
+  ]
+});
+</script>
+</body>
+</html>
