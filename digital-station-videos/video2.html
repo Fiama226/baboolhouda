@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidéo 2 · Les services Digital Station</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .set{position:absolute;inset:0;width:100%;height:100%}
+  .sign{position:absolute;z-index:26;background:#5c6b7d;color:#fff;font-weight:900;font-size:1.85cqw;
+    padding:1cqw 1.7cqw;border:.35cqw solid #3d4856;border-radius:.9cqw;letter-spacing:.04cqw;
+    box-shadow:0 1cqw 2cqw rgba(6,29,66,.3)}
+  .burst{position:absolute;z-index:1;opacity:.55}
+  .scene.active .burst{animation:spinSlow 16s linear infinite}
+  @keyframes spinSlow{to{transform:rotate(360deg)}}
+  .drift{position:absolute;z-index:2}
+  .scene.active .drift{animation:drift 9s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translateX(0)}to{transform:translateX(5cqw)}}
+  .blueprint{position:absolute;border:.4cqw dashed #7db4ff;border-radius:1.6cqw;
+    background:repeating-linear-gradient(0deg,rgba(28,99,198,.06) 0 1px,transparent 1px 3cqw),
+               repeating-linear-gradient(90deg,rgba(28,99,198,.06) 0 1px,transparent 1px 3cqw),#f2f8ff}
+  .brick{position:absolute;border-radius:.8cqw;box-shadow:0 .5cqw 1cqw rgba(6,29,66,.18)}
+  .notif{position:absolute;z-index:24;background:#fff;color:var(--ink);border:.3cqw solid var(--ink);
+    border-radius:1.4cqw;padding:1cqw 1.5cqw;font-size:1.75cqw;font-weight:700;
+    box-shadow:0 1cqw 2.2cqw rgba(6,29,66,.25);white-space:nowrap}
+  .heart{position:absolute;z-index:20;font-weight:900;text-shadow:0 .4cqw 1cqw rgba(0,0,0,.2)}
+  .ping{position:absolute;border:.5cqw solid var(--green);border-radius:50%;z-index:19}
+  .scene.active .ping{animation:pulseRing 1.3s ease-out infinite}
+  .result{padding:1.1cqw 1.5cqw;border-radius:1.2cqw;margin:0 1.4cqw 1.1cqw}
+  .result .rt{font-size:1.85cqw;font-weight:800;color:#1a56c4}
+  .result .ru{font-size:1.25cqw;color:#1fae62;font-weight:600}
+  .result .rd{font-size:1.3cqw;color:#5a6b80;margin-top:.3cqw;line-height:1.4}
+  .result.top{background:#e9fdf2;border:.4cqw solid var(--green);position:relative}
+  .result.dim{opacity:.55}
+  .result.dim .rt{color:#5a6b80;font-size:1.6cqw}
+  .n1badge{position:absolute;top:-1.6cqw;right:1.6cqw;background:var(--orange);color:#fff;font-weight:900;
+    font-size:1.7cqw;padding:.6cqw 1.3cqw;border-radius:99px;border:.3cqw solid #d96f00;box-shadow:0 .6cqw 1.4cqw rgba(255,138,0,.5)}
+  .counterbox{text-align:center;margin-top:1.2cqw}
+  .counterbox .num{font-size:3.6cqw;font-weight:900;color:var(--blue-dark)}
+  .counterbox .lbl{font-size:1.35cqw;color:#75879e;font-weight:700;letter-spacing:.1cqw}
+  .walkers{position:absolute;display:flex;gap:1.6cqw;align-items:flex-end;z-index:14}
+  .walkers .sm{position:relative}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back" href="index.html">← Toutes les vidéos</a>
+    <h1>« Vos services Digital Station » <span class="badgeprod">SPOT N°2</span></h1>
+    <div class="meta">Format 16:9 · Stickmen animés · Présentation d’offre<br>Production : Studio Digital Station</div>
+  </div>
+
+  <div class="stage-wrap">
+    <div class="stage paused" id="stage">
+
+      <!-- ================= PLAN 1 · LA BOUTIQUE VIDE ================= -->
+      <section class="scene bg-street" id="v2s1">
+        <svg class="set" viewBox="0 0 1280 720" preserveAspectRatio="none">
+          <g opacity=".75">
+            <ellipse cx="1060" cy="96" rx="120" ry="34" fill="#aeb9c6"/>
+            <ellipse cx="1010" cy="80" rx="70" ry="28" fill="#bcc7d3"/>
+          </g>
+          <!-- boutique -->
+          <g>
+            <rect x="330" y="210" width="620" height="420" fill="#c3ccd6" stroke="#5c6b7d" stroke-width="7"/>
+            <path d="M310 300 L970 300 L930 360 L350 360 Z" fill="#8b98a7"/>
+            <path d="M380 300 l-12 60 M470 300 l-6 60 M560 300 v60 M650 300 l6 60 M740 300 l12 60 M830 300 l16 60 M920 300 l18 60" stroke="#75879e" stroke-width="7"/>
+            <g transform="rotate(-3 640 262)">
+              <rect x="450" y="232" width="380" height="58" rx="8" fill="#e8edf2" stroke="#5c6b7d" stroke-width="6"/>
+              <text x="640" y="273" text-anchor="middle" font-size="36" font-weight="900" fill="#5c6b7d">MA BOUTIQUE</text>
+            </g>
+            <rect x="372" y="392" width="230" height="160" fill="#aeb9c6" stroke="#5c6b7d" stroke-width="6"/>
+            <g transform="rotate(-7 486 440)">
+              <rect x="436" y="418" width="100" height="42" rx="6" fill="#fff" stroke="#5c6b7d" stroke-width="4"/>
+              <text x="486" y="447" text-anchor="middle" font-size="21" font-weight="800" fill="#8b98a7">OUVERT</text>
+            </g>
+            <rect x="690" y="392" width="150" height="238" fill="#9fabbb" stroke="#5c6b7d" stroke-width="6"/>
+          </g>
+          <!-- lampadaire éteint -->
+          <g stroke="#5c6b7d" stroke-width="9" stroke-linecap="round">
+            <path d="M150 630 V330 M150 330 q-4 -44 44 -48" fill="none"/>
+          </g>
+          <circle cx="202" cy="292" r="14" fill="#8b98a7"/>
+          <ellipse cx="640" cy="664" rx="560" ry="16" fill="rgba(18,35,63,.12)"/>
+        </svg>
+        <svg class="drift" style="left:74cqw;top:4cqw;width:16cqw" viewBox="0 0 200 80">
+          <ellipse cx="100" cy="48" rx="78" ry="24" fill="#aeb9c6"/><ellipse cx="66" cy="36" rx="42" ry="20" fill="#bcc7d3"/>
+        </svg>
+
+        <!-- entrepreneur triste -->
+        <svg class="sm" style="left:55.5cqw;bottom:6.5cqw;width:16.5cqw;transform:rotate(-2deg)" viewBox="0 0 200 320">
+          <path class="ln" d="M100 186 L72 272"/><path class="ln" d="M100 186 L130 272"/>
+          <path class="ln" d="M66 272 h20 M124 272 h20"/>
+          <path class="ln" d="M97 92 Q91 140 100 186"/>
+          <path d="M84 112 h30 l4 56 h-38 Z" fill="#7d8a99"/>
+          <path class="ln" d="M96 108 L68 174"/>
+          <path class="ln" d="M96 108 L126 170"/>
+          <g transform="translate(-3 8) rotate(7 97 58)">
+            <circle class="head" cx="97" cy="58" r="33"/>
+            <circle class="eye" cx="85" cy="56" r="4.4"/><circle class="eye" cx="109" cy="56" r="4.4"/>
+            <path d="M78 74 q10 7 19 1 q9 6 19 -1" stroke="#12233f" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path class="mouth" d="M84 86 Q97 77 110 86"/>
+          </g>
+        </svg>
+
+        <svg class="kf-tumble" style="position:absolute;bottom:5.5cqw;left:0;width:6.5cqw;animation-delay:1.1s" viewBox="0 0 100 100">
+          <g stroke="#a98a5f" stroke-width="5" fill="none"><circle cx="50" cy="50" r="34"/><path d="M24 34 q26 18 50 4 M28 68 q24 -20 48 -6 M40 20 q6 30 22 56 M64 18 q-4 34 -22 60"/></g>
+        </svg>
+
+        <div class="sign fx-fade" style="left:38cqw;top:16cqw" data-from="1.3">0 client aujourd’hui…</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 2 · LE HÉROS ARRIVE ================= -->
+      <section class="scene bg-street-happy" id="v2s2">
+        <svg class="burst" style="left:4cqw;top:6cqw;width:44cqw" viewBox="0 0 200 200">
+          <path d="M100 0 L112 62 L168 22 L130 78 L196 62 L140 102 L200 116 L138 130 L182 172 L124 140 L132 202 L102 146 L74 200 L76 140 L18 174 L62 128 L0 118 L60 100 L6 62 L70 76 L34 20 L88 62 Z" fill="#ffd34d"/>
+        </svg>
+        <svg class="set" viewBox="0 0 1280 720" preserveAspectRatio="none">
+          <circle cx="1120" cy="86" r="44" fill="#ffd34d"/>
+          <g>
+            <rect x="560" y="210" width="560" height="420" fill="#ffffff" stroke="#12233f" stroke-width="7"/>
+            <path d="M545 300 L1135 300 L1100 362 L580 362 Z" fill="#ff8a00"/>
+            <path d="M630 300 l-8 62 M720 300 l-3 62 M810 300 v62 M900 300 l3 62 M990 300 l8 62" stroke="#fff" stroke-width="9"/>
+            <rect x="665" y="230" width="350" height="56" rx="8" fill="#0a2c5f"/>
+            <text x="840" y="269" text-anchor="middle" font-size="33" font-weight="900" fill="#fff">MA BOUTIQUE</text>
+            <rect x="596" y="392" width="210" height="160" fill="#bfe0ff" stroke="#12233f" stroke-width="6"/>
+            <rect x="880" y="392" width="140" height="238" fill="#1c63c6" stroke="#12233f" stroke-width="6"/>
+          </g>
+          <ellipse cx="300" cy="664" rx="150" ry="15" fill="rgba(18,35,63,.15)"/>
+          <ellipse cx="840" cy="664" rx="300" ry="15" fill="rgba(18,35,63,.12)"/>
+        </svg>
+
+        <!-- héros Digital Station -->
+        <svg class="sm kf-drop" style="left:14cqw;bottom:6cqw;width:20cqw;animation-delay:.1s" viewBox="0 0 200 320">
+          <defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2b74d8"/><stop offset="1" stop-color="#0a2c5f"/></linearGradient></defs>
+          <g class="kf-bob">
+            <g class="kf-cape" style="transform-origin:100px 84px">
+              <path d="M100 82 C38 118 26 208 48 266 L100 242 L152 266 C174 208 162 118 100 82 Z" fill="url(#hg)"/>
+            </g>
+            <path d="M100 178 L64 270 M100 178 L136 270" stroke="#1250a8" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <path class="ln" d="M56 272 h22 M128 272 h22"/>
+            <path d="M100 80 L100 180" stroke="#1250a8" stroke-width="17" stroke-linecap="round"/>
+            <path d="M84 168 h32" stroke="#ff8a00" stroke-width="8" stroke-linecap="round"/>
+            <path d="M100 100 L62 124 L80 152" stroke="#1250a8" stroke-width="13" stroke-linecap="round" fill="none"/>
+            <path d="M100 100 L140 72 L147 38" stroke="#1250a8" stroke-width="13" stroke-linecap="round" fill="none"/>
+            <circle cx="148" cy="34" r="9" fill="#1250a8"/>
+            <circle cx="100" cy="124" r="17" fill="#fff" stroke="#ff8a00" stroke-width="4"/>
+            <path d="M94 114 L108 124 L100 126 L103 136 L97 138 L94 128 L90 132 Z" fill="#1c63c6"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 h66 v15 h-66 Z" fill="#0a2c5f"/>
+            <circle cx="88" cy="48" r="4.2" fill="#fff"/><circle cx="112" cy="48" r="4.2" fill="#fff"/>
+            <path class="mouth" d="M83 62 Q100 76 117 62"/>
+          </g>
+        </svg>
+        <span class="fx-fade" style="position:absolute;left:15cqw;bottom:4.6cqw;font-size:3.4cqw;z-index:11" data-from="0.78" data-to="1.5"><span class="kf-dust" style="display:inline-block;animation-delay:.8s">💨</span></span>
+        <span class="fx-fade" style="position:absolute;left:28cqw;bottom:4.6cqw;font-size:2.6cqw;z-index:11" data-from="0.78" data-to="1.5"><span class="kf-dust" style="display:inline-block;animation-delay:.85s">💨</span></span>
+
+        <!-- entrepreneur : triste → wow → heureux -->
+        <svg class="sm" style="left:70cqw;bottom:6.5cqw;width:16.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L66 270"/><path class="ln" d="M100 178 L134 270"/>
+            <path class="ln" d="M60 270 h20 M128 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M84 108 h32 l4 58 h-40 Z" fill="#1fae62"/>
+            <g class="kf-wave2" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L60 68"/></g>
+            <path class="ln" d="M100 100 L142 72"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+            <path d="M80 60 q10 7 20 1 q10 6 20 -1" stroke="#12233f" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path class="mouth" d="M85 74 Q100 65 115 74" data-from="0" data-to="0.75"/>
+            <circle cx="100" cy="72" r="7.5" fill="#12233f" data-from="0.75" data-to="2.3"/>
+            <path class="mouth" d="M82 68 Q100 84 118 68" data-from="2.3"/>
+          </g>
+        </svg>
+
+        <div class="bigtitle fx-pop" style="top:4.2cqw;width:92cqw;font-size:4.4cqw" data-from="0.95">
+          NOUS RENDONS VOTRE ENTREPRISE <span class="hl">VISIBLE&nbsp;!</span>
+        </div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 3 · SITE WEB ================= -->
+      <section class="scene bg-soft" id="v2s3">
+        <div class="floor-line"></div>
+        <div class="blueprint" style="left:21cqw;top:7cqw;width:57cqw;height:33cqw">
+          <div class="brick kf-brick" style="left:0;top:0;width:100%;height:4.2cqw;background:#dbe7f7;border-radius:1.4cqw 1.4cqw 0 0;animation-delay:.15s">
+            <span style="position:absolute;left:1.4cqw;top:1.3cqw;width:1.5cqw;height:1.5cqw;border-radius:50%;background:#e5484d"></span>
+            <span style="position:absolute;left:3.6cqw;top:1.3cqw;width:1.5cqw;height:1.5cqw;border-radius:50%;background:#fbbc05"></span>
+            <span style="position:absolute;left:5.8cqw;top:1.3cqw;width:1.5cqw;height:1.5cqw;border-radius:50%;background:#1fae62"></span>
+            <span style="position:absolute;left:9cqw;top:.9cqw;right:2cqw;height:2.4cqw;background:#fff;border-radius:99px;font-size:1.3cqw;color:#4a5f7c;font-weight:600;padding:.4cqw 1.2cqw">🔒 www.votre-entreprise.bf</span>
+          </div>
+          <div class="brick kf-brick" style="left:1.6cqw;top:6cqw;width:25cqw;height:4.4cqw;background:#0a2c5f;color:#fff;font-weight:900;font-size:1.9cqw;padding:1.1cqw 1.4cqw;animation-delay:.45s">VOTRE ENTREPRISE</div>
+          <div class="brick kf-brick" style="right:1.6cqw;top:6cqw;width:24cqw;height:4.4cqw;background:#cfe1f7;animation-delay:.65s"></div>
+          <div class="brick kf-brick" style="left:1.6cqw;top:12cqw;width:33cqw;height:11cqw;background:linear-gradient(#bfe0ff,#8fc1f7);animation-delay:.85s;font-size:4.6cqw;text-align:center;padding-top:2.4cqw">🏗️</div>
+          <div class="brick kf-brick" style="right:1.6cqw;top:12cqw;width:19cqw;height:3cqw;background:#e3edf9;animation-delay:1.05s"></div>
+          <div class="brick kf-brick" style="right:1.6cqw;top:16.2cqw;width:15cqw;height:3cqw;background:#e3edf9;animation-delay:1.2s"></div>
+          <div class="brick kf-brick" style="right:1.6cqw;top:20.4cqw;width:17cqw;height:3cqw;background:#e3edf9;animation-delay:1.35s"></div>
+          <div class="brick kf-brick" style="left:1.6cqw;top:25cqw;width:26cqw;height:5.4cqw;background:#ff8a00;color:#fff;font-weight:900;font-size:2cqw;text-align:center;padding-top:1.5cqw;border-radius:99px;animation-delay:1.65s">Demander un devis</div>
+          <div class="brick kf-brick" style="left:30cqw;top:25cqw;width:25.4cqw;height:5.4cqw;background:#eaf3ff;animation-delay:1.8s;font-size:1.5cqw;color:#1fae62;font-weight:800;padding:1.7cqw 1.4cqw">⚡ Rapide · 📱 Mobile · 🔒 Sécurisé</div>
+        </div>
+
+        <!-- grue -->
+        <svg class="sm" style="left:79cqw;top:1cqw;width:19cqw;z-index:6" viewBox="0 0 240 340">
+          <path d="M196 340 V40 M178 340 L196 300 L214 340 M178 260 L196 224 L214 260 M178 184 L196 148 L214 184" stroke="#e5484d" stroke-width="8" fill="none"/>
+          <g class="kf-crane" style="transform-origin:196px 40px">
+            <path d="M196 40 L30 58 M196 40 L232 54" stroke="#e5484d" stroke-width="8"/>
+            <path d="M64 55 V120" stroke="#12233f" stroke-width="5"/>
+            <rect x="44" y="120" width="42" height="26" rx="5" fill="#ffb054" stroke="#d96f00" stroke-width="4"/>
+          </g>
+        </svg>
+
+        <!-- maçon stickman -->
+        <svg class="sm" style="left:5cqw;bottom:5.5cqw;width:14.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L66 270"/><path class="ln" d="M100 178 L134 270"/>
+            <path class="ln" d="M60 270 h20 M128 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L64 140"/>
+            <g class="kf-tap" style="transform-origin:100px 100px">
+              <path class="ln" d="M100 100 L140 128"/>
+              <rect x="136" y="118" width="30" height="18" rx="4" fill="#c96f2e" transform="rotate(24 151 127)"/>
+            </g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M66 42 a34 30 0 0 1 68 0 Z" fill="#fbbc05"/>
+            <rect x="60" y="40" width="80" height="9" rx="4.5" fill="#fbbc05"/>
+            <circle class="eye" cx="88" cy="50" r="4.4"/><circle class="eye" cx="112" cy="50" r="4.4"/>
+            <path class="mouth" d="M85 64 Q100 75 115 64"/>
+          </g>
+        </svg>
+
+        <div class="svc-label fx-up" data-from="0.9"><span>01</span>CRÉATION DE SITES WEB</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 4 · RÉSEAUX SOCIAUX ================= -->
+      <section class="scene bg-soft" id="v2s4">
+        <div class="phone kf-slideL" style="left:13cqw;top:2.6cqw;width:24cqw">
+          <div class="notch"><i></i></div>
+          <div class="scr">
+            <div style="display:flex;gap:1.2cqw;align-items:center;margin-top:1cqw">
+              <span style="width:4.6cqw;height:4.6cqw;border-radius:50%;background:#1c63c6;color:#fff;font-weight:900;font-size:2cqw;display:flex;align-items:center;justify-content:center">E</span>
+              <span style="font-size:1.55cqw;font-weight:800;color:#12233f;line-height:1.2">Votre Entreprise<br><span style="color:#75879e;font-weight:600;font-size:1.25cqw">@votre.entreprise.bf</span></span>
+            </div>
+            <div style="margin-top:1.6cqw;background:linear-gradient(#bfe0ff,#8fc1f7);border-radius:1.2cqw;height:12cqw;display:flex;align-items:center;justify-content:center;font-size:5cqw">🏗️</div>
+            <div style="font-size:1.9cqw;margin-top:1cqw">❤️ 💬 🔁 <span style="float:right">🔖</span></div>
+            <div class="counterbox">
+              <div class="num"><span data-count="10000" data-count-from="0.6" data-count-dur="2.3">0</span></div>
+              <div class="lbl">ABONNÉS</div>
+            </div>
+          </div>
+        </div>
+
+        <span class="heart kf-heart fx-fade" style="left:39cqw;top:30cqw;color:#e5484d;font-size:3cqw" data-from="0.3">♥</span>
+        <span class="heart kf-heart fx-fade" style="left:42.5cqw;top:34cqw;color:#ff8a00;font-size:2.4cqw;animation-delay:.7s" data-from="0.5">♥</span>
+        <span class="heart kf-heart fx-fade" style="left:37.5cqw;top:38cqw;font-size:2.6cqw;animation-delay:1.3s" data-from="0.7">👍</span>
+        <span class="heart kf-heart fx-fade" style="left:43cqw;top:40cqw;color:#e5484d;font-size:2.1cqw;animation-delay:1.9s" data-from="0.9">♥</span>
+        <span class="heart kf-heart fx-fade" style="left:40cqw;top:43cqw;font-size:2.3cqw;animation-delay:2.5s" data-from="1.1">👍</span>
+
+        <div class="notif fx-right" style="left:54cqw;top:8cqw" data-from="0.7">💬 WhatsApp — « Bonjour, je veux un devis ! »</div>
+        <div class="notif fx-right" style="left:58cqw;top:16.5cqw" data-from="1.4">❤️ +128 j’aime sur votre publication</div>
+        <div class="notif fx-right" style="left:54cqw;top:25cqw" data-from="2.1">👥 +350 nouveaux abonnés cette semaine</div>
+
+        <!-- entrepreneur ravi -->
+        <svg class="sm" style="left:82cqw;bottom:8.5cqw;width:13.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L66 270"/><path class="ln" d="M100 178 L134 270"/>
+            <path class="ln" d="M60 270 h20 M128 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M84 108 h32 l4 58 h-40 Z" fill="#1fae62"/>
+            <g class="kf-wave" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L56 66"/></g>
+            <path class="ln" d="M100 100 L146 68"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+            <path d="M80 58 q10 7 20 1 q10 6 20 -1" stroke="#12233f" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path class="mouth" d="M81 66 Q100 84 119 66"/>
+          </g>
+        </svg>
+
+        <div class="svc-label fx-up" data-from="0.6"><span>02</span>RÉSEAUX SOCIAUX</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 5 · GOOGLE N°1 ================= -->
+      <section class="scene bg-soft" id="v2s5">
+        <div class="browser kf-slideL" style="left:5cqw;top:6cqw;width:50cqw">
+          <div class="bar">
+            <span class="dot" style="background:#e5484d"></span><span class="dot" style="background:#fbbc05"></span><span class="dot" style="background:#1fae62"></span>
+            <span class="url">google.bf — « entreprise BTP Burkina »</span>
+          </div>
+          <div style="padding:1.4cqw 0 .6cqw">
+            <div class="result top">
+              <span class="n1badge fx-pop" data-from="0.9">👑 N°1</span>
+              <div class="rt">Votre Entreprise ⭐⭐⭐⭐⭐</div>
+              <div class="ru">www.votre-entreprise.bf</div>
+              <div class="rd">Construction, rénovation, forages. Devis gratuit sous 24 h. Ouvert · Ferme à 18 h 00.</div>
+            </div>
+            <div class="result dim"><div class="rt">Concurrent SARL</div><div class="ru">www.concurrent-sarl.bf</div></div>
+            <div class="result dim"><div class="rt">Une autre entreprise</div><div class="ru">www.autre-entreprise.com</div></div>
+          </div>
+        </div>
+
+        <!-- téléphone qui sonne -->
+        <span class="ping fx-fade" style="left:61.5cqw;top:9.5cqw;width:8cqw;height:8cqw" data-from="1.2"></span>
+        <div class="fx-pop" style="position:absolute;left:62.3cqw;top:10.3cqw;width:6.4cqw;height:6.4cqw;border-radius:50%;background:#1fae62;display:flex;align-items:center;justify-content:center;font-size:3cqw;z-index:20;box-shadow:0 1cqw 2cqw rgba(31,174,98,.5)" data-from="1.2">
+          <span class="kf-ringphone" style="display:inline-block">📞</span>
+        </div>
+        <div class="notif fx-right" style="left:62cqw;top:19.5cqw" data-from="1.7">📈 Les demandes de devis affluent !</div>
+
+        <!-- clients qui arrivent -->
+        <div class="walkers kf-walkx fx-fade" style="left:60cqw;bottom:9.5cqw;animation-delay:.5s" data-from="0.4">
+          <svg class="sm" style="width:8cqw" viewBox="0 0 200 320">
+            <g class="kf-legL" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L82 268"/></g>
+            <g class="kf-legR" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L118 268"/></g>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L66 140"/><path class="ln" d="M100 100 L132 138"/>
+            <rect x="126" y="134" width="30" height="36" rx="5" fill="#ff8a00"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#e5484d"/>
+            <circle class="eye" cx="88" cy="46" r="4.4"/><circle class="eye" cx="112" cy="46" r="4.4"/>
+            <path class="mouth" d="M85 60 Q100 72 115 60"/>
+          </svg>
+          <svg class="sm" style="width:8cqw" viewBox="0 0 200 320">
+            <g class="kf-legL" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L82 268"/></g>
+            <g class="kf-legR" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L118 268"/></g>
+            <path d="M100 96 L66 200 L134 200 Z" fill="#ff9ecb"/>
+            <path class="ln" d="M100 100 L64 138"/><path class="ln" d="M100 100 L134 136"/>
+            <rect x="130" y="118" width="22" height="38" rx="5" fill="#12233f"/>
+            <circle cx="132" cy="20" r="11" fill="#3a2a18"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 44 a33 33 0 0 1 66 0 l0 9 a33 26 0 0 0 -66 0 Z" fill="#3a2a18"/>
+            <circle class="eye" cx="88" cy="48" r="4.4"/><circle class="eye" cx="112" cy="48" r="4.4"/>
+            <path class="mouth" d="M85 62 Q100 74 115 62"/>
+          </svg>
+          <svg class="sm" style="width:8cqw" viewBox="0 0 200 320">
+            <g class="kf-legL" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L82 268"/></g>
+            <g class="kf-legR" style="transform-origin:100px 178px"><path class="ln" d="M100 178 L118 268"/></g>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M100 94 l-8 12 8 30 8-30 Z" fill="#1c63c6"/>
+            <g class="kf-wave" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L60 70"/></g>
+            <path class="ln" d="M100 100 L134 140"/>
+            <rect x="128" y="136" width="34" height="26" rx="5" fill="#7c4f22"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <circle class="eye" cx="88" cy="44" r="4.4"/><circle class="eye" cx="112" cy="44" r="4.4"/>
+            <path class="mouth" d="M84 58 Q100 73 116 58"/>
+          </svg>
+        </div>
+
+        <div class="svc-label fx-up" data-from="0.7"><span>03</span>RÉFÉRENCEMENT GOOGLE</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 6 · FIN ================= -->
+      <section class="scene bg-end" id="v2s6">
+        <span class="pix" style="left:8cqw;top:9cqw;width:1.6cqw;height:1.6cqw"></span>
+        <span class="pix" style="right:9cqw;top:12cqw;width:1.4cqw;height:1.4cqw"></span>
+        <span class="pix" style="left:15cqw;bottom:12cqw;width:1.2cqw;height:1.2cqw;opacity:.75"></span>
+        <div class="endwrap">
+          <div class="logo-card kf-zoom" style="animation-delay:.25s">
+            <img src="assets/logo.png" alt="Digital Station — Bâtir le numérique de demain">
+            <div class="shine"></div>
+          </div>
+          <div class="end-cta fx-up" data-from="1.3">
+            Prêt à être visible ? Contactez Digital Station.
+            <small>Bâtir le numérique de demain</small>
+          </div>
+          <div class="chips fx-up" data-from="2.3">
+            <span class="chip">01 · 🌐 Sites web</span>
+            <span class="chip">02 · 📱 Réseaux sociaux</span>
+            <span class="chip">03 · 🔍 Référencement Google</span>
+          </div>
+          <div class="contact fx-up" data-from="2.8">
+            <img class="qr" src="assets/qr-whatsapp.png" alt="QR WhatsApp Digital Station">
+            <div class="cinfo">
+              <span class="cnum">📞 +226 70 71 93 66</span>
+              <span class="csub"><b>WhatsApp</b> — scannez le QR code ou appelez-nous</span>
+            </div>
+          </div>
+        </div>
+        <!-- héros + entrepreneur disent au revoir -->
+        <svg class="sm" style="left:3.5cqw;bottom:2.5cqw;width:10.5cqw" viewBox="0 0 200 320">
+          <path d="M100 82 C40 118 28 206 50 262 L100 240 L150 262 C172 206 160 118 100 82 Z" fill="#1c63c6"/>
+          <path class="lnw" d="M100 178 L66 268"/><path class="lnw" d="M100 178 L134 268"/>
+          <path class="lnw" d="M100 80 L100 178"/>
+          <g class="kf-wave" style="transform-origin:100px 100px"><path class="lnw" d="M100 100 L56 64"/></g>
+          <path class="lnw" d="M100 100 L140 130"/>
+          <circle class="head" cx="100" cy="46" r="33"/>
+          <path d="M67 40 h66 v15 h-66 Z" fill="#0a2c5f"/>
+          <circle cx="88" cy="48" r="4.2" fill="#fff"/><circle cx="112" cy="48" r="4.2" fill="#fff"/>
+          <path class="mouth" d="M84 62 Q100 75 116 62"/>
+        </svg>
+        <svg class="sm" style="right:3.5cqw;bottom:2.5cqw;width:10.5cqw" viewBox="0 0 200 320">
+          <path class="lnw" d="M100 178 L66 268"/><path class="lnw" d="M100 178 L134 268"/>
+          <path class="lnw" d="M100 80 L100 178"/>
+          <path d="M84 108 h32 l4 58 h-40 Z" fill="#1fae62"/>
+          <path class="lnw" d="M100 100 L62 132"/>
+          <g class="kf-wave2" style="transform-origin:100px 100px"><path class="lnw" d="M100 100 L144 64"/></g>
+          <circle class="head" cx="100" cy="46" r="33"/>
+          <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+          <path d="M80 58 q10 7 20 1 q10 6 20 -1" stroke="#12233f" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path class="mouth" d="M81 66 Q100 84 119 66"/>
+        </svg>
+      </section>
+
+      <div class="subs" id="subs"></div>
+
+      <div class="bigplay" id="bigplay">
+        <div class="ring"><div class="disc">▶</div></div>
+        <h2>« Vos services Digital Station »</h2>
+        <p>Cliquez pour lancer le spot · 🔊 pensez à activer le son</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="cbtn main" id="btnPlay" title="Lecture / Pause (Espace)">▶</button>
+    <button class="cbtn" id="btnRestart" title="Recommencer">⟲</button>
+    <div class="progress" id="progress" title="Cliquez pour aller à un plan">
+      <div class="track"><div class="fill" id="pfill"></div><span id="pticks"></span><div class="head" id="phead"></div></div>
+    </div>
+    <div class="time" id="time">0:00 / 0:00</div>
+    <div class="chapter" id="chapter"></div>
+    <button class="cbtn" id="btnMute" title="Son on/off">🔊</button>
+    <button class="cbtn" id="btnFs" title="Plein écran">⛶</button>
+    <div class="hint">Astuce : Espace = lecture/pause · ← → = plan précédent/suivant · cliquez la barre pour sauter à un plan.</div>
+  </div>
+</div>
+
+<script src="js/player.js"></script>
+<script>
+SpotPlayer({
+  scenes: [
+    { id:"v2s1", title:"Plan 1 · Le problème", min:4.6,
+      audio:[{src:"audio/v2-accroche.mp3", at:0.5, rate:1.15, est:8.83, spanTo:1}],
+      subs:[{from:0.55, to:4.3, who:"Voix off", cls:"v", text:"Vous avez la meilleure entreprise… mais personne ne le sait ?"}] },
+    { id:"v2s2", title:"Plan 2 · Digital Station arrive", min:4.4,
+      audio:[],
+      subs:[{from:0.05, to:3.6, who:"Voix off", cls:"v", text:"Digital Station rend votre entreprise visible !"}] },
+    { id:"v2s3", title:"Plan 3 · Création de sites web", min:3.2,
+      audio:[{src:"audio/v2-services.mp3", at:0.3, rate:1.15, est:9.89, spanTo:4}],
+      subs:[{from:0.35, to:3.05, who:"Présentatrice", cls:"p", text:"Un site web professionnel, rapide et moderne."}] },
+    { id:"v2s4", title:"Plan 4 · Réseaux sociaux", min:3.2,
+      audio:[],
+      subs:[{from:0.05, to:2.95, who:"Présentatrice", cls:"p", text:"Une présence qui fait le buzz sur les réseaux sociaux."}] },
+    { id:"v2s5", title:"Plan 5 · Référencement Google", min:3.8,
+      audio:[],
+      subs:[{from:0.05, to:3.1, who:"Présentatrice", cls:"p", text:"Premier sur Google, premier dans l’esprit de vos clients !"}] },
+    { id:"v2s6", title:"Plan 6 · Digital Station", min:5.6,
+      audio:[{src:"audio/tagline.mp3", at:0.5, rate:1.05, est:4.75}],
+      subs:[{from:0.55, to:5.1, who:"Voix off", cls:"v", text:"Digital Station. Bâtir le numérique de demain."}] }
+  ]
+});
+</script>
+</body>
+</html>

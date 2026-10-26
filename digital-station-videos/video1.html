@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidéo 1 · Le BTP introuvable — Digital Station</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .set{position:absolute;inset:0;width:100%;height:100%}
+  .spot{position:absolute;top:-6cqw;width:36cqw;height:64cqw;z-index:2;pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,0) 72%);
+    clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);transform-origin:50% 0}
+  .live{position:absolute;top:1.8cqw;left:2cqw;z-index:40;background:rgba(4,12,28,.55);color:#fff;
+    font-weight:800;font-size:1.5cqw;letter-spacing:.14cqw;padding:.7cqw 1.4cqw;border-radius:99px}
+  .live i{color:#ff5252;font-style:normal}
+  .glowfloor{position:absolute;width:38cqw;height:6.5cqw;border-radius:50%;background:rgba(255,255,255,.16);z-index:3}
+  .sign{position:absolute;z-index:26;background:#a9713a;color:#fff8ec;font-weight:900;font-size:1.9cqw;
+    padding:1cqw 1.7cqw;border:.35cqw solid #7c4f22;border-radius:.9cqw;transform:rotate(-4deg);
+    box-shadow:0 1cqw 2cqw rgba(6,29,66,.3);letter-spacing:.06cqw}
+  .sign.on{transform:rotate(-4deg)}
+  .spark{position:absolute;color:#ffb054;font-size:2.6cqw;z-index:26;text-shadow:0 0 1cqw rgba(255,176,84,.8)}
+  .spider-outer{position:absolute;z-index:22;width:12cqw}
+  .spider-swing{transform-origin:50% 0}
+  .scene.active .spider-swing{animation:swing 2.6s ease-in-out infinite alternate}
+  .thread{width:.32cqw;height:14cqw;background:#9db6d9;margin:0 auto}
+  .web{position:absolute;z-index:5;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back" href="index.html">← Toutes les vidéos</a>
+    <h1>« Le BTP introuvable » <span class="badgeprod">SPOT N°1</span></h1>
+    <div class="meta">Format 16:9 · Stickmen animés · Ton humoristique<br>Production : Studio Digital Station</div>
+  </div>
+
+  <div class="stage-wrap">
+    <div class="stage paused" id="stage">
+
+      <!-- ================= PLAN 1 · BUREAU ================= -->
+      <section class="scene bg-office" id="v1s1">
+        <svg class="set" viewBox="0 0 1280 720" preserveAspectRatio="none">
+          <!-- fenêtre -->
+          <g>
+            <rect x="56" y="46" width="284" height="264" rx="10" fill="#bfe0ff" stroke="#12233f" stroke-width="7"/>
+            <circle cx="118" cy="104" r="26" fill="#ffd34d"/>
+            <rect x="150" y="170" width="52" height="140" fill="#7db4ff"/>
+            <rect x="212" y="140" width="60" height="170" fill="#5b9bf5"/>
+            <path d="M240 140 V96 M240 104 H320 M286 104 V132" stroke="#12233f" stroke-width="6" fill="none"/>
+            <line x1="198" y1="46" x2="198" y2="310" stroke="#12233f" stroke-width="6"/>
+          </g>
+          <!-- affiche -->
+          <g>
+            <rect x="962" y="52" width="256" height="196" rx="10" fill="#ffffff" stroke="#12233f" stroke-width="7"/>
+            <text x="1090" y="102" text-anchor="middle" font-size="31" font-weight="900" fill="#0a2c5f">ENTREPRISE</text>
+            <text x="1090" y="140" text-anchor="middle" font-size="31" font-weight="900" fill="#0a2c5f">BTP</text>
+            <text x="1090" y="190" text-anchor="middle" font-size="34">🏆</text>
+            <text x="1090" y="228" text-anchor="middle" font-size="25" font-weight="800" fill="#ff8a00">« N°1 »</text>
+          </g>
+          <!-- horloge -->
+          <g>
+            <circle cx="640" cy="104" r="40" fill="#fff" stroke="#12233f" stroke-width="7"/>
+            <path d="M640 104 V78 M640 104 L662 114" stroke="#12233f" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <!-- table + maquette -->
+          <g>
+            <rect x="452" y="498" width="46" height="120" fill="#7c4f22"/>
+            <rect x="782" y="498" width="46" height="120" fill="#7c4f22"/>
+            <rect x="420" y="472" width="440" height="28" rx="8" fill="#a9713a" stroke="#7c4f22" stroke-width="5"/>
+            <rect x="560" y="420" width="54" height="52" fill="#c9d8ec" stroke="#12233f" stroke-width="4"/>
+            <rect x="622" y="396" width="62" height="76" fill="#a9c4e8" stroke="#12233f" stroke-width="4"/>
+            <path d="M700 472 V410 M664 418 H744 M722 418 V446" stroke="#e5484d" stroke-width="5" fill="none"/>
+            <rect x="712" y="446" width="20" height="16" fill="#e5484d"/>
+            <rect x="470" y="452" width="64" height="14" rx="4" fill="#fff" stroke="#9db6d9" stroke-width="3"/>
+          </g>
+          <!-- plante -->
+          <g>
+            <path d="M1178 618 h64 l-8 64 h-48 Z" fill="#c96f2e"/>
+            <path d="M1210 618 C1190 570 1168 560 1152 548 M1210 618 C1212 566 1206 540 1210 516 M1210 618 C1230 572 1252 562 1268 550" stroke="#1fae62" stroke-width="9" fill="none" stroke-linecap="round"/>
+          </g>
+          <ellipse cx="300" cy="662" rx="120" ry="14" fill="rgba(18,35,63,.13)"/>
+          <ellipse cx="760" cy="662" rx="120" ry="14" fill="rgba(18,35,63,.13)"/>
+        </svg>
+
+        <!-- Stickman A fier, cravate -->
+        <svg class="sm" style="left:13cqw;bottom:7.5cqw;width:18.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M100 92 l-9 14 9 34 9-34 Z" fill="#ff8a00"/>
+            <path class="ln" d="M100 100 L62 122 L80 152"/>
+            <g class="kf-gesture" style="transform-origin:100px 100px">
+              <path class="ln" d="M100 100 L142 86 L146 54"/>
+              <path class="ln" d="M146 54 l2 -14"/>
+            </g>
+            <g class="kf-nod" style="transform-origin:100px 80px">
+              <circle class="head" cx="100" cy="46" r="33"/>
+              <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+              <path d="M78 28 l18 -5 M104 23 l18 5" stroke="#12233f" stroke-width="5" stroke-linecap="round"/>
+              <path class="mouth" d="M82 56 Q100 74 118 56"/>
+            </g>
+          </g>
+        </svg>
+
+        <!-- Stickman B casquette + téléphone -->
+        <svg class="sm" style="left:56cqw;bottom:7.5cqw;width:18.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L72 142"/>
+            <g class="kf-tap" style="transform-origin:100px 100px">
+              <path class="ln" d="M100 100 L128 138"/>
+            </g>
+            <g transform="rotate(-8 112 146)">
+              <rect x="96" y="118" width="34" height="58" rx="7" fill="#12233f"/>
+              <rect x="101" y="126" width="24" height="42" rx="3" fill="#dff0ff"/>
+            </g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+            <circle class="eye" cx="90" cy="52" r="4.4"/><circle class="eye" cx="112" cy="52" r="4.4"/>
+            <path class="mouth" d="M86 64 Q100 74 114 64"/>
+          </g>
+        </svg>
+
+        <div class="bubble tail-l" style="left:5cqw;top:5.5cqw" data-from="0.4" data-to="3.1">Tu connais la meilleure entreprise de BTP du Burkina&nbsp;?</div>
+        <div class="bubble tail-r" style="left:57cqw;top:5.5cqw" data-from="3.25" data-to="4.95">Évidemment. Deux secondes, je te la trouve.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 2 · GOOGLE ================= -->
+      <section class="scene bg-soft" id="v1s2">
+        <div class="phone kf-zoom" style="left:38cqw;top:2.6cqw">
+          <div class="notch"><i></i></div>
+          <div class="scr">
+            <div class="g-logo"><span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span></div>
+            <div class="g-search"><span class="mag">🔍</span><span><span data-type="Meilleure entreprise BTP Burkina" data-type-from="0.5" data-type-cps="16"></span><span class="caret"></span></span></div>
+            <div class="g-noresult fx-pop" data-from="2.7">
+              <div class="big">🕳️</div>
+              <div class="t1">Aucun résultat trouvé</div>
+              <div class="t2">Nous n’avons rien trouvé pour cette entreprise.<br>Vérifiez l’orthographe…<br>ou son existence.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- B perplexe -->
+        <svg class="sm" style="left:8cqw;bottom:7cqw;width:19cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path class="ln" d="M100 100 L66 148"/>
+            <g class="kf-scratch" style="transform-origin:100px 100px">
+              <path class="ln" d="M100 100 L146 78 L128 44"/>
+            </g>
+            <g class="kf-shake" style="transform-origin:100px 80px">
+              <circle class="head" cx="100" cy="46" r="33"/>
+              <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+              <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+              <circle class="eye" cx="88" cy="44" r="4.4"/><circle class="eye" cx="112" cy="44" r="4.4"/>
+              <path d="M78 30 l17 -4" stroke="#12233f" stroke-width="5" stroke-linecap="round"/>
+              <path class="mouth" d="M88 64 h24"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="bubble q" style="left:24.5cqw;top:14cqw" data-from="2.75" data-to="3.6">?!</div>
+        <div class="bubble tail-l" style="left:4cqw;top:4.5cqw" data-from="2.9" data-to="6.6">Bizarre… elle doit être sur Facebook.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 3 · FACEBOOK ================= -->
+      <section class="scene bg-soft" id="v1s3">
+        <div class="phone kf-slideL" style="left:15cqw;top:2.6cqw">
+          <div class="fb-bar">facebook</div>
+          <div class="fb-card">
+            <div class="lock">🔒</div>
+            <div class="t1">Ce contenu n’est pas disponible</div>
+            <div class="t2">Le propriétaire a peut-être supprimé la page…<br>ou elle n’a jamais existé.</div>
+          </div>
+          <!-- toile d'araignée pixelisée -->
+          <svg class="web kf-web" style="top:3.4cqw;right:0;width:13.5cqw" viewBox="0 0 150 150">
+            <g stroke="#a8bdd6" stroke-width="3.5" fill="none">
+              <path pathLength="1000" d="M150 0 L8 14 M150 0 L34 60 M150 0 L72 104 M150 0 L116 132 M150 0 L146 148"/>
+              <path pathLength="1000" d="M112 4 Q96 22 96 38 Q104 50 110 66 Q124 62 134 74 Q144 66 147 78" transform="translate(-38 2)"/>
+              <path pathLength="1000" d="M70 8 Q56 30 62 48 Q76 62 86 84 Q104 82 118 100 Q134 92 141 112" transform="translate(-16 4)"/>
+              <path pathLength="1000" d="M26 12 Q18 38 30 58 Q48 76 60 104 Q82 106 100 126" transform="translate(-4 2)"/>
+            </g>
+            <g fill="#a8bdd6"><rect x="128" y="34" width="7" height="7"/><rect x="96" y="66" width="7" height="7"/><rect x="60" y="40" width="7" height="7"/><rect x="112" y="104" width="7" height="7"/></g>
+          </svg>
+          <svg class="web kf-web" style="bottom:0;left:0;width:9cqw;transform:scale(-1,1) rotate(180deg)" viewBox="0 0 150 150">
+            <g stroke="#b9cadd" stroke-width="3.5" fill="none">
+              <path pathLength="1000" d="M150 0 L14 16 M150 0 L44 66 M150 0 L84 110 M150 0 L144 146"/>
+              <path pathLength="1000" d="M84 8 Q66 30 74 52 Q92 66 102 92 Q122 88 138 108" transform="translate(-22 4)"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- araignée stickman qui déménage -->
+        <div class="spider-outer kf-drop" style="left:48.5cqw;top:0;animation-delay:1.4s">
+          <div class="spider-swing">
+            <div class="thread"></div>
+            <svg class="sm" style="position:relative;width:11cqw;margin:-1cqw auto 0;display:block" viewBox="0 0 160 150">
+              <g stroke="#12233f" stroke-width="8" stroke-linecap="round" fill="none">
+                <path d="M64 74 L30 58 L18 76"/><path d="M62 88 L26 92 L16 112"/><path d="M66 100 L38 122 L34 142"/>
+                <path d="M96 100 L124 122 L128 142"/><path d="M98 88 L134 92 L144 112"/>
+              </g>
+              <g class="kf-wave" style="transform-origin:96px 74px">
+                <path d="M96 74 L130 54 L146 30" stroke="#12233f" stroke-width="8" stroke-linecap="round" fill="none"/>
+              </g>
+              <circle cx="80" cy="86" r="26" fill="#12233f"/>
+              <circle cx="80" cy="56" r="17" fill="#12233f"/>
+              <circle cx="74" cy="52" r="3.6" fill="#fff"/><circle cx="87" cy="52" r="3.6" fill="#fff"/>
+              <path d="M72 62 Q80 69 89 62" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <g>
+                <rect x="118" y="116" width="34" height="24" rx="5" fill="#ff8a00" stroke="#d96f00" stroke-width="3"/>
+                <path d="M128 116 v-6 h14 v6" stroke="#12233f" stroke-width="4" fill="none"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="sign fx-pop" style="left:59.5cqw;top:23cqw" data-from="2.5">DÉMÉNAGÉ ➜</div>
+
+        <!-- B dépité -->
+        <svg class="sm" style="left:76cqw;bottom:6cqw;width:17.5cqw;transform:rotate(-3deg)" viewBox="0 0 200 320">
+          <path class="ln" d="M100 186 L70 272"/><path class="ln" d="M100 186 L132 272"/>
+          <path class="ln" d="M64 272 h20 M126 272 h20"/>
+          <path class="ln" d="M96 92 Q90 140 100 186"/>
+          <path class="ln" d="M95 108 L68 176"/>
+          <path class="ln" d="M95 108 L128 172"/>
+          <g transform="translate(-4 10) rotate(8 96 58)">
+            <circle class="head" cx="96" cy="58" r="33"/>
+            <path d="M63 52 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <path d="M74 58 l16 6 M90 58 l-16 6 M104 58 l16 6 M120 58 l-16 6" stroke="#12233f" stroke-width="4.6" stroke-linecap="round"/>
+            <path class="mouth" d="M82 80 Q96 70 110 80"/>
+          </g>
+        </svg>
+
+        <div class="bubble tail-r" style="left:63cqw;top:5.5cqw" data-from="2.45" data-to="4.2">Même l’araignée a déménagé.</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 4 · LE CONCURRENT ================= -->
+      <section class="scene bg-office" id="v1s4">
+        <div class="floor-line"></div>
+        <!-- A hausse les épaules -->
+        <svg class="sm" style="left:3.5cqw;bottom:8cqw;width:17.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <path d="M100 92 l-9 14 9 34 9-34 Z" fill="#ff8a00"/>
+            <g class="kf-shrugL" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L56 78 L48 56"/></g>
+            <g class="kf-shrugR" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L144 78 L152 56"/></g>
+            <g transform="rotate(5 100 80)">
+              <circle class="head" cx="100" cy="46" r="33"/>
+              <circle class="eye" cx="88" cy="42" r="4.4"/><circle class="eye" cx="112" cy="42" r="4.4"/>
+              <path d="M78 28 l17 4 M105 32 l17 -4" stroke="#12233f" stroke-width="5" stroke-linecap="round"/>
+              <path class="mouth" d="M87 63 q13 -5 26 0"/>
+            </g>
+          </g>
+        </svg>
+
+        <!-- site du concurrent -->
+        <div class="browser fx-pop" style="left:24cqw;top:7.5cqw;width:54cqw" data-from="3.0">
+          <div class="bar">
+            <span class="dot" style="background:#e5484d"></span><span class="dot" style="background:#fbbc05"></span><span class="dot" style="background:#1fae62"></span>
+            <span class="url">🔒 www.sahel-btp.bf</span>
+          </div>
+          <div class="site-head">
+            <span class="lg">SAHEL<span>BTP</span></span>
+            <nav><span>Accueil</span><span>Réalisations</span><span>Contact</span></nav>
+          </div>
+          <div class="site-hero">
+            <svg style="float:right;width:17cqw;margin:.4cqw 0 .6cqw 1.4cqw" viewBox="0 0 220 150">
+              <rect x="18" y="66" width="52" height="84" fill="#a9c4e8" stroke="#12233f" stroke-width="4"/>
+              <rect x="78" y="40" width="58" height="110" fill="#7db4ff" stroke="#12233f" stroke-width="4"/>
+              <g fill="#fff"><rect x="28" y="78" width="12" height="12"/><rect x="48" y="78" width="12" height="12"/><rect x="28" y="100" width="12" height="12"/><rect x="90" y="54" width="13" height="13"/><rect x="112" y="54" width="13" height="13"/><rect x="90" y="78" width="13" height="13"/><rect x="112" y="78" width="13" height="13"/><rect x="90" y="102" width="13" height="13"/></g>
+              <path d="M168 150 V22 M120 32 H212 M196 32 V62" stroke="#e5484d" stroke-width="6" fill="none"/>
+              <rect x="184" y="62" width="24" height="18" fill="#e5484d"/>
+            </svg>
+            <h3>Nous construisons vos projets, partout au Burkina.</h3>
+            <p>Immeubles • Routes • Forages<br>Devis gratuit sous 24 h — ⭐⭐⭐⭐⭐ (214 avis)</p>
+            <span class="btn-cta" data-from="0" data-to="4.9">Demander un devis</span>
+            <span class="btn-cta ok fx-pop" data-from="4.95">✓ Devis envoyé !</span>
+            <svg class="cursor-arrow kf-cursor" style="left:11cqw;bottom:2.2cqw;animation-delay:3.6s" viewBox="0 0 40 52">
+              <path d="M6 2 L34 26 L20 28 L26 44 L17 48 L11 32 L4 40 Z" fill="#fff" stroke="#12233f" stroke-width="3"/>
+            </svg>
+            <span class="click-ring" style="left:9.5cqw;bottom:1cqw" data-from="4.85" data-to="5.6"></span>
+          </div>
+        </div>
+        <span class="spark kf-twinkle fx-fade" style="left:23cqw;top:5cqw" data-from="3.3">✦</span>
+        <span class="spark kf-twinkle fx-fade" style="left:77cqw;top:9cqw;animation-delay:.3s" data-from="3.5">✦</span>
+        <span class="spark kf-twinkle fx-fade" style="left:74cqw;top:30cqw;animation-delay:.6s" data-from="3.7">✦</span>
+
+        <!-- B émerveillé -->
+        <svg class="sm" style="left:80.5cqw;bottom:8cqw;width:16.5cqw" viewBox="0 0 200 320">
+          <g class="kf-bob2">
+            <path class="ln" d="M100 178 L64 270"/><path class="ln" d="M100 178 L136 270"/>
+            <path class="ln" d="M58 270 h20 M130 270 h20"/>
+            <path class="ln" d="M100 80 L100 178"/>
+            <g class="kf-wave2" style="transform-origin:100px 100px"><path class="ln" d="M100 100 L58 64"/></g>
+            <path class="ln" d="M100 100 L146 70"/>
+            <g transform="rotate(-8 112 84)"><rect x="140" y="46" width="26" height="44" rx="6" fill="#12233f"/><rect x="144" y="53" width="18" height="30" rx="2" fill="#dff0ff"/></g>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 40 a33 33 0 0 1 66 0 Z" fill="#1c63c6"/>
+            <rect x="120" y="34" width="34" height="9" rx="4.5" fill="#1c63c6"/>
+            <text x="79" y="55" font-size="21" fill="#ff8a00">★</text>
+            <text x="103" y="55" font-size="21" fill="#ff8a00">★</text>
+            <circle cx="100" cy="66" r="7.5" fill="#12233f"/>
+          </g>
+        </svg>
+
+        <div class="bubble tail-l" style="left:2.5cqw;top:5cqw" data-from="0.4" data-to="3.3">Bon… tape « entreprise BTP » tout court.</div>
+        <div class="bubble tail-r" style="left:68cqw;top:3.6cqw" data-from="5.1" data-to="6.9">Oh ! Eux, ils existent !</div>
+        <div class="wm">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 5 · PRÉSENTATRICE ================= -->
+      <section class="scene bg-brand" id="v1s5">
+        <div class="spot kf-spotL" style="left:2cqw"></div>
+        <div class="spot kf-spotR" style="right:2cqw"></div>
+        <div class="live"><i>●</i> SPOT PUB</div>
+        <div class="glowfloor" style="left:6.5cqw;bottom:4.2cqw"></div>
+
+        <svg class="sm kf-pop" style="left:9cqw;bottom:4.5cqw;width:21cqw;animation-delay:.05s" viewBox="0 0 200 320">
+          <g class="kf-bob">
+            <path class="lnw" d="M88 206 L78 272"/><path class="lnw" d="M112 206 L124 272"/>
+            <path class="lnw" d="M72 272 h20 M118 272 h20"/>
+            <path d="M100 92 L62 210 L138 210 Z" fill="#ff8a00"/>
+            <path class="lnw" d="M100 80 L100 96"/>
+            <g class="kf-gesture" style="transform-origin:100px 104px">
+              <path class="lnw" d="M100 104 L56 132"/>
+            </g>
+            <path class="lnw" d="M100 104 L136 92 L130 64"/>
+            <line x1="130" y1="64" x2="126" y2="50" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="124" cy="42" r="13" fill="#fff"/>
+            <circle cx="124" cy="42" r="13" fill="none" stroke="#12233f" stroke-width="4"/>
+            <circle cx="133" cy="20" r="11" fill="#6b4423"/>
+            <circle class="head" cx="100" cy="46" r="33"/>
+            <path d="M67 44 a33 33 0 0 1 66 0 l0 10 a33 26 0 0 0 -66 0 Z" fill="#6b4423"/>
+            <circle class="eye" cx="88" cy="46" r="4.4"/><circle class="eye" cx="112" cy="46" r="4.4"/>
+            <path d="M76 40 l-6 -4 M124 40 l6 -4" stroke="#12233f" stroke-width="4" stroke-linecap="round"/>
+            <path class="mouth" d="M80 58 Q100 78 120 58"/>
+            <circle cx="76" cy="58" r="5" fill="#ff9ecb" opacity=".7"/><circle cx="124" cy="58" r="5" fill="#ff9ecb" opacity=".7"/>
+          </g>
+        </svg>
+
+        <div class="kt" style="left:36cqw;top:11cqw;width:61cqw">
+          <div class="l1 fx-up" data-from="0.5">Si vos clients ne vous trouvent pas,</div>
+          <div class="l2 fx-up" data-from="2.4">ils trouvent <span class="hl">vos concurrents.</span></div>
+          <div class="l3 fx-up" data-from="4.3">Ne soyez pas la meilleure entreprise…<br><b>que personne ne connaît.</b></div>
+        </div>
+        <div class="wm on-dark">DIGITAL STATION</div>
+      </section>
+
+      <!-- ================= PLAN 6 · ÉCRAN DE FIN ================= -->
+      <section class="scene bg-end" id="v1s6">
+        <span class="pix" style="left:8cqw;top:9cqw;width:1.6cqw;height:1.6cqw"></span>
+        <span class="pix" style="left:13cqw;top:15cqw;width:1.1cqw;height:1.1cqw;opacity:.7"></span>
+        <span class="pix" style="right:9cqw;top:12cqw;width:1.4cqw;height:1.4cqw"></span>
+        <span class="pix" style="right:15cqw;bottom:14cqw;width:1.1cqw;height:1.1cqw;opacity:.7"></span>
+        <span class="pix" style="left:16cqw;bottom:11cqw;width:1.3cqw;height:1.3cqw;opacity:.85"></span>
+        <div class="endwrap">
+          <div class="logo-card kf-zoom" style="animation-delay:.25s">
+            <img src="assets/logo.png" alt="Digital Station — Bâtir le numérique de demain">
+            <div class="shine"></div>
+          </div>
+          <div class="end-cta fx-up" data-from="1.3">
+            Contactez Digital Station pour créer votre site web.
+            <small>Bâtir le numérique de demain</small>
+          </div>
+          <div class="chips fx-up" data-from="2.3">
+            <span class="chip">🌐 Sites web</span>
+            <span class="chip">📱 Réseaux sociaux</span>
+            <span class="chip">🔍 Référencement Google</span>
+          </div>
+          <div class="contact fx-up" data-from="2.8">
+            <img class="qr" src="assets/qr-whatsapp.png" alt="QR WhatsApp Digital Station">
+            <div class="cinfo">
+              <span class="cnum">📞 +226 70 71 93 66</span>
+              <span class="csub"><b>WhatsApp</b> — scannez le QR code ou appelez-nous</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="subs" id="subs"></div>
+
+      <div class="bigplay" id="bigplay">
+        <div class="ring"><div class="disc">▶</div></div>
+        <h2>« Le BTP introuvable »</h2>
+        <p>Cliquez pour lancer le spot · 🔊 pensez à activer le son</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="cbtn main" id="btnPlay" title="Lecture / Pause (Espace)">▶</button>
+    <button class="cbtn" id="btnRestart" title="Recommencer">⟲</button>
+    <div class="progress" id="progress" title="Cliquez pour aller à un plan">
+      <div class="track"><div class="fill" id="pfill"></div><span id="pticks"></span><div class="head" id="phead"></div></div>
+    </div>
+    <div class="time" id="time">0:00 / 0:00</div>
+    <div class="chapter" id="chapter"></div>
+    <button class="cbtn" id="btnMute" title="Son on/off">🔊</button>
+    <button class="cbtn" id="btnFs" title="Plein écran">⛶</button>
+    <div class="hint">Astuce : Espace = lecture/pause · ← → = plan précédent/suivant · cliquez la barre pour sauter à un plan.</div>
+  </div>
+</div>
+
+<script src="js/player.js"></script>
+<script>
+SpotPlayer({
+  scenes: [
+    { id:"v1s1", title:"Plan 1 · Au bureau", min:5.3,
+      audio:[{src:"audio/v1-a1.mp3", at:0.35, rate:1.2, est:3.16},
+             {src:"audio/v1-b1.mp3", at:3.2,  rate:1.2, est:1.88}],
+      subs:[{from:0.4,  to:3.05, who:"Stickman A", cls:"a", text:"Tu connais la meilleure entreprise de BTP du Burkina ?"},
+            {from:3.25, to:4.9,  who:"Stickman B", cls:"b", text:"Évidemment. Deux secondes, je te la trouve."}] },
+    { id:"v1s2", title:"Plan 2 · Recherche Google", min:7.2,
+      audio:[{src:"audio/v1-b2.mp3", at:2.85, rate:1.2, est:4.55}],
+      subs:[{from:2.9, to:6.6, who:"Stickman B", cls:"b", text:"Bizarre… elle doit être sur Facebook."}] },
+    { id:"v1s3", title:"Plan 3 · Facebook…", min:4.6,
+      audio:[{src:"audio/v1-b3.mp3", at:2.4, rate:1.2, est:1.36}],
+      subs:[{from:2.45, to:3.9, who:"Stickman B", cls:"b", text:"Même l’araignée a déménagé."}] },
+    { id:"v1s4", title:"Plan 4 · Le concurrent, lui, existe", min:7.2,
+      audio:[{src:"audio/v1-a2.mp3", at:0.35, rate:1.2, est:3.45},
+             {src:"audio/v1-b4.mp3", at:5.05, rate:1.2, est:1.88}],
+      subs:[{from:0.4,  to:3.25, who:"Stickman A", cls:"a", text:"Bon… tape « entreprise BTP » tout court."},
+            {from:5.1,  to:6.7,  who:"Stickman B", cls:"b", text:"Oh ! Eux, ils existent !"}] },
+    { id:"v1s5", title:"Plan 5 · Le message", min:7.8,
+      audio:[{src:"audio/v1-pres.mp3", at:0.35, rate:1.2, est:8.18}],
+      subs:[{from:0.4,  to:3.8, who:"Présentatrice", cls:"p", text:"Si vos clients ne vous trouvent pas, ils trouvent vos concurrents."},
+            {from:3.85, to:7.3, who:"Présentatrice", cls:"p", text:"Ne soyez pas la meilleure entreprise… que personne ne connaît."}] },
+    { id:"v1s6", title:"Plan 6 · Digital Station", min:5.6,
+      audio:[{src:"audio/tagline.mp3", at:0.5, rate:1.05, est:4.75}],
+      subs:[{from:0.55, to:5.1, who:"Voix off", cls:"v", text:"Digital Station. Bâtir le numérique de demain."}] }
+  ]
+});
+</script>
+</body>
+</html>
